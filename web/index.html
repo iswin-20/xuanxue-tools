@@ -1324,15 +1324,17 @@
           <span class="badge">罗盘 / 九宫</span>
         </div>
         <div class="panel">
-          <div class="compass-wrap">
-            <div class="compass" id="compass" style="--heading: 0deg"><div class="needle"></div></div>
-            <div class="compass-controls">
-              <button class="primary-btn" id="openFsCompassBtn" style="margin-bottom: 10px; font-weight: bold;">进入全屏专业大罗盘</button>
-              <button class="small-btn" id="enableCompass">读取设备方向</button>
-              <label for="headingSlider">方位角</label>
-              <input id="headingSlider" type="range" min="0" max="359" value="0" />
-              <p id="directionText" class="muted"></p>
-            </div>
+          <div style="text-align: center; padding: 20px 0;">
+            <div class="compass" id="compass" style="--heading: 0deg; margin: 0 auto;"><div class="needle"></div></div>
+          </div>
+          <div style="display: flex; gap: 10px; justify-content: center; margin: 16px 0 8px;">
+            <button class="small-btn" id="openFsCompassBtn" style="font-size: 13px; padding: 6px 14px;">进入全屏大罗盘</button>
+            <button class="small-btn" id="enableCompass" style="font-size: 13px; padding: 6px 14px;">读取设备方向</button>
+          </div>
+          <div style="max-width: 400px; margin: 0 auto;">
+            <label for="headingSlider" style="font-size: 13px;">方位角</label>
+            <input id="headingSlider" type="range" min="0" max="359" value="0" />
+            <p id="directionText" class="muted" style="text-align: center;"></p>
           </div>
           <div class="palace-grid" id="palaceGrid"></div>
         </div>
