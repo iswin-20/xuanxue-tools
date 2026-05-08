@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 import httpx
 from fastapi import APIRouter, HTTPException
@@ -37,15 +37,41 @@ class OracleChatOut(BaseModel):
     model: str
 
 
-SYSTEM_PROMPT = """你是“玄览”应用里的 AI 国学问卜助手。
+class CultureReadingIn(BaseModel):
+    reading_type: Literal["palm", "face"]
+    image_context: str = Field(default="", max_length=1000)
+    current_time: str | None = None
+
+
+SYSTEM_PROMPT = """你是“安安”应用里的 AI 国学与民俗文化解读助手。
 定位：传统文化解读、AI 互动娱乐、个人生活建议。
 要求：
-1. 结合易经卦象、阴阳五行、节气时令、民俗语言给出启发式解读。
+1. 结合易经、阴阳五行、节气时令、民俗语言给出启发式解读。
 2. 不要声称能绝对预测未来，不要用恐吓、宿命论、包治百病或保证发财的表达。
 3. 遇到医学、法律、财务、心理危机等高风险问题，要建议咨询专业人士。
-4. 不做身份识别、敏感属性判断或人脸生物特征推断。
-5. 输出中文，结构为：卦象/时机、现实判断、行动建议、提醒边界。
-6. 语气有传统文化韵味，但要清楚、实际、克制。"""
+4. 不做身份识别、敏感属性判断、人脸识别或生物特征确认。
+5. 输出中文，清楚、实际、克制，有传统文化韵味。
+6. 明确说明内容仅供娱乐与传统文化参考。"""
+
+
+PALM_PROMPT = """你正在为“传统手相 AI”模块生成娱乐性文化解读。
+请围绕生命线、智慧线、感情线、事业线四个维度输出。
+不要声称真实识别了医学健康状况，不要做疾病、寿命、身份或敏感属性判断。
+请给出：
+1. 总体气质
+2. 四条掌纹的传统说法
+3. 近期生活建议
+4. 边界提醒"""
+
+
+FACE_PROMPT = """你正在为“传统面相 AI”模块生成娱乐性文化解读。
+请围绕脸型气质、额头、眉眼、鼻相、嘴相五个维度输出。
+不要做身份识别，不要推断种族、年龄、健康、财富真实性等敏感或高风险结论。
+请给出：
+1. 总体气质
+2. 五官与脸型的传统文化说法
+3. 人际沟通与生活建议
+4. 隐私与边界提醒"""
 
 
 def _cast_context(cast: OracleCast | None) -> str:
@@ -75,30 +101,18 @@ def _normalize_history(history: list[OracleMessage]) -> list[dict[str, str]]:
     return normalized
 
 
-@router.post("/chat", response_model=OracleChatOut)
-async def chat(data: OracleChatIn) -> OracleChatOut:
+async def _deepseek_chat(messages: list[dict[str, str]], max_tokens: int = 900) -> OracleChatOut:
     if not settings.deepseek_api_key:
         raise HTTPException(
             status_code=503,
             detail="DeepSeek API Key 未配置。请在 .env 中设置 DEEPSEEK_API_KEY 后重启服务。",
         )
 
-    now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
-    user_prompt = f"""当前时间：{now_text}
-起卦信息：{_cast_context(data.cast)}
-用户问题：{data.question.strip()}
-
-请给出一段完整解读，避免绝对化预测，并给出 3 条可执行建议。"""
-
-    messages: list[dict[str, str]] = [{"role": "system", "content": SYSTEM_PROMPT}]
-    messages.extend(_normalize_history(data.history))
-    messages.append({"role": "user", "content": user_prompt})
-
     payload: dict[str, Any] = {
         "model": settings.deepseek_model,
         "messages": messages,
         "temperature": 0.78,
-        "max_tokens": 900,
+        "max_tokens": max_tokens,
         "thinking": {"type": "disabled"},
         "stream": False,
     }
@@ -130,3 +144,36 @@ async def chat(data: OracleChatIn) -> OracleChatOut:
         raise HTTPException(status_code=502, detail="DeepSeek 返回为空。")
 
     return OracleChatOut(answer=answer, model=result.get("model") or settings.deepseek_model)
+
+
+@router.post("/chat", response_model=OracleChatOut)
+async def chat(data: OracleChatIn) -> OracleChatOut:
+    now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
+    user_prompt = f"""当前时间：{now_text}
+起卦信息：{_cast_context(data.cast)}
+用户问题：{data.question.strip()}
+
+请给出一段完整解读，避免绝对化预测，并给出 3 条可执行建议。"""
+
+    messages: list[dict[str, str]] = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages.extend(_normalize_history(data.history))
+    messages.append({"role": "user", "content": user_prompt})
+    return await _deepseek_chat(messages)
+
+
+@router.post("/culture-reading", response_model=OracleChatOut)
+async def culture_reading(data: CultureReadingIn) -> OracleChatOut:
+    now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
+    module_prompt = PALM_PROMPT if data.reading_type == "palm" else FACE_PROMPT
+    user_prompt = f"""当前时间：{now_text}
+页面侧摘要：{data.image_context or '用户已上传图片，但未提供可确认的视觉特征。'}
+
+请基于页面侧摘要与传统文化语汇生成解读。注意：不要声称进行了确定性识别；不要输出医学、身份、敏感属性判断。"""
+    return await _deepseek_chat(
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": module_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=850,
+    )

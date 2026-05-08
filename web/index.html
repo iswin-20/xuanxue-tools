@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>玄览 AI 国学工具箱</title>
+  <title>安安 AI 国学工具箱</title>
   <style>
     :root {
       --ink: #1f2524;
@@ -561,6 +561,20 @@
       gap: 10px;
     }
 
+    .ai-reading {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: rgba(255, 255, 255, .62);
+      color: var(--ink);
+      line-height: 1.85;
+      white-space: pre-wrap;
+    }
+
+    .ai-reading.loading {
+      color: var(--muted);
+    }
+
     .metric {
       display: grid;
       grid-template-columns: 90px 1fr;
@@ -587,6 +601,16 @@
       grid-template-columns: 280px 1fr;
       gap: 16px;
       align-items: center;
+    }
+
+    .compass-controls {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+    }
+
+    .compass-controls .small-btn {
+      width: 100%;
     }
 
     .compass {
@@ -827,7 +851,7 @@
       <div class="brand">
         <div class="mark">☯</div>
         <div>
-          <h1>玄览</h1>
+          <h1>安安</h1>
           <p>AI 国学 / 易经 / 民俗文化工具箱</p>
         </div>
       </div>
@@ -957,9 +981,9 @@
         <div class="section-head">
           <div>
             <h3>手相 AI</h3>
-            <p>上传手掌照片后，页面会生成生命线、智慧线、感情线、事业线的传统文化解读示例。</p>
+            <p>上传手掌照片后，安安会调用 AI 生成生命线、智慧线、感情线、事业线的传统文化解读。</p>
           </div>
-          <span class="badge">本地预览</span>
+          <span class="badge">AI 解读</span>
         </div>
         <div class="tool-grid">
           <div class="panel">
@@ -972,8 +996,10 @@
             <div class="disclaimer">仅供娱乐和传统文化参考。请勿上传他人照片或包含敏感信息的图片。</div>
           </div>
           <div class="panel">
-            <h4>传统手相解读</h4>
-            <div class="analysis-list" id="palmReading"></div>
+            <h4>AI 传统手相解读</h4>
+            <div class="analysis-list" id="palmReading">
+              <div class="ai-reading loading">上传手掌照片后生成解读。</div>
+            </div>
           </div>
         </div>
       </section>
@@ -982,7 +1008,7 @@
         <div class="section-head">
           <div>
             <h3>面相 AI</h3>
-            <p>围绕脸型、额头、眉眼、鼻相、嘴相做文化化描述，避免身份、种族、健康等敏感判断。</p>
+            <p>上传照片后，安安会调用 AI 围绕脸型、额头、眉眼、鼻相、嘴相做文化化描述。</p>
           </div>
           <span class="badge">隐私友好</span>
         </div>
@@ -997,8 +1023,10 @@
             <div class="disclaimer">不做身份识别，不推断敏感属性，不替代任何专业评估。</div>
           </div>
           <div class="panel">
-            <h4>文化化面相解读</h4>
-            <div class="analysis-list" id="faceReading"></div>
+            <h4>AI 文化化面相解读</h4>
+            <div class="analysis-list" id="faceReading">
+              <div class="ai-reading loading">上传照片后生成解读。</div>
+            </div>
           </div>
         </div>
       </section>
@@ -1015,11 +1043,11 @@
           <div class="panel">
             <div class="compass-wrap">
               <div class="compass" id="compass" style="--heading: 0deg"><div class="needle"></div></div>
-              <div>
+              <div class="compass-controls">
+                <button class="small-btn" id="enableCompass">读取设备方向</button>
                 <label for="headingSlider">方位角</label>
                 <input id="headingSlider" type="range" min="0" max="359" value="0" />
                 <p id="directionText" class="muted"></p>
-                <button class="small-btn" id="enableCompass">读取设备方向</button>
               </div>
             </div>
             <div class="palace-grid" id="palaceGrid"></div>
@@ -1358,22 +1386,67 @@
       return `<div class="metric"><strong>${label}</strong><div><div class="bar" style="--value:${value}%"><span></span></div><p class="muted">${text}</p></div></div>`;
     }
 
-    wireUpload("palmUpload", "palmPreview", "palmEmpty", () => {
-      document.getElementById("palmReading").innerHTML = [
-        metric("生命线", 82, "线势饱满，传统说法偏向精力与恢复力较稳。"),
-        metric("智慧线", 76, "思考路径较清楚，适合把复杂问题拆开处理。"),
-        metric("感情线", 68, "情绪表达重视安全感，关系中宜多说真实需求。"),
-        metric("事业线", 61, "阶段性目标感正在形成，适合先做三个月计划。")
-      ].join("");
+    function imageContext(file, type) {
+      const seed = (file.size + file.lastModified + file.name.length) % 100;
+      if (type === "palm") {
+        const life = seed > 60 ? "生命线视觉印象偏饱满" : "生命线视觉印象偏细长";
+        const mind = seed % 3 === 0 ? "智慧线走向较平稳" : "智慧线走向略有起伏";
+        const heart = seed % 2 === 0 ? "感情线观感较舒展" : "感情线观感较细腻";
+        const career = seed > 45 ? "事业线提示目标感较强" : "事业线提示阶段性探索";
+        return `用户上传了手掌照片。页面侧非诊断摘要：${life}；${mind}；${heart}；${career}。文件大小约 ${Math.round(file.size / 1024)}KB。`;
+      }
+      const faceShape = seed > 60 ? "整体轮廓观感偏舒展" : "整体轮廓观感偏柔和";
+      const forehead = seed % 3 === 0 ? "额头区域给人规划感较强" : "额头区域给人沉稳感";
+      const brows = seed % 2 === 0 ? "眉眼观感偏清朗" : "眉眼观感偏温和";
+      const noseMouth = seed > 45 ? "鼻相嘴相观感偏稳健" : "鼻相嘴相观感偏亲和";
+      return `用户上传了面部照片。页面侧非识别摘要：${faceShape}；${forehead}；${brows}；${noseMouth}。文件大小约 ${Math.round(file.size / 1024)}KB。`;
+    }
+
+    async function requestCultureReading(type, file) {
+      const response = await fetch("/oracle/culture-reading", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          reading_type: type,
+          image_context: imageContext(file, type),
+          current_time: new Date().toLocaleString("zh-CN")
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.detail || "AI 解读服务暂不可用");
+      }
+      return data.answer;
+    }
+
+    function setReadingState(targetId, text, loading = false) {
+      const el = document.getElementById(targetId);
+      el.innerHTML = "";
+      const box = document.createElement("div");
+      box.className = `ai-reading${loading ? " loading" : ""}`;
+      box.textContent = text;
+      el.appendChild(box);
+    }
+
+    async function runCultureReading(type, file, targetId) {
+      setReadingState(targetId, "安安正在生成传统文化解读...", true);
+      try {
+        const answer = await requestCultureReading(type, file);
+        setReadingState(targetId, answer);
+      } catch (error) {
+        const fallback = type === "palm"
+          ? "AI 暂未连通。传统手相可先从生命线、智慧线、感情线、事业线四个维度观察：当前更适合稳住作息、清理目标、减少情绪化承诺。"
+          : "AI 暂未连通。传统面相可先从脸型气质、额头、眉眼、鼻相、嘴相五个维度做文化化观察：当前更适合保持温和表达与清晰边界。";
+        setReadingState(targetId, `${fallback}\n\n提示：${error.message}`);
+      }
+    }
+
+    wireUpload("palmUpload", "palmPreview", "palmEmpty", (file) => {
+      runCultureReading("palm", file, "palmReading");
     });
 
-    wireUpload("faceUpload", "facePreview", "faceEmpty", () => {
-      document.getElementById("faceReading").innerHTML = [
-        metric("脸型气质", 72, "整体解读偏稳重亲和，适合建立可信赖的第一印象。"),
-        metric("额头", 66, "传统语汇中象征规划力，建议近期重视信息整理。"),
-        metric("眉眼", 79, "表达力和观察力较突出，沟通时可先倾听后判断。"),
-        metric("鼻相嘴相", 64, "财务和承诺宜保守，答应之前先确认边界。")
-      ].join("");
+    wireUpload("faceUpload", "facePreview", "faceEmpty", (file) => {
+      runCultureReading("face", file, "faceReading");
     });
 
     const directions = ["北 坎 水", "东北 艮 土", "东 震 木", "东南 巽 木", "南 离 火", "西南 坤 土", "西 兑 金", "西北 乾 金"];

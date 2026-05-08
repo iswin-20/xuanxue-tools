@@ -2,7 +2,7 @@
 
 
 class Settings(BaseSettings):
-    app_name: str = "Image Hub"
+    app_name: str = "安安 AI 国学工具箱"
     app_env: str = "dev"
     secret_key: str = "change_me"
     access_token_expire_minutes: int = 720
