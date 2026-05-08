@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from typing import Any, Literal
 
@@ -43,6 +44,29 @@ class CultureReadingIn(BaseModel):
     current_time: str | None = None
 
 
+class IChingReadingIn(BaseModel):
+    question: str = Field(default="未设问题", max_length=800)
+    base: str
+    changed: str
+    mutual: str | None = None
+    opposite: str | None = None
+    reversed: str | None = None
+    moving_lines: list[int] = Field(default_factory=list)
+    base_text: str | None = None
+    changed_text: str | None = None
+    current_time: str | None = None
+
+
+class IChingReadingOut(BaseModel):
+    overview: str
+    career: str
+    relationship: str
+    wealth: str
+    health: str
+    decision: str
+    model: str
+
+
 SYSTEM_PROMPT = """你是“安安”应用里的 AI 国学与民俗文化解读助手。
 定位：传统文化解读、AI 互动娱乐、个人生活建议。
 要求：
@@ -74,6 +98,18 @@ FACE_PROMPT = """你正在为“传统面相 AI”模块生成娱乐性文化解
 4. 隐私与边界提醒"""
 
 
+ICHING_FIELD_PROMPT = """你正在为“易经算卦”模块生成分领域解读。
+必须严格结合本卦、变卦、互卦、错卦、综卦、动爻和用户问题。
+只能使用用户提供的卦名和卦义，不要自行推导、替换或新增卦名。
+如果用户提供“本卦：屯，变卦：泰”，就必须按屯变泰解释，不得写成其他卦。
+不要输出固定模板；不同卦象要体现不同侧重。
+输出必须是一个 JSON 对象，不要 Markdown，不要代码块，字段为：
+overview, career, relationship, wealth, health, decision。
+每个字段 45 到 90 个中文字符。
+health 字段只能给作息、压力、运动、饮食节律等生活建议，不要做疾病诊断。
+decision 字段要给现实可执行的判断方式，不要绝对预测。"""
+
+
 def _cast_context(cast: OracleCast | None) -> str:
     if not cast:
         return "暂无卦象，按当前时间与问题语义做文化化解读。"
@@ -99,6 +135,18 @@ def _normalize_history(history: list[OracleMessage]) -> list[dict[str, str]]:
         if content:
             normalized.append({"role": item.role, "content": content[:1000]})
     return normalized
+
+
+def _extract_json_object(text: str) -> dict[str, Any]:
+    clean = text.strip()
+    if clean.startswith("```"):
+        clean = clean.strip("`")
+        clean = clean.removeprefix("json").strip()
+    start = clean.find("{")
+    end = clean.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        raise ValueError("No JSON object found")
+    return json.loads(clean[start : end + 1])
 
 
 async def _deepseek_chat(messages: list[dict[str, str]], max_tokens: int = 900) -> OracleChatOut:
@@ -146,6 +194,14 @@ async def _deepseek_chat(messages: list[dict[str, str]], max_tokens: int = 900) 
     return OracleChatOut(answer=answer, model=result.get("model") or settings.deepseek_model)
 
 
+async def _deepseek_json(messages: list[dict[str, str]], max_tokens: int = 900) -> tuple[dict[str, Any], str]:
+    result = await _deepseek_chat(messages, max_tokens=max_tokens)
+    try:
+        return _extract_json_object(result.answer), result.model
+    except (json.JSONDecodeError, ValueError) as exc:
+        raise HTTPException(status_code=502, detail=f"DeepSeek JSON 解析失败：{exc}") from exc
+
+
 @router.post("/chat", response_model=OracleChatOut)
 async def chat(data: OracleChatIn) -> OracleChatOut:
     now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
@@ -159,6 +215,36 @@ async def chat(data: OracleChatIn) -> OracleChatOut:
     messages.extend(_normalize_history(data.history))
     messages.append({"role": "user", "content": user_prompt})
     return await _deepseek_chat(messages)
+
+
+@router.post("/iching-reading", response_model=IChingReadingOut)
+async def iching_reading(data: IChingReadingIn) -> IChingReadingOut:
+    now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
+    moving = "、".join(str(x) for x in data.moving_lines) if data.moving_lines else "无明显动爻"
+    user_prompt = f"""当前时间：{now_text}
+用户所问：{data.question or '未设问题'}
+本卦：{data.base}，卦义：{data.base_text or '未提供'}
+变卦：{data.changed}，卦义：{data.changed_text or '未提供'}
+互卦：{data.mutual or '未提供'}
+错卦：{data.opposite or '未提供'}
+综卦：{data.reversed or '未提供'}
+动爻：{moving}
+
+禁止出现未在上面列出的卦名；禁止把本卦或变卦改写成其他卦。
+请按提示词要求输出严格 JSON。"""
+    parsed, model = await _deepseek_json(
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": ICHING_FIELD_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=700,
+    )
+    required = ["overview", "career", "relationship", "wealth", "health", "decision"]
+    missing = [key for key in required if not str(parsed.get(key, "")).strip()]
+    if missing:
+        raise HTTPException(status_code=502, detail=f"DeepSeek 返回缺少字段：{', '.join(missing)}")
+    return IChingReadingOut(model=model, **{key: str(parsed[key]).strip() for key in required})
 
 
 @router.post("/culture-reading", response_model=OracleChatOut)

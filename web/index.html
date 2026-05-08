@@ -1190,6 +1190,7 @@
     let coinLines = [];
     let cupRecords = [];
     let oracleHistory = [];
+    let ichingRequestSeq = 0;
 
     function hexFromLines(lines) {
       const value = lines.reduce((sum, bit, i) => sum + (bit ? Math.pow(2, i) : 0), 0);
@@ -1266,19 +1267,89 @@
         <h4>AI 解读</h4>
         <p><strong>所问：</strong>${escapeHtml(question || "未设问题")}</p>
         <p><strong>卦辞白话：</strong>${base[0]}提示当前格局以“${base[2].replace("。", "")}”为主，变为${changed[0]}，说明事情会从当下态势转向“${changed[2].replace("。", "")}”。动爻为${moving}。</p>
-        <div class="reading-grid">
-          ${readingItem("事业", "先看组织与资源是否顺畅，宜把目标拆成小步，避免只凭一时冲劲。")}
-          ${readingItem("感情", "重在真诚表达与边界感，关系里的误会适合用温和而具体的话说清。")}
-          ${readingItem("财运", "适合稳健评估投入产出，不宜被短期热度牵引，先保现金流。")}
-          ${readingItem("健康", "留意作息、压力和饮食节律，身体信号比外部评价更值得听。")}
-          ${readingItem("决策", "可行但需留后手。若三日内仍反复犹豫，先补信息，再做承诺。")}
+        <div class="reading-grid" id="ichingFieldReading">
+          ${readingItem("事业", "安安正在结合本卦、变卦与动爻生成事业解读...")}
+          ${readingItem("感情", "安安正在结合卦象生成感情解读...")}
+          ${readingItem("财运", "安安正在结合卦象生成财运解读...")}
+          ${readingItem("健康", "安安正在结合卦象生成生活节律建议...")}
+          ${readingItem("决策", "安安正在结合卦象生成决策建议...")}
         </div>
       `;
+      requestIChingReading();
       seedChat();
     }
 
     function readingItem(title, body) {
       return `<div class="mini-card"><strong>${title}</strong><p>${body}</p></div>`;
+    }
+
+    function ichingPayload() {
+      const cast = currentCast;
+      if (!cast) return null;
+      return {
+        question: cast.question || "未设问题",
+        base: cast.base[0],
+        changed: cast.changed[0],
+        mutual: cast.mutual[0],
+        opposite: cast.opposite[0],
+        reversed: cast.reversed[0],
+        moving_lines: cast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean),
+        base_text: cast.base[2],
+        changed_text: cast.changed[2],
+        current_time: new Date().toLocaleString("zh-CN")
+      };
+    }
+
+    function fallbackIChingReading(cast) {
+      const moving = cast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean);
+      const moveText = moving.length ? `动爻在第 ${moving.join("、")} 爻，说明变化点已经出现。` : "无明显动爻，宜先稳住现状再观察。";
+      return {
+        overview: `${cast.base[0]}转${cast.changed[0]}，当前主题是“${cast.base[2].replace("。", "")}”，后势转向“${cast.changed[2].replace("。", "")}”。${moveText}`,
+        career: `${cast.base[0]}提示先看当前职责与资源是否匹配，${cast.changed[0]}提示后续宜顺势调整节奏，先做小范围验证。`,
+        relationship: `关系上以${cast.base[0]}之象看当前互动模式，以${cast.changed[0]}之象看后续变化，宜少猜测，多用明确表达。`,
+        wealth: `财务上不宜只看短期热度，${cast.base[0]}重在守住基本盘，${cast.changed[0]}提示机会要配合风险边界。`,
+        health: `健康只作生活建议：按${cast.base[0]}之象先调作息与压力，按${cast.changed[0]}之象再逐步恢复运动和饮食节律。`,
+        decision: `决策上先列条件清单，再看三日内信息是否更明。若关键条件仍含糊，宜试探推进，不宜一次性重押。`
+      };
+    }
+
+    function renderIChingFields(reading) {
+      const target = document.getElementById("ichingFieldReading");
+      if (!target) return;
+      target.innerHTML = [
+        readingItem("总览", reading.overview),
+        readingItem("事业", reading.career),
+        readingItem("感情", reading.relationship),
+        readingItem("财运", reading.wealth),
+        readingItem("健康", reading.health),
+        readingItem("决策", reading.decision)
+      ].join("");
+    }
+
+    async function requestIChingReading() {
+      const payload = ichingPayload();
+      if (!payload || !currentCast) return;
+      const seq = ++ichingRequestSeq;
+      try {
+        const response = await fetch("/oracle/iching-reading", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.detail || "AI 卦象解读暂不可用");
+        }
+        if (seq === ichingRequestSeq) {
+          renderIChingFields(data);
+        }
+      } catch (error) {
+        if (seq === ichingRequestSeq && currentCast) {
+          const fallback = fallbackIChingReading(currentCast);
+          fallback.overview = `${fallback.overview}\n提示：${error.message}`;
+          renderIChingFields(fallback);
+        }
+      }
     }
 
     function escapeHtml(str) {
