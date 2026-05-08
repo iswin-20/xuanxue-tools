@@ -618,10 +618,10 @@
       aspect-ratio: 1;
       border-radius: 50%;
       margin: auto;
-      background: url('assets/luopan.png') center/cover no-repeat;
-      border: 4px solid #5a3c1e;
+      background: url('assets/luopan.png') center/contain no-repeat;
+      border: none;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.5);
+      box-shadow: none;
       transform: rotate(var(--heading));
       transition: transform .25s ease;
     }
@@ -998,13 +998,13 @@
       height: 90vmin;
       max-width: 800px;
       max-height: 800px;
-      background: url('assets/luopan.png') center/cover no-repeat;
+      background: url('assets/luopan.png') center/contain no-repeat;
       border-radius: 50%;
       transform: rotate(var(--fs-heading));
       transition: transform 0.1s linear;
       z-index: 10001;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      border: 6px solid #4a2e15;
+      box-shadow: none;
+      border: none;
     }
     .fs-controls {
       position: absolute;
@@ -1323,29 +1323,27 @@
           </div>
           <span class="badge">罗盘 / 九宫</span>
         </div>
-        <div class="tool-grid">
-          <div class="panel">
-            <div class="compass-wrap">
-              <div class="compass" id="compass" style="--heading: 0deg"><div class="needle"></div></div>
-              <div class="compass-controls">
-                <button class="primary-btn" id="openFsCompassBtn" style="margin-bottom: 10px; font-weight: bold;">进入全屏专业大罗盘</button>
-                <button class="small-btn" id="enableCompass">读取设备方向</button>
-                <label for="headingSlider">方位角</label>
-                <input id="headingSlider" type="range" min="0" max="359" value="0" />
-                <p id="directionText" class="muted"></p>
-              </div>
+        <div class="panel">
+          <div class="compass-wrap">
+            <div class="compass" id="compass" style="--heading: 0deg"><div class="needle"></div></div>
+            <div class="compass-controls">
+              <button class="primary-btn" id="openFsCompassBtn" style="margin-bottom: 10px; font-weight: bold;">进入全屏专业大罗盘</button>
+              <button class="small-btn" id="enableCompass">读取设备方向</button>
+              <label for="headingSlider">方位角</label>
+              <input id="headingSlider" type="range" min="0" max="359" value="0" />
+              <p id="directionText" class="muted"></p>
             </div>
-            <div class="palace-grid" id="palaceGrid"></div>
           </div>
-          <div class="panel">
-            <label for="floorUpload">户型图上传</label>
-            <input id="floorUpload" type="file" accept="image/*" />
-            <div class="upload-box">
-              <div id="floorEmpty">上传户型图后可叠加方位建议</div>
-              <img id="floorPreview" alt="户型图预览" />
-            </div>
-            <div id="fengshuiAdvice" class="reading"></div>
+          <div class="palace-grid" id="palaceGrid"></div>
+        </div>
+        <div class="panel" style="margin-top: 16px;">
+          <label for="floorUpload">户型图上传</label>
+          <input id="floorUpload" type="file" accept="image/*" />
+          <div class="upload-box">
+            <div id="floorEmpty">上传户型图后可叠加方位建议</div>
+            <img id="floorPreview" alt="户型图预览" />
           </div>
+          <div id="fengshuiAdvice" class="reading"></div>
         </div>
       </section>
 

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<title>羅一鳴風水羅盤 For Mobile Web 版</title>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<link href="themes/compass.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="main" class="container-fluid row no-gutters justify-content-around align-items-center">
+  <div id="CompasHeader" class="col p-1 row no-gutters row-cols-1 justify-content-center text-center align-self-start">
+    <div class="col"><a href="https://www.fengshui-republic.com/" target="fengshui"><img src="themes/images/NewLogo.png" width="100" class="mx-auto"></a></div>
+    <div id="ThemesRight" class="col h4 my-2 font-weight-bolder text-nowrap"><a href="https://www.fengshui-republic.com/" target="fengshui" class="text-reset">羅一鳴風水羅盤</a></div>
+    <div class="col setBtn text-center mt-3">
+      <button class="start-btn btn btn-outline-warning font-weight-bolder btn-block w-75 mx-auto d-none text-nowrap text-center">啟動羅盤</button>
+    </div>
+    <div class="col directionUp py-3 mt-2 text-nowrap"></div>
+    <div class="col directionDown py-3 text-nowrap"></div>
+  </div>
+  <div id="CompasBody" class="col p-1 row no-gutters row-cols-1">
+    <div class="col directionUp text-center mb-3"></div>
+    <div class="col compass align-self-center w-100">
+      <div class="compass-circle"></div>
+      <div class="cross-line"></div>
+    </div>
+    <div class="col directionDown text-center mt-3"></div>
+  </div>
+  <div id="CompasFooter" class="col p-1 setBtn text-center pb-5">
+    <button class="start-btn2 btn btn-outline-warning btn-block w-75 font-weight-bolder mx-auto d-none text-nowrap text-center">啟動羅盤</button>
+  </div>
+</div>
+</body>
+<script>
+const Mount12 = ['子', '癸', '丑', '艮', '寅', '甲', '卯', '乙', '辰', '巽', '巳', '丙', '午', '丁', '未', '坤', '申', '庚', '酉', '辛', '戌', '乾', '亥', '壬'];
+var eAng = (Math.floor(360/Mount12.length*100))/100, Angle = new Object;
+var startAng = 360 - (eAng/2);
+for(a in Mount12){
+  var eStartAng = startAng+(eAng*a), eEndAng = eStartAng + eAng;
+  var ea = {name:Mount12[a],start:eStartAng-(eStartAng>360?360:0), end:eEndAng-360};
+  Angle[a] = ea;
+}
+const compassCircle = document.querySelector(".compass-circle");
+const startBtn = document.querySelector(".start-btn");
+const startBtn2 = document.querySelector(".start-btn2");
+const directionUp = document.querySelector(".directionUp");
+const directionDown = document.querySelector(".directionDown");
+//$('.directionUp').html('▲ 午向<span class="angle">180.00°</span>▲');
+//$('.directionDown').html('▼ 子山<span class="angle">0.00°</span>▼');
+$('.directionUp').html('▲<span class="angle">180.00°</span>▲');
+$('.directionDown').html('▼<span class="angle">0.00°</span>▼');
+const isIOS =
+  navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
+  navigator.userAgent.match(/AppleWebKit/);
+
+function init() {
+  startBtn.addEventListener("click", startCompass);
+  startBtn2.addEventListener("click", startCompass);
+  navigator.geolocation.getCurrentPosition(locationHandler);
+
+  if (!isIOS) {
+    window.addEventListener("deviceorientationabsolute", handler, true);
+  }
+}
+
+function startCompass() {
+  if (isIOS) {
+    DeviceOrientationEvent.requestPermission()
+      .then((response) => {
+        if (response === "granted") {
+          window.addEventListener("deviceorientation", handler, true);
+        } else {
+          alert("必須允許才能啟動!\n如你之前不允許，請重新啟動瀏覽器才能啟動羅盤.");
+        }
+      })
+      .catch(() => alert("不支援"));
+  }
+}
+
+function handler(e) {
+  compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+  compassCircle.style.transform = `translate(-50%, -50%) rotate(${-compass-(window.innerWidth<window.innerHeight?180:270)}deg)`;
+  var dUp = Math.abs(compass), tostrUp = (Math.floor(dUp*100)/100).toFixed(2), UpStr = new String;
+  var dDown = compass-180, tostrDown = (Math.floor((dDown>0?dDown:360+dDown)*100)/100).toFixed(2), DownStr = new String;
+  for(u in Angle){
+      if(u=='0'){
+          if((tostrUp>=Angle[u].start||tostrUp<=360)||(tostrUp>=0||tostrUp<=Angle[u].end)){
+//              UpStr = '▲ ' + Angle[u].name + '向<span class="angle">' + tostrUp + '°</span>▲';
+              UpStr = '▲<span class="angle">' + tostrUp + '°</span>▲';
+          }
+          if((tostrDown>=Angle[u].start||tostrDown<=360)||(tostrDown>=0||tostrDown<=Angle[u].end)){
+//              DownStr = '▼ ' + Angle[u].name + '山<span class="angle">' + tostrDown + '°</span>▼';
+              DownStr = '▼<span class="angle">' + tostrDown + '°</span>▼';
+          }
+      }else{
+          if(tostrUp>=Angle[u].start&&tostrUp<=Angle[u].end){
+//              UpStr = '▲ ' + Angle[u].name + '向<span class="angle">' + tostrUp + '°</span>▲';
+              UpStr = '▲<span class="angle">' + tostrUp + '°</span>▲';
+          }
+          if(tostrDown>=Angle[u].start&&tostrDown<=Angle[u].end){
+//              DownStr = '▼ ' + Angle[u].name + '山<span class="angle">' + tostrDown + '°</span>▼';
+              DownStr = '▼<span class="angle">' + tostrDown + '°</span>▼';
+          }
+      }
+  }
+  $('.directionUp').html(UpStr);
+  $('.directionDown').html(DownStr);
+}
+
+let pointDegree;
+
+function locationHandler(position) {
+  const { latitude, longitude } = position.coords;
+  pointDegree = calcDegreeToPoint(latitude, longitude);
+
+  if (pointDegree < 0) {
+    pointDegree = pointDegree + 360;
+  }
+}
+
+function calcDegreeToPoint(latitude, longitude) {
+  // Qibla geolocation
+  const point = {
+    lat: 21.422487,
+    lng: 39.826206
+  };
+
+  const phiK = (point.lat * Math.PI) / 180.0;
+  const lambdaK = (point.lng * Math.PI) / 180.0;
+  const phi = (latitude * Math.PI) / 180.0;
+  const lambda = (longitude * Math.PI) / 180.0;
+  const psi =
+    (180.0 / Math.PI) *
+    Math.atan2(
+      Math.sin(lambdaK - lambda),
+      Math.cos(phi) * Math.tan(phiK) -
+        Math.sin(phi) * Math.cos(lambdaK - lambda)
+    );
+  return Math.round(psi);
+}
+function DeviceDeploy(){
+  var main = $('#main');
+  var Wid = window.innerWidth, Hei = window.innerHeight;
+  //var Wid = window.outerWidth, Hei = window.outerHeight;
+  main.removeClass('row-cols-1 row-cols-3');
+  $('#CompasHeader .directionUp,#CompasHeader .directionDown,#CompasBody .directionUp,#CompasBody .directionDown').removeClass('d-none');
+  if(Wid < Hei){
+    main.addClass('row-cols-1');
+    $('#CompasHeader>div:first-child').removeClass('col').addClass('col-5');
+    $('#CompasHeader .directionUp,#CompasHeader .directionDown').addClass('d-none');
+    $('#CompasHeader .start-btn').removeClass('d-none');
+    $('#CompasFooter .start-btn2').addClass('d-none');
+    main.children('div[id]').removeClass('col-6 col-3').addClass('col');
+    $('.compass').css({width:$('#CompasBody').innerWidth()*.9,height:$('#CompasBody').innerWidth()*.9});
+  }else
+  if(Hei < Wid){
+      main.addClass('row-cols-3');
+      $('#CompasHeader>div:first-child').removeClass('col-5').addClass('col');
+      $('#CompasBody .directionUp,#CompasBody .directionDown').addClass('d-none');
+      $('#CompasHeader .start-btn').addClass('d-none');
+      $('#CompasFooter .start-btn2').removeClass('d-none');
+      main.children('div[id]').each(function(){
+        $(this).removeClass('col');
+        if($(this).is(':first-child')){
+            $(this).addClass('col-3');
+        }else if($(this).is(':last-child')){
+            $(this).addClass('col-3');
+        }else{
+            $(this).addClass('col-6');
+        }
+      });
+      $('.compass').css({width:$('#CompasBody').innerWidth()*.8,height:$('#CompasBody').innerWidth()*.8});
+  }
+  //window.scrollTo(main.offset().top,main.offset().left);
+}
+window.onresize = function(){
+  DeviceDeploy();
+};
+DeviceDeploy();
+init();
+$(document).ready(function(){
+  $('button[class^="start-btn"]').on('click', function(){
+    $('button[class^="start-btn"]').remove();
+  })
+});
+</script>
+</html>
