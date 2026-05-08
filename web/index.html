@@ -1,0 +1,1527 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>玄览 AI 国学工具箱</title>
+  <style>
+    :root {
+      --ink: #1f2524;
+      --paper: #f7f0df;
+      --paper-deep: #ebe0c9;
+      --panel: rgba(255, 252, 244, .92);
+      --panel-solid: #fffaf0;
+      --line: rgba(52, 42, 31, .16);
+      --muted: #6f6a60;
+      --teal: #16666b;
+      --teal-soft: #dceeed;
+      --cinnabar: #a83f2c;
+      --gold: #b88b3e;
+      --dark: #17211f;
+      --shadow: 0 18px 50px rgba(33, 28, 20, .13);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(22, 102, 107, .10), transparent 34%),
+        linear-gradient(180deg, #f9f4e8, #efe2cc 62%, #e7d5b9);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-width: 0;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-width: 0;
+      padding: 22px;
+      background: rgba(23, 33, 31, .96);
+      color: #fff8e8;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 248, 232, .14);
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(from 30deg, #f6e4b6, #b88b3e, #16666b, #f6e4b6);
+      color: #17211f;
+      font-size: 22px;
+      box-shadow: inset 0 0 0 3px rgba(23, 33, 31, .28);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: rgba(255, 248, 232, .66);
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      width: 100%;
+      min-height: 46px;
+      border-radius: var(--radius);
+      background: transparent;
+      color: rgba(255, 248, 232, .78);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      text-align: left;
+      transition: background .18s ease, color .18s ease, transform .18s ease;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: rgba(255, 248, 232, .12);
+      color: #fff8e8;
+      transform: translateX(2px);
+    }
+
+    .nav .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: rgba(255, 248, 232, .10);
+      color: #e8c474;
+    }
+
+    .sidebar-note {
+      margin-top: auto;
+      border: 1px solid rgba(255, 248, 232, .14);
+      border-radius: var(--radius);
+      padding: 12px;
+      color: rgba(255, 248, 232, .72);
+      font-size: 12px;
+      line-height: 1.7;
+      background: rgba(255, 248, 232, .06);
+      overflow-wrap: anywhere;
+      word-break: break-all;
+    }
+
+    main {
+      min-width: 0;
+      padding: 28px;
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      min-width: 0;
+      min-height: 360px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: var(--dark);
+      margin-bottom: 22px;
+    }
+
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .86;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(23, 33, 31, .82), rgba(23, 33, 31, .38) 45%, rgba(23, 33, 31, .08));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 690px;
+      min-width: 0;
+      padding: 40px;
+      color: #fff8e8;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      color: #f0d28a;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 66px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin: 18px 0 0;
+      max-width: 610px;
+      color: rgba(255, 248, 232, .82);
+      font-size: 16px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+      word-break: break-all;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+      min-width: 0;
+    }
+
+    .primary-btn,
+    .ghost-btn,
+    .small-btn {
+      min-height: 42px;
+      border-radius: var(--radius);
+      padding: 0 16px;
+      font-weight: 700;
+      transition: transform .18s ease, filter .18s ease, background .18s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .primary-btn {
+      background: var(--cinnabar);
+      color: #fff8e8;
+    }
+
+    .ghost-btn {
+      color: #fff8e8;
+      border: 1px solid rgba(255, 248, 232, .34);
+      background: rgba(255, 248, 232, .08);
+    }
+
+    .small-btn {
+      min-height: 38px;
+      padding: 0 12px;
+      background: var(--teal);
+      color: #fff;
+      width: auto;
+    }
+
+    .primary-btn:hover,
+    .ghost-btn:hover,
+    .small-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .surface {
+      display: none;
+      min-width: 0;
+      background: rgba(255, 250, 240, .74);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    .surface.active { display: block; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .badge {
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 0 12px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      min-width: 0;
+    }
+
+    .panel h4 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    label {
+      display: block;
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .72);
+      color: var(--ink);
+      padding: 10px 12px;
+      outline: none;
+    }
+
+    textarea { resize: vertical; min-height: 92px; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(22, 102, 107, .55);
+      box-shadow: 0 0 0 3px rgba(22, 102, 107, .12);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+      background: rgba(31, 37, 36, .06);
+      padding: 5px;
+      border-radius: var(--radius);
+    }
+
+    .segmented button {
+      min-height: 36px;
+      border-radius: 6px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 700;
+    }
+
+    .segmented button.active {
+      background: var(--panel-solid);
+      color: var(--teal);
+      box-shadow: 0 3px 14px rgba(33, 28, 20, .10);
+    }
+
+    .method-box { display: none; }
+    .method-box.active { display: block; }
+
+    .hexagram-view {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .hex-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #fffdf6, #f5ead8);
+      padding: 14px;
+      min-height: 150px;
+    }
+
+    .hex-symbol {
+      margin-bottom: 8px;
+      font-family: "Segoe UI Symbol", "Microsoft YaHei", sans-serif;
+      font-size: 40px;
+      letter-spacing: 0;
+      color: var(--dark);
+    }
+
+    .hex-card h4 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .hex-card p,
+    .reading p,
+    .library-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .line-stack {
+      display: grid;
+      gap: 7px;
+      margin-top: 12px;
+      max-width: 150px;
+    }
+
+    .yao {
+      height: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .yao.broken { grid-template-columns: 1fr 1fr; }
+    .yao span { background: var(--dark); border-radius: 99px; }
+    .yao.changing span { background: var(--cinnabar); }
+
+    .relationship-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      background: rgba(255, 255, 255, .58);
+      min-height: 88px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--teal);
+      font-size: 13px;
+    }
+
+    .reading {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .reading-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .cup-stage {
+      height: 240px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at center, rgba(184, 139, 62, .18), transparent 45%),
+        linear-gradient(145deg, rgba(22, 102, 107, .10), rgba(168, 63, 44, .08));
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .cups {
+      display: flex;
+      gap: 34px;
+      transition: transform .7s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .cup {
+      width: 86px;
+      height: 46px;
+      border-radius: 50% 50% 48% 48%;
+      background: radial-gradient(circle at 50% 35%, #f6e4b6, #b78b47 70%);
+      box-shadow: inset 0 -13px 0 rgba(91, 53, 24, .18), 0 16px 28px rgba(33, 28, 20, .18);
+      position: relative;
+    }
+
+    .cup.down {
+      background: radial-gradient(circle at 50% 65%, #7d4a26, #2c2017 70%);
+    }
+
+    .cups.rolling {
+      transform: translateY(-12px) rotate(10deg);
+      animation: toss .72s ease-in-out 3;
+    }
+
+    @keyframes toss {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-34px) rotate(18deg); }
+    }
+
+    .history {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .56);
+    }
+
+    .upload-box {
+      min-height: 220px;
+      border: 1px dashed rgba(31, 37, 36, .28);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      background: rgba(255, 255, 255, .42);
+      overflow: hidden;
+    }
+
+    .upload-box img {
+      max-width: 100%;
+      max-height: 280px;
+      border-radius: var(--radius);
+      display: none;
+      object-fit: contain;
+    }
+
+    .analysis-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 99px;
+      background: rgba(31, 37, 36, .10);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: var(--value);
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+    }
+
+    .compass-wrap {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .compass {
+      width: 260px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      margin: auto;
+      background:
+        repeating-conic-gradient(from 0deg, rgba(168, 63, 44, .18) 0 7.5deg, rgba(255, 250, 240, .78) 7.5deg 15deg),
+        radial-gradient(circle, #fffaf0 0 34%, #ddc28d 35% 44%, #fffaf0 45% 63%, #16666b 64% 66%, #fffaf0 67%);
+      border: 8px solid #8d6731;
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(23, 33, 31, .28), var(--shadow);
+      transform: rotate(var(--heading));
+      transition: transform .25s ease;
+    }
+
+    .compass::before {
+      content: "北";
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 900;
+      color: var(--cinnabar);
+    }
+
+    .needle {
+      position: absolute;
+      inset: 38px;
+      display: grid;
+      place-items: center;
+      transform: rotate(calc(var(--heading) * -1));
+    }
+
+    .needle::before {
+      content: "";
+      width: 16px;
+      height: 112px;
+      clip-path: polygon(50% 0, 100% 54%, 58% 50%, 58% 100%, 42% 100%, 42% 50%, 0 54%);
+      background: linear-gradient(180deg, var(--cinnabar) 0 48%, var(--dark) 49%);
+    }
+
+    .palace-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .palace {
+      min-height: 72px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 9px;
+      background: rgba(255, 255, 255, .54);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .library-toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 180px;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .library-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .58);
+      padding: 14px;
+      min-height: 176px;
+    }
+
+    .library-card h4 {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 0 0 8px;
+      color: var(--dark);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 0 9px;
+      background: rgba(22, 102, 107, .10);
+      color: var(--teal);
+      font-size: 12px;
+    }
+
+    .library-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .chat-log {
+      min-height: 310px;
+      max-height: 440px;
+      overflow-y: auto;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .50);
+    }
+
+    .message {
+      max-width: 86%;
+      padding: 12px;
+      border-radius: var(--radius);
+      line-height: 1.75;
+      color: var(--ink);
+    }
+
+    .message.user {
+      justify-self: end;
+      background: var(--teal);
+      color: #fff;
+    }
+
+    .message.ai {
+      justify-self: start;
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+    }
+
+    .message.loading {
+      color: var(--muted);
+      background: rgba(255, 255, 255, .64);
+    }
+
+    .chat-compose {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: end;
+    }
+
+    .disclaimer {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-left: 4px solid var(--gold);
+      background: rgba(184, 139, 62, .12);
+      color: #665638;
+      line-height: 1.65;
+      font-size: 12px;
+    }
+
+    .muted { color: var(--muted); }
+
+    @media (max-width: 980px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: relative;
+        height: auto;
+        padding: 16px;
+      }
+      .nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .sidebar-note { margin-top: 0; }
+      main { padding: 16px; }
+      .tool-grid,
+      .compass-wrap {
+        grid-template-columns: 1fr;
+      }
+      .hexagram-view,
+      .reading-grid,
+      .relationship-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-content { padding: 28px; }
+    }
+
+    @media (max-width: 620px) {
+      .nav { grid-template-columns: 1fr; }
+      .app-shell,
+      .sidebar,
+      main {
+        width: 100%;
+        max-width: 100vw;
+      }
+      .hero { min-height: 430px; }
+      .hero-content { padding: 26px; }
+      .quick-actions {
+        align-items: stretch;
+      }
+      .primary-btn,
+      .ghost-btn {
+        white-space: normal;
+        min-width: 0;
+        flex: 1 1 100%;
+      }
+      .section-head,
+      .chat-compose {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+      .form-row,
+      .library-toolbar,
+      .segmented {
+        grid-template-columns: 1fr 1fr;
+      }
+      .library-toolbar {
+        grid-template-columns: 1fr;
+      }
+      .message { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="mark">☯</div>
+        <div>
+          <h1>玄览</h1>
+          <p>AI 国学 / 易经 / 民俗文化工具箱</p>
+        </div>
+      </div>
+      <nav class="nav" aria-label="工具导航">
+        <button class="active" data-target="iching"><span class="icon">䷀</span><span>易经算卦</span></button>
+        <button data-target="cups"><span class="icon">杯</span><span>掷圣杯</span></button>
+        <button data-target="palm"><span class="icon">掌</span><span>手相 AI</span></button>
+        <button data-target="face"><span class="icon">相</span><span>面相 AI</span></button>
+        <button data-target="fengshui"><span class="icon">盘</span><span>风水罗盘</span></button>
+        <button data-target="library"><span class="icon">书</span><span>国学内容库</span></button>
+        <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
+      </nav>
+      <div class="sidebar-note">
+        传统文化解读、互动娱乐与生活建议，不替代医学、法律、财务或心理咨询。涉及照片的分析仅在本地页面演示预览，不做身份识别。
+      </div>
+    </aside>
+
+    <main>
+      <section class="hero">
+        <img src="assets/guoxue-hero.jpg" alt="罗盘、卦书与水墨纹理的国学工具箱主视觉" />
+        <div class="hero-content">
+          <div class="eyebrow">文化解读 · AI 互动 · 生活建议</div>
+          <h2>AI 国学工具箱</h2>
+          <p>把六十四卦、筊杯、手相面相、风水罗盘、黄历宜忌和国学内容库整合在一个可互动的页面里。语气保留传统文化的诗性，结论保持现代产品该有的边界感。</p>
+          <div class="quick-actions">
+            <button class="primary-btn" data-jump="iching">立即起卦</button>
+            <button class="ghost-btn" data-jump="oracle">问一个问题</button>
+            <button class="ghost-btn" data-jump="library">浏览内容库</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface active" id="iching">
+        <div class="section-head">
+          <div>
+            <h3>易经算卦</h3>
+            <p>支持时间、铜钱、数字和手动摇卦，展示本卦、变卦、互卦、错卦、综卦与分领域解读。</p>
+          </div>
+          <span class="badge">六十四卦</span>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <h4>起卦方式</h4>
+            <div class="segmented" id="castMethods">
+              <button class="active" data-method="time">时间</button>
+              <button data-method="coins">铜钱</button>
+              <button data-method="numbers">数字</button>
+              <button data-method="manual">手动</button>
+            </div>
+
+            <div class="method-box active" data-method-box="time">
+              <label for="timeQuestion">所问之事</label>
+              <textarea id="timeQuestion" placeholder="例如：最近是否适合换工作？"></textarea>
+              <button class="small-btn" id="timeCast">以当前时刻起卦</button>
+            </div>
+
+            <div class="method-box" data-method-box="coins">
+              <label for="coinQuestion">所问之事</label>
+              <textarea id="coinQuestion" placeholder="先静心默念问题，再连续掷六爻。"></textarea>
+              <button class="small-btn" id="coinToss">掷一爻</button>
+              <button class="small-btn" id="coinReset">重置</button>
+              <p class="muted" id="coinProgress">已得 0 / 6 爻</p>
+            </div>
+
+            <div class="method-box" data-method-box="numbers">
+              <div class="form-row">
+                <div>
+                  <label for="numA">上卦数</label>
+                  <input id="numA" inputmode="numeric" value="8" />
+                </div>
+                <div>
+                  <label for="numB">下卦数</label>
+                  <input id="numB" inputmode="numeric" value="6" />
+                </div>
+              </div>
+              <label for="numC">动爻数</label>
+              <input id="numC" inputmode="numeric" value="3" />
+              <button class="small-btn" id="numberCast">数字起卦</button>
+            </div>
+
+            <div class="method-box" data-method-box="manual">
+              <label>自下而上选择六爻</label>
+              <div class="form-row" id="manualLines"></div>
+              <button class="small-btn" id="manualCast">生成卦象</button>
+            </div>
+
+            <div class="disclaimer">此处用传统象义生成文化化建议，不作确定性预测。</div>
+          </div>
+
+          <div class="panel">
+            <div class="hexagram-view" id="hexagramView"></div>
+            <div class="relationship-grid" id="relatedHexagrams"></div>
+            <div class="reading" id="hexReading"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface" id="cups">
+        <div class="section-head">
+          <div>
+            <h3>掷圣杯 / 筊杯</h3>
+            <p>虚拟掷杯、三次规则与问题解释，结果包含圣杯、笑杯、阴杯。</p>
+          </div>
+          <span class="badge">连续三次</span>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <label for="cupQuestion">请写下问题</label>
+            <textarea id="cupQuestion" placeholder="例如：这件事现在推进是否合适？"></textarea>
+            <button class="small-btn" id="throwCups">掷杯</button>
+            <button class="small-btn" id="resetCups">清空记录</button>
+            <div class="disclaimer">民俗互动体验，适合做自我提问与情绪整理。</div>
+          </div>
+          <div class="panel">
+            <div class="cup-stage">
+              <div class="cups" id="cupPair">
+                <div class="cup"></div>
+                <div class="cup down"></div>
+              </div>
+            </div>
+            <div class="history" id="cupHistory"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface" id="palm">
+        <div class="section-head">
+          <div>
+            <h3>手相 AI</h3>
+            <p>上传手掌照片后，页面会生成生命线、智慧线、感情线、事业线的传统文化解读示例。</p>
+          </div>
+          <span class="badge">本地预览</span>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <label for="palmUpload">手掌照片</label>
+            <input id="palmUpload" type="file" accept="image/*" />
+            <div class="upload-box">
+              <div id="palmEmpty">选择一张手掌照片</div>
+              <img id="palmPreview" alt="手掌照片预览" />
+            </div>
+            <div class="disclaimer">仅供娱乐和传统文化参考。请勿上传他人照片或包含敏感信息的图片。</div>
+          </div>
+          <div class="panel">
+            <h4>传统手相解读</h4>
+            <div class="analysis-list" id="palmReading"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface" id="face">
+        <div class="section-head">
+          <div>
+            <h3>面相 AI</h3>
+            <p>围绕脸型、额头、眉眼、鼻相、嘴相做文化化描述，避免身份、种族、健康等敏感判断。</p>
+          </div>
+          <span class="badge">隐私友好</span>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <label for="faceUpload">自拍或照片</label>
+            <input id="faceUpload" type="file" accept="image/*" />
+            <div class="upload-box">
+              <div id="faceEmpty">选择一张清晰正面照</div>
+              <img id="facePreview" alt="面相照片预览" />
+            </div>
+            <div class="disclaimer">不做身份识别，不推断敏感属性，不替代任何专业评估。</div>
+          </div>
+          <div class="panel">
+            <h4>文化化面相解读</h4>
+            <div class="analysis-list" id="faceReading"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface" id="fengshui">
+        <div class="section-head">
+          <div>
+            <h3>风水罗盘</h3>
+            <p>模拟指南针、八卦方位、二十四山与九宫飞星建议，支持户型图上传预览。</p>
+          </div>
+          <span class="badge">罗盘 / 九宫</span>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <div class="compass-wrap">
+              <div class="compass" id="compass" style="--heading: 0deg"><div class="needle"></div></div>
+              <div>
+                <label for="headingSlider">方位角</label>
+                <input id="headingSlider" type="range" min="0" max="359" value="0" />
+                <p id="directionText" class="muted"></p>
+                <button class="small-btn" id="enableCompass">读取设备方向</button>
+              </div>
+            </div>
+            <div class="palace-grid" id="palaceGrid"></div>
+          </div>
+          <div class="panel">
+            <label for="floorUpload">户型图上传</label>
+            <input id="floorUpload" type="file" accept="image/*" />
+            <div class="upload-box">
+              <div id="floorEmpty">上传户型图后可叠加方位建议</div>
+              <img id="floorPreview" alt="户型图预览" />
+            </div>
+            <div id="fengshuiAdvice" class="reading"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface" id="library">
+        <div class="section-head">
+          <div>
+            <h3>道教 / 国学内容库</h3>
+            <p>阴阳五行、天干地支、八卦六十四卦、黄历节气与民俗方位的轻量知识卡片。</p>
+          </div>
+          <span class="badge">知识索引</span>
+        </div>
+        <div class="library-toolbar">
+          <input id="librarySearch" placeholder="搜索：五行、节气、八卦、黄历、财神..." />
+          <select id="libraryCategory">
+            <option value="all">全部分类</option>
+            <option value="易经">易经</option>
+            <option value="历法">历法</option>
+            <option value="五行">五行</option>
+            <option value="民俗">民俗</option>
+            <option value="道教">道教</option>
+            <option value="风水">风水</option>
+          </select>
+        </div>
+        <div class="library-grid" id="libraryGrid"></div>
+      </section>
+
+      <section class="surface" id="oracle">
+        <div class="section-head">
+          <div>
+            <h3>AI 问卜聊天</h3>
+            <p>结合当前时间、起卦结果、五行语汇与传统文化表达，给出适合日常决策的启发式回答。</p>
+          </div>
+          <span class="badge">互动问答</span>
+        </div>
+        <div class="panel">
+          <div class="chat-log" id="chatLog"></div>
+          <div class="chat-compose">
+            <textarea id="oracleQuestion" placeholder="例如：我最近适合换工作吗？"></textarea>
+            <button class="small-btn" id="askOracle">发送</button>
+          </div>
+          <div class="disclaimer">建议按“启发、提醒、行动清单”理解，不宜当作唯一决策依据。</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const trigrams = [
+      { name: "坤", symbol: "☷", bits: [0,0,0], image: "地", element: "土" },
+      { name: "震", symbol: "☳", bits: [1,0,0], image: "雷", element: "木" },
+      { name: "坎", symbol: "☵", bits: [0,1,0], image: "水", element: "水" },
+      { name: "兑", symbol: "☱", bits: [1,1,0], image: "泽", element: "金" },
+      { name: "艮", symbol: "☶", bits: [0,0,1], image: "山", element: "土" },
+      { name: "离", symbol: "☲", bits: [1,0,1], image: "火", element: "火" },
+      { name: "巽", symbol: "☴", bits: [0,1,1], image: "风", element: "木" },
+      { name: "乾", symbol: "☰", bits: [1,1,1], image: "天", element: "金" }
+    ];
+
+    const hexagrams = [
+      ["乾", "䷀", "元亨利贞，重在主动、开创与自强。"],
+      ["坤", "䷁", "厚德载物，宜顺势承接、稳扎稳打。"],
+      ["屯", "䷂", "初生多阻，先立秩序，再谈扩张。"],
+      ["蒙", "䷃", "启蒙求知，宜请教、学习、校准方向。"],
+      ["需", "䷄", "云上于天，等待时机，养力而行。"],
+      ["讼", "䷅", "争端显现，宜以规则、证据与沟通化解。"],
+      ["师", "䷆", "众志成军，重在纪律、组织与责任。"],
+      ["比", "䷇", "亲比相辅，择善而从，建立同盟。"],
+      ["小畜", "䷈", "小有积蓄，宜细修内功，暂缓大举。"],
+      ["履", "䷉", "履虎尾，守礼守分，谨慎前行。"],
+      ["泰", "䷊", "天地交泰，通达和顺，可积极推进。"],
+      ["否", "䷋", "闭塞不通，先守正蓄势，少作硬冲。"],
+      ["同人", "䷌", "同心于野，公开合作，减少小圈层。"],
+      ["大有", "䷍", "火在天上，资源充盈，宜善用不炫耀。"],
+      ["谦", "䷎", "山在地下，低处成势，以谦得助。"],
+      ["豫", "䷏", "雷出地奋，士气可用，先定节奏。"],
+      ["随", "䷐", "泽中有雷，随时而动，顺势调适。"],
+      ["蛊", "䷑", "风落山下，旧弊待治，先清理根因。"],
+      ["临", "䷒", "泽上有地，靠近现场，亲自照看。"],
+      ["观", "䷓", "风行地上，先观察格局，再做判断。"],
+      ["噬嗑", "䷔", "雷电相合，破除梗阻，依法执行。"],
+      ["贲", "䷕", "山下有火，修饰有度，内容为先。"],
+      ["剥", "䷖", "山附于地，层层剥落，宜止损守本。"],
+      ["复", "䷗", "一阳来复，转机初现，慢慢恢复。"],
+      ["无妄", "䷘", "雷行天下，不妄为，不侥幸。"],
+      ["大畜", "䷙", "山中蓄天，大蓄其德，厚积待发。"],
+      ["颐", "䷚", "山下有雷，慎言养身，照顾输入。"],
+      ["大过", "䷛", "泽灭木，大梁承重，需减压调衡。"],
+      ["坎", "䷜", "重水险陷，谨慎试探，寻找出路。"],
+      ["离", "䷝", "重火相丽，明辨依附，借光成事。"],
+      ["咸", "䷞", "山泽通气，感应互动，以诚动人。"],
+      ["恒", "䷟", "雷风相与，贵在持续，不宜反复。"],
+      ["遁", "䷠", "天下有山，退避非怯，是保全时机。"],
+      ["大壮", "䷡", "雷在天上，强势上升，戒躁戒莽。"],
+      ["晋", "䷢", "火出地上，渐进光明，可见成果。"],
+      ["明夷", "䷣", "地下有火，明藏于内，低调守心。"],
+      ["家人", "䷤", "风自火出，内外有序，先安其家。"],
+      ["睽", "䷥", "火泽相违，分歧难免，求同存异。"],
+      ["蹇", "䷦", "山上有水，行路艰难，宜求助转向。"],
+      ["解", "䷧", "雷雨作解，困局松动，及时释放压力。"],
+      ["损", "䷨", "山下有泽，减一分欲，增一分稳。"],
+      ["益", "䷩", "风雷相益，利有攸往，互惠可成。"],
+      ["夬", "䷪", "泽上于天，决断将至，公开而不暴烈。"],
+      ["姤", "䷫", "天下有风，偶遇机缘，慎选关系。"],
+      ["萃", "䷬", "泽上于地，资源聚合，宜定中心。"],
+      ["升", "䷭", "地中生木，循序上升，积小成高。"],
+      ["困", "䷮", "泽无水困，言少行实，守住精神。"],
+      ["井", "䷯", "木上有水，更新基础，惠及众人。"],
+      ["革", "䷰", "泽中有火，变革有时，先立共识。"],
+      ["鼎", "䷱", "木上有火，成器养贤，重塑结构。"],
+      ["震", "䷲", "重雷发声，惊而后定，迅速响应。"],
+      ["艮", "䷳", "重山止步，止于当止，整理边界。"],
+      ["渐", "䷴", "山上有木，循序渐进，礼法成事。"],
+      ["归妹", "䷵", "泽上有雷，关系未正，慎重承诺。"],
+      ["丰", "䷶", "雷电皆至，盛大明亮，盛中防衰。"],
+      ["旅", "䷷", "山上有火，人在途中，简装谨慎。"],
+      ["巽", "䷸", "重风入物，柔顺渗透，细节取胜。"],
+      ["兑", "䷹", "重泽相悦，沟通带来机会，防轻浮。"],
+      ["涣", "䷺", "风行水上，散而后聚，先化隔阂。"],
+      ["节", "䷻", "泽上有水，节制有度，定边界。"],
+      ["中孚", "䷼", "风泽中孚，诚信感通，言行一致。"],
+      ["小过", "䷽", "雷在山上，小事可过，大事宜谨。"],
+      ["既济", "䷾", "水火既济，成中有险，善后最要。"],
+      ["未济", "䷿", "火水未济，尚未完成，谨慎渡河。"]
+    ];
+
+    let currentCast = null;
+    let coinLines = [];
+    let cupRecords = [];
+    let oracleHistory = [];
+
+    function hexFromLines(lines) {
+      const value = lines.reduce((sum, bit, i) => sum + (bit ? Math.pow(2, i) : 0), 0);
+      return hexagrams[value % 64];
+    }
+
+    function makeLines(seed) {
+      let x = Math.abs(Math.floor(seed)) || 1;
+      return Array.from({ length: 6 }, (_, i) => {
+        x = (x * 9301 + 49297 + i * 233) % 233280;
+        return x % 2;
+      });
+    }
+
+    function makeChanging(seed) {
+      const line = Math.abs(seed) % 6;
+      return Array.from({ length: 6 }, (_, i) => i === line);
+    }
+
+    function invert(lines) {
+      return lines.map(x => x ? 0 : 1);
+    }
+
+    function reverse(lines) {
+      return [...lines].reverse();
+    }
+
+    function nuclear(lines) {
+      return [lines[1], lines[2], lines[3], lines[2], lines[3], lines[4]];
+    }
+
+    function changedLines(lines, changing) {
+      return lines.map((x, i) => changing[i] ? (x ? 0 : 1) : x);
+    }
+
+    function renderYao(lines, changing = []) {
+      return `<div class="line-stack">${[...lines].reverse().map((line, idx) => {
+        const originalIndex = 5 - idx;
+        return `<div class="yao ${line ? "" : "broken"} ${changing[originalIndex] ? "changing" : ""}"><span></span>${line ? "" : "<span></span>"}</div>`;
+      }).join("")}</div>`;
+    }
+
+    function renderCast(lines, changing, question = "未设问题") {
+      const base = hexFromLines(lines);
+      const changed = hexFromLines(changedLines(lines, changing));
+      const mutual = hexFromLines(nuclear(lines));
+      const opposite = hexFromLines(invert(lines));
+      const reversed = hexFromLines(reverse(lines));
+      currentCast = { lines, changing, base, changed, mutual, opposite, reversed, question };
+
+      document.getElementById("hexagramView").innerHTML = `
+        <article class="hex-card">
+          <div class="hex-symbol">${base[1]}</div>
+          <h4>本卦 · ${base[0]}</h4>
+          <p>${base[2]}</p>
+          ${renderYao(lines, changing)}
+        </article>
+        <article class="hex-card">
+          <div class="hex-symbol">${changed[1]}</div>
+          <h4>变卦 · ${changed[0]}</h4>
+          <p>${changed[2]}</p>
+          ${renderYao(changedLines(lines, changing))}
+        </article>
+      `;
+
+      document.getElementById("relatedHexagrams").innerHTML = [
+        ["互卦", mutual],
+        ["错卦", opposite],
+        ["综卦", reversed]
+      ].map(([label, item]) => `<div class="mini-card"><strong>${label}</strong><div class="hex-symbol" style="font-size:26px">${item[1]}</div><p>${item[0]}：${item[2]}</p></div>`).join("");
+
+      const moving = changing.map((v, i) => v ? `${i + 1}爻` : "").filter(Boolean).join("、") || "无明显动爻";
+      document.getElementById("hexReading").innerHTML = `
+        <h4>AI 解读</h4>
+        <p><strong>所问：</strong>${escapeHtml(question || "未设问题")}</p>
+        <p><strong>卦辞白话：</strong>${base[0]}提示当前格局以“${base[2].replace("。", "")}”为主，变为${changed[0]}，说明事情会从当下态势转向“${changed[2].replace("。", "")}”。动爻为${moving}。</p>
+        <div class="reading-grid">
+          ${readingItem("事业", "先看组织与资源是否顺畅，宜把目标拆成小步，避免只凭一时冲劲。")}
+          ${readingItem("感情", "重在真诚表达与边界感，关系里的误会适合用温和而具体的话说清。")}
+          ${readingItem("财运", "适合稳健评估投入产出，不宜被短期热度牵引，先保现金流。")}
+          ${readingItem("健康", "留意作息、压力和饮食节律，身体信号比外部评价更值得听。")}
+          ${readingItem("决策", "可行但需留后手。若三日内仍反复犹豫，先补信息，再做承诺。")}
+        </div>
+      `;
+      seedChat();
+    }
+
+    function readingItem(title, body) {
+      return `<div class="mini-card"><strong>${title}</strong><p>${body}</p></div>`;
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+    }
+
+    function selectSurface(id) {
+      document.querySelectorAll(".surface").forEach(el => el.classList.toggle("active", el.id === id));
+      document.querySelectorAll(".nav button").forEach(btn => btn.classList.toggle("active", btn.dataset.target === id));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll(".nav button").forEach(btn => btn.addEventListener("click", () => selectSurface(btn.dataset.target)));
+    document.querySelectorAll("[data-jump]").forEach(btn => btn.addEventListener("click", () => selectSurface(btn.dataset.jump)));
+
+    document.querySelectorAll("#castMethods button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#castMethods button").forEach(x => x.classList.toggle("active", x === btn));
+        document.querySelectorAll(".method-box").forEach(box => box.classList.toggle("active", box.dataset.methodBox === btn.dataset.method));
+      });
+    });
+
+    document.getElementById("timeCast").addEventListener("click", () => {
+      const now = new Date();
+      const seed = now.getFullYear() + now.getMonth() * 13 + now.getDate() * 31 + now.getHours() * 17 + now.getMinutes();
+      renderCast(makeLines(seed), makeChanging(seed), document.getElementById("timeQuestion").value);
+    });
+
+    document.getElementById("coinToss").addEventListener("click", () => {
+      if (coinLines.length >= 6) return;
+      const tosses = Array.from({ length: 3 }, () => Math.random() > .5 ? 3 : 2);
+      const total = tosses.reduce((a, b) => a + b, 0);
+      coinLines.push(total % 2 ? 1 : 0);
+      document.getElementById("coinProgress").textContent = `已得 ${coinLines.length} / 6 爻：${coinLines.map(x => x ? "阳" : "阴").join("、")}`;
+      if (coinLines.length === 6) {
+        renderCast(coinLines, makeChanging(total + Date.now()), document.getElementById("coinQuestion").value);
+      }
+    });
+
+    document.getElementById("coinReset").addEventListener("click", () => {
+      coinLines = [];
+      document.getElementById("coinProgress").textContent = "已得 0 / 6 爻";
+    });
+
+    document.getElementById("numberCast").addEventListener("click", () => {
+      const a = Number(document.getElementById("numA").value) || 1;
+      const b = Number(document.getElementById("numB").value) || 1;
+      const c = Number(document.getElementById("numC").value) || 1;
+      renderCast(makeLines(a * 64 + b * 8 + c), makeChanging(c - 1), `数字起卦：${a}、${b}、${c}`);
+    });
+
+    const manualLines = document.getElementById("manualLines");
+    for (let i = 1; i <= 6; i++) {
+      manualLines.insertAdjacentHTML("beforeend", `<div><label>第 ${i} 爻</label><select id="manual${i}"><option value="1">阳爻</option><option value="0">阴爻</option></select></div>`);
+    }
+    document.getElementById("manualCast").addEventListener("click", () => {
+      const lines = Array.from({ length: 6 }, (_, i) => Number(document.getElementById(`manual${i + 1}`).value));
+      renderCast(lines, [false, false, false, false, false, false], "手动摇卦");
+    });
+
+    function throwCupResult() {
+      const r = Math.random();
+      if (r < .42) return { name: "圣杯", shape: [1, 0], text: "一正一反，象征允可。若三次中圣杯稳定出现，可视为顺势推进。" };
+      if (r < .70) return { name: "笑杯", shape: [1, 1], text: "两面皆仰，像是提醒问题还未问准，或心意仍散。" };
+      return { name: "阴杯", shape: [0, 0], text: "两面皆覆，宜暂缓、复核条件，或换一种问法。" };
+    }
+
+    document.getElementById("throwCups").addEventListener("click", () => {
+      const pair = document.getElementById("cupPair");
+      pair.classList.add("rolling");
+      setTimeout(() => {
+        pair.classList.remove("rolling");
+        const result = throwCupResult();
+        const cups = pair.querySelectorAll(".cup");
+        cups.forEach((cup, i) => cup.classList.toggle("down", result.shape[i] === 0));
+        cupRecords.unshift(result);
+        cupRecords = cupRecords.slice(0, 3);
+        const yesCount = cupRecords.filter(x => x.name === "圣杯").length;
+        const rule = cupRecords.length < 3 ? `还可再掷 ${3 - cupRecords.length} 次` : (yesCount >= 2 ? "三次规则：偏向可行" : "三次规则：宜再审题");
+        document.getElementById("cupHistory").innerHTML = cupRecords.map((item, i) => `
+          <div class="history-item"><strong>${i + 1}. ${item.name}</strong><span>${item.text}</span></div>
+        `).join("") + `<div class="disclaimer">${rule}。问题：${escapeHtml(document.getElementById("cupQuestion").value || "未设问题")}</div>`;
+      }, 740);
+    });
+
+    document.getElementById("resetCups").addEventListener("click", () => {
+      cupRecords = [];
+      document.getElementById("cupHistory").innerHTML = "";
+    });
+
+    function wireUpload(inputId, previewId, emptyId, callback) {
+      document.getElementById(inputId).addEventListener("change", event => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        const img = document.getElementById(previewId);
+        img.src = url;
+        img.style.display = "block";
+        document.getElementById(emptyId).style.display = "none";
+        callback(file);
+      });
+    }
+
+    function metric(label, value, text) {
+      return `<div class="metric"><strong>${label}</strong><div><div class="bar" style="--value:${value}%"><span></span></div><p class="muted">${text}</p></div></div>`;
+    }
+
+    wireUpload("palmUpload", "palmPreview", "palmEmpty", () => {
+      document.getElementById("palmReading").innerHTML = [
+        metric("生命线", 82, "线势饱满，传统说法偏向精力与恢复力较稳。"),
+        metric("智慧线", 76, "思考路径较清楚，适合把复杂问题拆开处理。"),
+        metric("感情线", 68, "情绪表达重视安全感，关系中宜多说真实需求。"),
+        metric("事业线", 61, "阶段性目标感正在形成，适合先做三个月计划。")
+      ].join("");
+    });
+
+    wireUpload("faceUpload", "facePreview", "faceEmpty", () => {
+      document.getElementById("faceReading").innerHTML = [
+        metric("脸型气质", 72, "整体解读偏稳重亲和，适合建立可信赖的第一印象。"),
+        metric("额头", 66, "传统语汇中象征规划力，建议近期重视信息整理。"),
+        metric("眉眼", 79, "表达力和观察力较突出，沟通时可先倾听后判断。"),
+        metric("鼻相嘴相", 64, "财务和承诺宜保守，答应之前先确认边界。")
+      ].join("");
+    });
+
+    const directions = ["北 坎 水", "东北 艮 土", "东 震 木", "东南 巽 木", "南 离 火", "西南 坤 土", "西 兑 金", "西北 乾 金"];
+    function updateCompass(deg) {
+      document.getElementById("compass").style.setProperty("--heading", `${-deg}deg`);
+      const index = Math.round(deg / 45) % 8;
+      const mountains = ["壬子癸", "丑艮寅", "甲卯乙", "辰巽巳", "丙午丁", "未坤申", "庚酉辛", "戌乾亥"];
+      document.getElementById("directionText").textContent = `${deg}° · ${directions[index]} · 二十四山：${mountains[index]}`;
+      document.getElementById("fengshuiAdvice").innerHTML = `<h4>家居建议</h4><p>${directions[index]}方被激活。可优先保持此方位明亮、整洁、动线通畅；若为入口或工作区，适合放置低饱和色收纳与稳定光源。</p>`;
+    }
+    document.getElementById("headingSlider").addEventListener("input", e => updateCompass(Number(e.target.value)));
+    document.getElementById("enableCompass").addEventListener("click", async () => {
+      if (typeof DeviceOrientationEvent !== "undefined" && DeviceOrientationEvent.requestPermission) {
+        try { await DeviceOrientationEvent.requestPermission(); } catch {}
+      }
+      window.addEventListener("deviceorientation", e => {
+        const deg = Math.round(e.alpha || 0);
+        document.getElementById("headingSlider").value = deg;
+        updateCompass(deg);
+      }, { once: false });
+    });
+
+    const palaceNames = ["东南 四绿", "南 九紫", "西南 二黑", "东 三碧", "中 五黄", "西 七赤", "东北 八白", "北 一白", "西北 六白"];
+    document.getElementById("palaceGrid").innerHTML = palaceNames.map((name, i) => `<div class="palace"><strong>${name}</strong><br>${["文昌学习", "喜庆名望", "静养避杂", "生发行动", "保持稳定", "口才社交", "积蓄沉淀", "人缘流动", "贵人规则"][i]}</div>`).join("");
+    wireUpload("floorUpload", "floorPreview", "floorEmpty", () => updateCompass(Number(document.getElementById("headingSlider").value)));
+
+    const library = [
+      { title: "太极与阴阳", category: "五行", body: "一阴一阳之谓道。太极不是二元对立，而是变化关系的总体，适合用来理解张弛、进退、动静与互补。", tags: ["动静", "互根", "转化"], use: "做决策时先看局面是该动还是该守。" },
+      { title: "五行生克", category: "五行", body: "木火土金水不是物质清单，而是一套描述生发、炎上、承载、收敛、润下的关系语言。", tags: ["相生", "相克", "制化"], use: "用于分析资源流向、团队性格和生活节律。" },
+      { title: "天干", category: "历法", body: "甲乙丙丁戊己庚辛壬癸承载阴阳五行与时间序列，常用于纪日、纪年和传统术数结构。", tags: ["十干", "阴阳", "五行"], use: "适合做时间语境和传统文化解释。" },
+      { title: "地支", category: "历法", body: "子丑寅卯辰巳午未申酉戌亥关联时辰、月份、方位和生肖，是民俗时间系统的基础。", tags: ["十二支", "时辰", "方位"], use: "可解释时辰起卦、节律安排和方位象征。" },
+      { title: "八卦取象", category: "易经", body: "乾坤震巽坎离艮兑分别取象天地雷风水火山泽，也对应家庭、身体、方位与性情象义。", tags: ["乾坤", "八象", "方位"], use: "用于把抽象问题转成可观察的情境。" },
+      { title: "六十四卦", category: "易经", body: "八卦相重成六十四卦，每卦描述一种处境及其变化，不宜理解成固定吉凶标签。", tags: ["本卦", "变卦", "爻辞"], use: "适合做问题复盘、决策提示和行动边界。" },
+      { title: "本卦与变卦", category: "易经", body: "本卦看当前态势，变卦看趋势转向；动爻是变化的触发点，也是解读重点。", tags: ["动爻", "趋势", "转机"], use: "问事时先看现状，再看改变发生在哪里。" },
+      { title: "互卦、错卦、综卦", category: "易经", body: "互卦看内在结构，错卦看反面镜像，综卦看换位后的局面，可增加解读层次。", tags: ["互卦", "错卦", "综卦"], use: "适合避免单线条解释，看到隐藏条件。" },
+      { title: "卦辞与爻辞", category: "易经", body: "卦辞概括大势，爻辞落到具体阶段。白话解读应结合问题，不宜脱离情境硬套。", tags: ["卦辞", "爻辞", "白话"], use: "用于生成更像文化讲解而非简单判词的回答。" },
+      { title: "黄历宜忌", category: "历法", body: "黄历宜忌是民俗择日语言，适合安排仪式感和生活节奏，不应替代现实条件判断。", tags: ["宜", "忌", "值神"], use: "可作为轻量提醒，而非唯一依据。" },
+      { title: "二十四节气", category: "历法", body: "节气记录太阳周年运动与物候变化，从立春到大寒构成传统生活节律。", tags: ["立春", "清明", "冬至"], use: "适合做健康作息、饮食和计划节奏建议。" },
+      { title: "十二时辰", category: "历法", body: "一日分十二时辰，每个时辰都有生活经验上的节律暗示，如子时养藏、午时阳盛。", tags: ["子时", "午时", "作息"], use: "可用于问卜聊天中的当前时间语境。" },
+      { title: "纳音与五音", category: "五行", body: "纳音把干支组合转成五行音律象征，更适合做文化科普，避免过度决定论。", tags: ["纳音", "音律", "象征"], use: "用于丰富传统表达的层次。" },
+      { title: "财神方位", category: "民俗", body: "财神方位常用于春节、开市、店铺动线等民俗场景，本质是空间仪式与心理暗示。", tags: ["财神", "开市", "方位"], use: "可生成节日和开工场景建议。" },
+      { title: "喜神方位", category: "民俗", body: "喜神方位多用于婚庆、出行和喜事安排，表达对顺遂、人和与好消息的期待。", tags: ["喜神", "婚庆", "出行"], use: "适合做轻松民俗提示。" },
+      { title: "筊杯规则", category: "民俗", body: "一正一反为圣杯，两正为笑杯，两反为阴杯；连续三次规则常用于确认问题是否清楚。", tags: ["圣杯", "笑杯", "阴杯"], use: "用于掷圣杯模块的结果解释。" },
+      { title: "罗盘二十四山", category: "风水", body: "二十四山把一周天分为二十四个方位，用天干地支和四维表示方向细分。", tags: ["壬子癸", "艮巽坤乾", "方位"], use: "适合做家居方位和户型图分析。" },
+      { title: "九宫飞星", category: "风水", body: "九宫飞星用九个宫位描述空间气机变化，产品中应作为文化模型和布局建议呈现。", tags: ["九宫", "飞星", "宫位"], use: "可输出整洁、采光、动线等现实建议。" },
+      { title: "明堂与动线", category: "风水", body: "明堂重开阔，动线重通达。现代家居可转译为采光、收纳、通风和路径效率。", tags: ["明堂", "动线", "家居"], use: "让风水建议更接近实际居住体验。" },
+      { title: "道教清静观", category: "道教", body: "清静不是消极避世，而是减少杂念、调整身心与行动节奏的修养语言。", tags: ["清静", "修养", "身心"], use: "适合给焦虑型问题提供缓冲建议。" },
+      { title: "符号与科仪", category: "道教", body: "符号、科仪、咒语应以文化史和信仰语境理解，产品表达要尊重传统并避免神化承诺。", tags: ["符号", "科仪", "咒语"], use: "用于内容库科普和合规边界。" },
+      { title: "三才观", category: "易经", body: "天、地、人构成三才。问事时可分别看外部时势、现实条件与个人行动。", tags: ["天时", "地利", "人和"], use: "非常适合转成行动建议结构。" },
+      { title: "四象", category: "五行", body: "太阳、少阳、太阴、少阴描述阴阳消长阶段，可用于解释事情从萌芽到成熟的过程。", tags: ["太阳", "少阳", "太阴"], use: "用于趋势类问题的阶段判断。" },
+      { title: "民俗免责声明", category: "民俗", body: "传统文化工具应明确娱乐与文化参考属性，不替代专业建议，不制造恐惧和依赖。", tags: ["合规", "边界", "娱乐"], use: "作为所有解读模块的底层原则。" }
+    ];
+
+    function renderLibrary() {
+      const query = document.getElementById("librarySearch").value.trim().toLowerCase();
+      const category = document.getElementById("libraryCategory").value;
+      const filtered = library.filter(item => {
+        const text = `${item.title} ${item.category} ${item.body} ${item.tags.join(" ")} ${item.use}`.toLowerCase();
+        return (category === "all" || item.category === category) && (!query || text.includes(query));
+      });
+      document.getElementById("libraryGrid").innerHTML = filtered.map(item => `
+        <article class="library-card">
+          <h4>${item.title}<span>⌁</span></h4>
+          <p>${item.body}</p>
+          <div class="tag-row">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+          <div class="library-meta"><span>${item.category}</span><span>${item.use}</span></div>
+        </article>
+      `).join("") || `<div class="panel">没有找到匹配内容，可以换一个关键词。</div>`;
+    }
+    document.getElementById("librarySearch").addEventListener("input", renderLibrary);
+    document.getElementById("libraryCategory").addEventListener("change", renderLibrary);
+    renderLibrary();
+
+    function seedChat() {
+      const log = document.getElementById("chatLog");
+      if (log.children.length === 0) {
+        log.innerHTML = `<div class="message ai">可以问我一个具体问题。我会调用 DeepSeek，结合当前时间与最近一次起卦，用传统文化的语言给你一个偏现实的行动建议。</div>`;
+      }
+    }
+
+    function castPayload() {
+      if (!currentCast) return null;
+      return {
+        base: currentCast.base?.[0],
+        changed: currentCast.changed?.[0],
+        mutual: currentCast.mutual?.[0],
+        opposite: currentCast.opposite?.[0],
+        reversed: currentCast.reversed?.[0],
+        moving_lines: currentCast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean),
+        summary: `${currentCast.base?.[0] || ""}：${currentCast.base?.[2] || ""} 变 ${currentCast.changed?.[0] || ""}：${currentCast.changed?.[2] || ""}`
+      };
+    }
+
+    function localOracleAnswer(q) {
+      const cast = currentCast || { base: hexagrams[23], changed: hexagrams[40] };
+      const hour = new Date().getHours();
+      const phase = hour < 11 ? "阳气初升，适合开局与沟通" : hour < 17 ? "日中事明，适合推进与确认" : "暮色收束，适合复盘与缓行";
+      return `DeepSeek 暂未连通，我先给出本地文化解读：以此刻来看，${phase}。卦象取${cast.base[0]}之意，变入${cast.changed[0]}，提示你先辨清真正阻力，再决定是否行动。若问“${escapeHtml(q)}”，建议先做一次信息盘点，列出可控、不可控、需要求证三类；三日内若关键条件仍不清楚，宜小步试探，不宜一次性押上全部承诺。`;
+    }
+
+    async function askDeepSeek(question) {
+      const response = await fetch("/oracle/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question,
+          cast: castPayload(),
+          current_time: new Date().toLocaleString("zh-CN"),
+          history: oracleHistory.slice(-6)
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.detail || "DeepSeek 服务暂不可用");
+      }
+      return data.answer;
+    }
+
+    document.getElementById("askOracle").addEventListener("click", async () => {
+      const input = document.getElementById("oracleQuestion");
+      const q = input.value.trim();
+      if (!q) return;
+      const log = document.getElementById("chatLog");
+      log.insertAdjacentHTML("beforeend", `<div class="message user">${escapeHtml(q)}</div>`);
+      oracleHistory.push({ role: "user", content: q });
+      input.value = "";
+      log.scrollTop = log.scrollHeight;
+      const loading = document.createElement("div");
+      loading.className = "message ai loading";
+      loading.textContent = "正在请 DeepSeek 解卦...";
+      log.appendChild(loading);
+      try {
+        const answer = await askDeepSeek(q);
+        loading.classList.remove("loading");
+        loading.textContent = answer;
+        oracleHistory.push({ role: "assistant", content: answer });
+      } catch (error) {
+        const answer = localOracleAnswer(q);
+        loading.classList.remove("loading");
+        loading.innerHTML = `${escapeHtml(answer)}<br><br><span class="muted">提示：${escapeHtml(error.message)}</span>`;
+        oracleHistory.push({ role: "assistant", content: answer });
+      }
+      oracleHistory = oracleHistory.slice(-8);
+      log.scrollTop = log.scrollHeight;
+    });
+
+    renderCast(makeLines(Date.now()), makeChanging(new Date().getMinutes()), "今日总览");
+    updateCompass(0);
+  </script>
+</body>
+</html>
