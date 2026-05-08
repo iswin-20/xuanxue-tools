@@ -614,28 +614,20 @@
     }
 
     .compass {
-      width: 260px;
+      width: 300px;
       aspect-ratio: 1;
       border-radius: 50%;
       margin: auto;
-      background:
-        repeating-conic-gradient(from 0deg, rgba(168, 63, 44, .18) 0 7.5deg, rgba(255, 250, 240, .78) 7.5deg 15deg),
-        radial-gradient(circle, #fffaf0 0 34%, #ddc28d 35% 44%, #fffaf0 45% 63%, #16666b 64% 66%, #fffaf0 67%);
-      border: 8px solid #8d6731;
+      background: url('assets/luopan.png') center/cover no-repeat;
+      border: 4px solid #5a3c1e;
       position: relative;
-      box-shadow: inset 0 0 0 1px rgba(23, 33, 31, .28), var(--shadow);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.5);
       transform: rotate(var(--heading));
       transition: transform .25s ease;
     }
 
     .compass::before {
-      content: "北";
-      position: absolute;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-weight: 900;
-      color: var(--cinnabar);
+      display: none;
     }
 
     .needle {
