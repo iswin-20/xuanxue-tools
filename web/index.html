@@ -1744,15 +1744,53 @@
     }
     document.getElementById("headingSlider").addEventListener("input", e => updateCompass(Number(e.target.value)));
     document.getElementById("enableCompass").addEventListener("click", async () => {
-      if (typeof DeviceOrientationEvent !== "undefined" && DeviceOrientationEvent.requestPermission) {
-        try { await DeviceOrientationEvent.requestPermission(); } catch {}
+      if (window.isSecureContext === false) {
+        alert("获取设备方向需要 HTTPS 环境或本地 localhost。如果在局域网访问，请手动拖动下方滑块调整方向。");
+        return;
       }
-      window.addEventListener("deviceorientation", e => {
-        const deg = Math.round(e.alpha || 0);
-        document.getElementById("headingSlider").value = deg;
-        updateCompass(deg);
-      }, { once: false });
+      
+      const btn = document.getElementById("enableCompass");
+      
+      if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+        try {
+          const permissionState = await DeviceOrientationEvent.requestPermission();
+          if (permissionState === "granted") {
+            window.addEventListener("deviceorientation", handleOrientation);
+            btn.textContent = "已开启方向传感器";
+            btn.disabled = true;
+          } else {
+            alert("需要同意方向传感器权限才能自动旋转罗盘。");
+          }
+        } catch (e) {
+          alert("获取权限失败，可能是由于非 HTTPS 协议引起。");
+        }
+      } else {
+        if ("ondeviceorientationabsolute" in window) {
+          window.addEventListener("deviceorientationabsolute", handleOrientation);
+        } else {
+          window.addEventListener("deviceorientation", handleOrientation);
+        }
+        btn.textContent = "已开启方向传感器";
+        btn.disabled = true;
+      }
     });
+
+    function handleOrientation(e) {
+      let deg = 0;
+      if (e.webkitCompassHeading) {
+        deg = e.webkitCompassHeading;
+      } else if (e.alpha !== null) {
+        // Android absolute orientation is usually e.alpha, but it rotates counter-clockwise
+        deg = 360 - e.alpha;
+      } else {
+        return;
+      }
+      deg = Math.round(deg) % 360;
+      if (deg < 0) deg += 360;
+      
+      document.getElementById("headingSlider").value = deg;
+      updateCompass(deg);
+    }
 
     const palaceNames = ["东南 四绿", "南 九紫", "西南 二黑", "东 三碧", "中 五黄", "西 七赤", "东北 八白", "北 一白", "西北 六白"];
     document.getElementById("palaceGrid").innerHTML = palaceNames.map((name, i) => `<div class="palace"><strong>${name}</strong><br>${["文昌学习", "喜庆名望", "静养避杂", "生发行动", "保持稳定", "口才社交", "积蓄沉淀", "人缘流动", "贵人规则"][i]}</div>`).join("");
