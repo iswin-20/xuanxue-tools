@@ -954,6 +954,134 @@
     .muyu-mallet.hit {
       transform: rotate(-25deg) translateY(20px) translateX(-10px);
     }
+    
+    /* Fullscreen Compass Overlay */
+    .fs-compass-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #c39b61; /* Traditional beige/khaki background */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      overflow: hidden;
+    }
+    .fs-compass-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .fs-crosshair-x {
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px; background: rgba(255, 0, 0, 0.8); z-index: 10002;
+    }
+    .fs-crosshair-y {
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 1px; background: rgba(255, 0, 0, 0.8); z-index: 10002;
+    }
+    .fs-compass-center {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1.5px solid rgba(255, 0, 0, 0.8);
+      transform: translate(-50%, -50%);
+      z-index: 10003;
+    }
+    .fs-compass {
+      width: 90vmin;
+      height: 90vmin;
+      max-width: 800px;
+      max-height: 800px;
+      background: url('assets/luopan.png') center/cover no-repeat;
+      border-radius: 50%;
+      transform: rotate(var(--fs-heading));
+      transition: transform 0.1s linear;
+      z-index: 10001;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border: 6px solid #4a2e15;
+    }
+    .fs-controls {
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10004;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .fs-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #fff;
+      padding: 12px 20px;
+      cursor: pointer;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+    .fs-btn:hover { background: rgba(255,255,255,0.25); }
+    .fs-close {
+      position: absolute;
+      top: 20px; right: 30px;
+      z-index: 10004;
+      font-size: 40px;
+      color: #fff;
+      cursor: pointer;
+      background: none;
+      border: none;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      transition: transform 0.2s;
+    }
+    .fs-close:hover { transform: scale(1.1); }
+    .fs-logo {
+      position: absolute;
+      top: 30px; left: 40px;
+      z-index: 10004;
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      letter-spacing: 2px;
+    }
+    .fs-info {
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-family: monospace;
+    }
+    .fs-adjust-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      transition: color 0.2s;
+    }
+    .fs-adjust-btn:hover { color: var(--gold); }
+    @media (max-width: 768px) {
+      .fs-controls {
+        top: auto; bottom: 40px; left: 50%; transform: translateX(-50%);
+        align-items: center; justify-content: center;
+        width: 100%;
+      }
+      .fs-info { font-size: 28px; }
+      .fs-logo { font-size: 18px; top: 20px; left: 20px; }
+      .fs-close { top: 10px; right: 15px; font-size: 32px; }
+    }
   </style>
 </head>
 <body>
@@ -1200,6 +1328,7 @@
             <div class="compass-wrap">
               <div class="compass" id="compass" style="--heading: 0deg"><div class="needle"></div></div>
               <div class="compass-controls">
+                <button class="primary-btn" id="openFsCompassBtn" style="margin-bottom: 10px; font-weight: bold;">进入全屏专业大罗盘</button>
                 <button class="small-btn" id="enableCompass">读取设备方向</button>
                 <label for="headingSlider">方位角</label>
                 <input id="headingSlider" type="range" min="0" max="359" value="0" />
@@ -1275,7 +1404,28 @@
     </div>
   </div>
 
+  <div class="fs-compass-overlay" id="fsCompassOverlay">
+    <div class="fs-logo">安安风水大罗盘</div>
+    <button class="fs-close" id="fsCloseBtn">×</button>
+    
+    <div class="fs-controls">
+      <div class="fs-info">
+        <button class="fs-adjust-btn" id="fsAdjUp">▲</button>
+        <span id="fsAngleDisplay">0.00°</span>
+        <button class="fs-adjust-btn" id="fsAdjDown">▼</button>
+      </div>
+      <div style="font-size: 20px; opacity: 0.9; text-align: center;" id="fsMountainDisplay">北 坎 水</div>
+      <button class="fs-btn" id="fsStartBtn" style="margin-top: 10px;">启动方向感应</button>
+    </div>
+
+    <div class="fs-compass" id="fsCompass" style="--fs-heading: 0deg"></div>
+    <div class="fs-crosshair-x"></div>
+    <div class="fs-crosshair-y"></div>
+    <div class="fs-compass-center"></div>
+  </div>
+
   <script>
+    window.fsOffset = 0;
     const trigrams = [
       { name: "坤", symbol: "☷", bits: [0,0,0], image: "地", element: "土" },
       { name: "震", symbol: "☳", bits: [1,0,0], image: "雷", element: "木" },
@@ -1727,14 +1877,57 @@
     });
 
     const directions = ["北 坎 水", "东北 艮 土", "东 震 木", "东南 巽 木", "南 离 火", "西南 坤 土", "西 兑 金", "西北 乾 金"];
-    function updateCompass(deg) {
+    function updateCompass(rawDeg) {
+      let deg = (rawDeg + window.fsOffset) % 360;
+      if (deg < 0) deg += 360;
+      
       document.getElementById("compass").style.setProperty("--heading", `${-deg}deg`);
+      
+      const fsCompass = document.getElementById("fsCompass");
+      if (fsCompass) {
+        fsCompass.style.setProperty("--fs-heading", `${-deg}deg`);
+        document.getElementById("fsAngleDisplay").textContent = deg.toFixed(2) + "°";
+      }
+
       const index = Math.round(deg / 45) % 8;
       const mountains = ["壬子癸", "丑艮寅", "甲卯乙", "辰巽巳", "丙午丁", "未坤申", "庚酉辛", "戌乾亥"];
-      document.getElementById("directionText").textContent = `${deg}° · ${directions[index]} · 二十四山：${mountains[index]}`;
+      document.getElementById("directionText").textContent = `${deg.toFixed(1)}° · ${directions[index]} · 二十四山：${mountains[index]}`;
+      
+      const fsMountainDisplay = document.getElementById("fsMountainDisplay");
+      if (fsMountainDisplay) {
+        fsMountainDisplay.textContent = `${directions[index]} · ${mountains[index]}`;
+      }
+
       document.getElementById("fengshuiAdvice").innerHTML = `<h4>家居建议</h4><p>${directions[index]}方被激活。可优先保持此方位明亮、整洁、动线通畅；若为入口或工作区，适合放置低饱和色收纳与稳定光源。</p>`;
     }
+    
     document.getElementById("headingSlider").addEventListener("input", e => updateCompass(Number(e.target.value)));
+    
+    document.getElementById("openFsCompassBtn").addEventListener("click", () => {
+      document.getElementById("fsCompassOverlay").classList.add("show");
+    });
+    
+    document.getElementById("fsCloseBtn").addEventListener("click", () => {
+      document.getElementById("fsCompassOverlay").classList.remove("show");
+    });
+    
+    document.getElementById("fsAdjUp").addEventListener("click", () => {
+      window.fsOffset = (window.fsOffset + 0.5) % 360;
+      updateCompass(Number(document.getElementById("headingSlider").value));
+    });
+    
+    document.getElementById("fsAdjDown").addEventListener("click", () => {
+      window.fsOffset = (window.fsOffset - 0.5) % 360;
+      updateCompass(Number(document.getElementById("headingSlider").value));
+    });
+
+    document.getElementById("fsStartBtn").addEventListener("click", () => {
+      document.getElementById("enableCompass").click(); 
+      const btn = document.getElementById("fsStartBtn");
+      btn.textContent = "已开启方向传感器";
+      btn.disabled = true;
+    });
+
     document.getElementById("enableCompass").addEventListener("click", async () => {
       if (window.isSecureContext === false) {
         alert("获取设备方向需要 HTTPS 环境或本地 localhost。如果在局域网访问，请手动拖动下方滑块调整方向。");
