@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,6 +31,7 @@ app.include_router(oracle.router)
 
 app.mount(f"/{settings.upload_dir}", StaticFiles(directory=settings.upload_dir), name="uploads")
 app.mount("/web", StaticFiles(directory="web", html=True), name="web")
+app.mount("/assets", StaticFiles(directory="web/assets"), name="assets")
 
 
 @app.get("/")
