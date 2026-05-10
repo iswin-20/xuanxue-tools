@@ -787,6 +787,18 @@
       align-items: end;
     }
 
+    .placeholder-card {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--panel);
+      border-radius: var(--radius);
+      border: 2px dashed var(--line);
+    }
+    .placeholder-card.hidden { display: none; }
+    .line-stack .yao.pending { opacity: 0.2; }
+    .line-stack .yao.pending span { background: var(--line); }
+    .incense-reading.ai-loading { opacity: 0.6; }
     .disclaimer {
       margin-top: 12px;
       padding: 10px 12px;
@@ -1412,8 +1424,10 @@
             <div class="method-box" data-method-box="coins">
               <label for="coinQuestion">所问之事</label>
               <textarea id="coinQuestion" placeholder="先静心默念问题，再连续掷六爻。"></textarea>
-              <button class="small-btn" id="coinToss">掷一爻</button>
-              <button class="small-btn" id="coinReset">重置</button>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <button class="small-btn" id="coinToss">掷一爻</button>
+                <button class="small-btn" id="coinReset" style="background:var(--paper-deep); color:var(--muted);">重置</button>
+              </div>
               <p class="muted" id="coinProgress">已得 0 / 6 爻</p>
             </div>
 
@@ -1434,16 +1448,27 @@
             </div>
 
             <div class="method-box" data-method-box="manual">
-              <label>自下而上选择六爻</label>
+              <label for="manualQuestion">所问之事</label>
+              <textarea id="manualQuestion" placeholder="例如：最近事业运势如何？"></textarea>
+              <label>自下而上选择六爻（老阳/老阴为动爻）</label>
               <div class="form-row" id="manualLines"></div>
-              <button class="small-btn" id="manualCast">生成卦象</button>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <button class="small-btn" id="manualCast">生成卦象</button>
+                <button class="small-btn" id="manualReset" style="background:var(--paper-deep); color:var(--muted);">重置</button>
+              </div>
             </div>
 
             <div class="disclaimer">此处用传统象义生成文化化建议，不作确定性预测。</div>
           </div>
 
           <div class="panel">
-            <div class="hexagram-view" id="hexagramView"></div>
+            <div class="hexagram-view" id="hexagramView">
+              <div class="placeholder-card" id="hexPlaceholder">
+                <div style="font-size:48px; opacity:0.2; margin-bottom:12px;">䷀</div>
+                <p style="color:var(--muted);">请选择起卦方式，开始摇卦</p>
+                <p style="color:var(--muted); font-size:13px; margin-top:4px;">支持时间、铜钱、数字和手动四种起卦方法</p>
+              </div>
+            </div>
             <div class="relationship-grid" id="relatedHexagrams"></div>
             <div class="reading" id="hexReading"></div>
           </div>
@@ -1955,6 +1980,40 @@
       return [lines[1], lines[2], lines[3], lines[2], lines[3], lines[4]];
     }
 
+    // 掷爻过程中逐步渲染已有爻位（铜钱法专用）
+    function renderCoinProgress(lines, changings) {
+      const pending = 6 - lines.length;
+      const fullLines = [...lines, ...Array(pending).fill(null)];
+      const fullChangings = [...changings, ...Array(pending).fill(false)];
+      
+      // 逐步构建显示
+      let yaoHtml = [...fullLines].reverse().map((val, idx) => {
+        const origIdx = 5 - idx;
+        if (val === null) {
+          return `<div class="yao pending"><span></span><span></span></div>`;
+        }
+        const isYang = val === 1;
+        const isChanging = fullChangings[origIdx] || false;
+        const cls = isYang ? "" : "broken";
+        const chgCls = isChanging ? "changing" : "";
+        return `<div class="yao ${cls} ${chgCls}"><span></span>${isYang ? "" : "<span></span>"}</div>`;
+      }).join("");
+      
+      // 显示当前进度
+      const progressText = lines.length < 6 ? `（已完成 ${lines.length}/6 爻）` : "";
+      document.getElementById("hexagramView").innerHTML = `
+        <article class="hex-card" style="grid-column:1/-1;">
+          <h4>起卦中 ${progressText}</h4>
+          <div class="line-stack">${yaoHtml}</div>
+          <p class="muted" style="margin-top:8px; text-align:center;">
+            ${lines.length < 6 ? "继续掷爻完成剩余爻位..." : ""}
+          </p>
+        </article>
+      `;
+      document.getElementById("relatedHexagrams").innerHTML = "";
+      document.getElementById("hexReading").innerHTML = "";
+    }
+
     function changedLines(lines, changing) {
       return lines.map((x, i) => changing[i] ? (x ? 0 : 1) : x);
     }
@@ -2220,11 +2279,17 @@
           overlay.classList.remove("show");
           coinLines.push(lineVal);
           coinChangings.push(isChanging);
-          document.getElementById("coinProgress").textContent = `已得 ${coinLines.length} / 6 爻：${coinLines.map(x => x ? "阳" : "阴").join("、")}`;
+          
+          const yinYang = coinLines.map(x => x ? "阳" : "阴");
+          const movingMark = coinChangings.map((c, i) => c ? "⚡" : "").filter(Boolean);
+          const progressStr = yinYang.join("、") + (movingMark.length ? "（" + movingMark.join("") + "动）" : "");
+          document.getElementById("coinProgress").textContent = `已得 ${coinLines.length} / 6 爻：${progressStr}`;
           btn.disabled = false;
           
           if (coinLines.length === 6) {
             renderCast(coinLines, coinChangings, document.getElementById("coinQuestion").value);
+          } else {
+            renderCoinProgress(coinLines, coinChangings);
           }
         }, 1500);
       }, 1600);
@@ -2244,12 +2309,36 @@
     });
 
     const manualLines = document.getElementById("manualLines");
+    const manualOptions = [
+      { value: "2", label: "老阳 ▅▅▅ (动)", cls: "yang-changing" },
+      { value: "1", label: "少阳 ▅▅▅", cls: "yang-static" },
+      { value: "-1", label: "少阴 ▅ ▅", cls: "yin-static" },
+      { value: "-2", label: "老阴 ▅ ▅ (动)", cls: "yin-changing" }
+    ];
     for (let i = 1; i <= 6; i++) {
-      manualLines.insertAdjacentHTML("beforeend", `<div><label>第 ${i} 爻</label><select id="manual${i}"><option value="1">阳爻</option><option value="0">阴爻</option></select></div>`);
+      const opts = manualOptions.map(o => `<option value="${o.value}" class="${o.cls}">${o.label}</option>`).join("");
+      manualLines.insertAdjacentHTML("beforeend", `<div><label>第 ${i} 爻</label><select id="manual${i}">${opts}</select></div>`);
+    }
+    function readManualCast() {
+      const lines = [];
+      const changing = [];
+      for (let i = 0; i < 6; i++) {
+        const val = Number(document.getElementById(`manual${i + 1}`).value);
+        lines.push(val > 0 ? 1 : 0);
+        changing.push(Math.abs(val) === 2);
+      }
+      return { lines, changing };
     }
     document.getElementById("manualCast").addEventListener("click", () => {
-      const lines = Array.from({ length: 6 }, (_, i) => Number(document.getElementById(`manual${i + 1}`).value));
-      renderCast(lines, [false, false, false, false, false, false], "手动摇卦");
+      const { lines, changing } = readManualCast();
+      const question = document.getElementById("manualQuestion").value.trim() || "手动摇卦";
+      renderCast(lines, changing, question);
+    });
+    document.getElementById("manualReset").addEventListener("click", () => {
+      document.getElementById("manualQuestion").value = "";
+      for (let i = 1; i <= 6; i++) {
+        document.getElementById(`manual${i}`).selectedIndex = 0;
+      }
     });
 
     function throwCupResult() {
@@ -3041,7 +3130,7 @@
       document.getElementById("fsIncenseOverlay").classList.remove("show");
     });
 
-    renderCast(makeLines(Date.now()), makeChanging(new Date().getMinutes()), "今日总览");
+    // 起卦区域初始为空白，等待用户操作
     updateCompass(0);
   </script>
 </body>
