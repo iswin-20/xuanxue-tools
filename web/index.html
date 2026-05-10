@@ -799,6 +799,106 @@
     .line-stack .yao.pending { opacity: 0.2; }
     .line-stack .yao.pending span { background: var(--line); }
     .incense-reading.ai-loading { opacity: 0.6; }
+    
+
+    /* 移动端底部抽屉菜单 */
+    .mobile-nav-icon {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 997;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(168, 63, 44, .92);
+      backdrop-filter: blur(8px);
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: 0;
+      padding: 0;
+      color: #fff8e8;
+      font-size: 20px;
+      box-shadow: 0 2px 16px rgba(168, 63, 44, .35);
+      transition: transform .2s;
+    }
+    .mobile-nav-icon:active { transform: translateX(-50%) scale(.92); }
+    .bottom-sheet-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      background: rgba(80, 30, 20, .55);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .bottom-sheet-overlay.show { display: block; opacity: 1; }
+    .bottom-sheet {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: -100%;
+      z-index: 999;
+      max-height: 75vh;
+      background: linear-gradient(180deg, #fffaf0, #fef6e8);
+      border-radius: 16px 16px 0 0;
+      padding: 12px 16px 24px;
+      transition: bottom .35s cubic-bezier(0.32, 0.72, 0, 1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,.2);
+      overflow-y: auto;
+    }
+    .bottom-sheet.open { bottom: 0; }
+    .bottom-sheet-handle {
+      width: 36px; height: 4px;
+      border-radius: 2px;
+      background: var(--cinnabar);
+      opacity: .4;
+      margin: 0 auto 12px;
+    }
+    .bottom-sheet-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .bottom-sheet-nav button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      text-align: left;
+      transition: background .15s;
+    }
+    .bottom-sheet-nav button:active { background: var(--paper-deep); }
+    .bottom-sheet-nav button .icon { font-size: 20px; width: 28px; text-align: center; }
+    .bottom-sheet-nav button.active { background: #fef0ea; color: var(--cinnabar); font-weight: 600; }
+
+    @media (max-width: 980px) {
+      .mobile-nav-icon { display: flex; }
+      .bottom-sheet { display: block; }
+      .bottom-sheet-overlay.show { display: block; }
+      .sidebar { display: none; }
+      main { padding-bottom: 16px; }
+    }
+    .disclaimer-banner {
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      border-radius: var(--radius);
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #664d00;
+      font-size: 13px;
+      line-height: 1.6;
+    }
     .disclaimer {
       margin-top: 12px;
       padding: 10px 12px;
@@ -1359,6 +1459,21 @@
   </div>
 
   <div class="app-shell">
+    <button class="mobile-nav-icon" id="mobileNavIcon" onclick="toggleBottomSheet()" aria-label="打开菜单">☯</button>
+    <div class="bottom-sheet-overlay" id="bottomSheetOverlay" onclick="toggleBottomSheet(false)"></div>
+    <div class="bottom-sheet" id="bottomSheet">
+      <div class="bottom-sheet-handle"></div>
+      <nav class="bottom-sheet-nav">
+        <button data-target="iching"><span class="icon">䷀</span><span>易经算卦</span></button>
+        <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
+        <button data-target="cups"><span class="icon">杯</span><span>掷圣杯</span></button>
+        <button data-target="muyu"><span class="icon">鱼</span><span>敲木鱼</span></button>
+        <button data-target="incense"><span class="icon">香</span><span>敬香祈福</span></button>
+        <button data-target="palm"><span class="icon">掌</span><span>手相 AI</span></button>
+        <button data-target="face"><span class="icon">相</span><span>面相 AI</span></button>
+        <button data-target="fengshui"><span class="icon">盘</span><span>风水罗盘</span></button>
+        <button data-target="library"><span class="icon">书</span><span>国学内容库</span></button>
+      </nav>
     <aside class="sidebar">
       <div class="brand">
         <div class="mark">☯</div>
@@ -1378,9 +1493,9 @@
         <button data-target="library"><span class="icon">书</span><span>国学内容库</span></button>
         <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
       </nav>
-      <div class="sidebar-note">
-        传统文化解读、互动娱乐与生活建议，不替代医学、法律、财务或心理咨询。涉及照片的分析仅在本地页面演示预览，不做身份识别。
-      </div>
+
+      </nav>
+    </div>
     </aside>
 
     <main>
@@ -1551,6 +1666,9 @@
       </section>
 
       <section class="surface" id="palm">
+        <div class="disclaimer-banner">
+          <strong>提示：</strong>手相分析基于传统文化解读与 AI 互动娱乐，不替代医学或心理咨询。涉及照片的分析仅在本地演示，不做身份识别。
+        </div>
         <div class="section-head">
           <div>
             <h3>手相 AI</h3>
@@ -1578,6 +1696,9 @@
       </section>
 
       <section class="surface" id="face">
+        <div class="disclaimer-banner">
+          <strong>提示：</strong>面相分析基于传统文化解读与 AI 互动娱乐，不替代医学或心理咨询。涉及照片的分析仅在本地演示，不做身份识别。
+        </div>
         <div class="section-head">
           <div>
             <h3>面相 AI</h3>
@@ -3131,7 +3252,31 @@
     });
 
     // 起卦区域初始为空白，等待用户操作
+
+    // 移动端底部抽屉菜单
+    function toggleBottomSheet(open) {
+      const sheet = document.getElementById("bottomSheet");
+      const overlay = document.getElementById("bottomSheetOverlay");
+      const isOpen = open !== undefined ? open : !sheet.classList.contains("open");
+      sheet.classList.toggle("open", isOpen);
+      overlay.classList.toggle("show", isOpen);
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    }
+    // 底部菜单点击后跳转并关闭
+    document.querySelectorAll(".bottom-sheet-nav button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.target;
+        if (target) {
+          document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+          document.querySelector(`.nav button[data-target="${target}"]`)?.classList.add("active");
+          selectSurface(target);
+        }
+        toggleBottomSheet(false);
+      });
+    });
+
     updateCompass(0);
   </script>
+
 </body>
 </html>
