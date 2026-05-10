@@ -55,6 +55,12 @@ class IChingReadingIn(BaseModel):
     base_text: str | None = None
     changed_text: str | None = None
     current_time: str | None = None
+    # 梅花易数体用生克
+    ti_gua: str | None = None          # 体卦名
+    yong_gua: str | None = None        # 用卦名
+    ti_element: str | None = None      # 体卦五行
+    yong_element: str | None = None    # 用卦五行
+    ti_yong_relation: str | None = None  # 体用关系（用生体/体生用/体用比和/用克体/体克用）
 
 
 class IChingReadingOut(BaseModel):
@@ -65,6 +71,9 @@ class IChingReadingOut(BaseModel):
     health: str
     decision: str
     model: str
+    # 解卦方法说明
+    interpretation_rule: str | None = None
+    ti_yong_analysis: str | None = None
 
 
 SYSTEM_PROMPT = """你是“安安”应用里的 AI 国学与民俗文化解读助手。
@@ -221,6 +230,29 @@ async def chat(data: OracleChatIn) -> OracleChatOut:
 async def iching_reading(data: IChingReadingIn) -> IChingReadingOut:
     now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
     moving = "、".join(str(x) for x in data.moving_lines) if data.moving_lines else "无明显动爻"
+    moving_count = len(data.moving_lines)
+    
+    # 确定解卦规则
+    if moving_count == 0:
+        rule_text = "六爻安静，无动爻（无变卦）。看本卦卦辞作为总体评判。"
+    elif moving_count == 1:
+        rule_text = f"一爻动（第{data.moving_lines[0]}爻），看本卦该动爻的爻辞。"
+    elif moving_count == 2:
+        rule_text = f"两爻动（第{'、'.join(str(x) for x in data.moving_lines)}爻），看本卦这两个动爻的爻辞，以上方动爻（第{max(data.moving_lines)}爻）为主。"
+    elif moving_count == 3:
+        rule_text = "三爻动，结合本卦卦辞和变卦卦辞综合来看。"
+    elif moving_count == 4:
+        rule_text = "四爻动，看变卦的两个静爻的爻辞，以下方静爻为主。"
+    elif moving_count == 5:
+        rule_text = "五爻动，看变卦的那一个静爻的爻辞。"
+    else:
+        rule_text = "六爻全动，乾卦看用九辞，坤卦看用六辞，他卦看变卦卦辞。"
+    
+    # 体用生克信息
+    ti_yong_text = ""
+    if data.ti_gua and data.yong_gua:
+        ti_yong_text = f"{data.ti_gua}（{data.ti_element}）为体卦（代表求测者），{data.yong_gua}（{data.yong_element}）为用卦（代表事情），体用关系为{data.ti_yong_relation}。"
+
     user_prompt = f"""当前时间：{now_text}
 用户所问：{data.question or '未设问题'}
 本卦：{data.base}，卦义：{data.base_text or '未提供'}
@@ -229,6 +261,8 @@ async def iching_reading(data: IChingReadingIn) -> IChingReadingOut:
 错卦：{data.opposite or '未提供'}
 综卦：{data.reversed or '未提供'}
 动爻：{moving}
+解卦规则：{rule_text}
+{ti_yong_text}
 
 禁止出现未在上面列出的卦名；禁止把本卦或变卦改写成其他卦。
 请按提示词要求输出严格 JSON。"""
@@ -238,13 +272,22 @@ async def iching_reading(data: IChingReadingIn) -> IChingReadingOut:
             {"role": "system", "content": ICHING_FIELD_PROMPT},
             {"role": "user", "content": user_prompt},
         ],
-        max_tokens=700,
+        max_tokens=900,
     )
     required = ["overview", "career", "relationship", "wealth", "health", "decision"]
     missing = [key for key in required if not str(parsed.get(key, "")).strip()]
     if missing:
         raise HTTPException(status_code=502, detail=f"DeepSeek 返回缺少字段：{', '.join(missing)}")
-    return IChingReadingOut(model=model, **{key: str(parsed[key]).strip() for key in required})
+    
+    interpretation_rule = str(parsed.get("interpretation_rule", rule_text)).strip()
+    ti_yong_analysis = str(parsed.get("ti_yong_analysis", ti_yong_text)).strip()
+    
+    return IChingReadingOut(
+        model=model,
+        interpretation_rule=interpretation_rule,
+        ti_yong_analysis=ti_yong_analysis,
+        **{key: str(parsed[key]).strip() for key in required}
+    )
 
 
 @router.post("/culture-reading", response_model=OracleChatOut)

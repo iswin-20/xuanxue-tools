@@ -1834,8 +1834,93 @@
       ["未济", "䷿", "火水未济，尚未完成，谨慎渡河。"]
     ];
 
+    // 八卦五行属性（按三爻二进制值 0-7）
+    const TRIGRAM_ELEMENTS = ["土", "木", "水", "金", "土", "火", "木", "金"];
+    const TRIGRAM_NAMES = ["坤（地）", "震（雷）", "坎（水）", "兑（泽）", "艮（山）", "离（火）", "巽（风）", "乾（天）"];
+    const TRIGRAM_SHORT = ["坤", "震", "坎", "兑", "艮", "离", "巽", "乾"];
+
+    // 五行生克关系
+    function getTiYongRelation(tiElem, yongElem) {
+      if (tiElem === yongElem) return "体用比和";
+      const generates = { "金": "水", "水": "木", "木": "火", "火": "土", "土": "金" };
+      const overcomes = { "金": "木", "木": "土", "土": "水", "水": "火", "火": "金" };
+      if (generates[yongElem] === tiElem) return "用生体";
+      if (generates[tiElem] === yongElem) return "体生用";
+      if (overcomes[yongElem] === tiElem) return "用克体";
+      if (overcomes[tiElem] === yongElem) return "体克用";
+      return "未知";
+    }
+
+    function getTiYongRelationDesc(rel) {
+      const desc = {
+        "用生体": "大吉，事情容易成功，有贵人相助",
+        "体生用": "耗费心力，虽可成功但代价较大",
+        "体用比和": "顺畅，合作互助，内外一致",
+        "用克体": "阻力重重，事情难以办成",
+        "体克用": "经过自身努力可掌控局面、克服困难"
+      };
+      return desc[rel] || "";
+    }
+
+    // 从六爻中提取上下卦值（下卦=初至三爻，上卦=四至六爻）
+    function getTrigramValues(lines) {
+      return {
+        lower: (lines[0] || 0) + (lines[1] || 0) * 2 + (lines[2] || 0) * 4,
+        upper: (lines[3] || 0) + (lines[4] || 0) * 2 + (lines[5] || 0) * 4
+      };
+    }
+
+    // 计算体卦和用卦（梅花易数）
+    function computeTiYong(lines, changing) {
+      const tri = getTrigramValues(lines);
+      const lowerMoving = changing.slice(0, 3).filter(v => v).length;
+      const upperMoving = changing.slice(3, 6).filter(v => v).length;
+      
+      let ti, yong, tiPos, yongPos;
+      if (upperMoving > lowerMoving) {
+        ti = tri.lower; yong = tri.upper;
+        tiPos = "下卦"; yongPos = "上卦";
+      } else if (lowerMoving > upperMoving) {
+        ti = tri.upper; yong = tri.lower;
+        tiPos = "上卦"; yongPos = "下卦";
+      } else {
+        // 无动爻或两卦动爻数相等 → 以动爻所在位置判断，否则以下卦为体
+        if (lowerMoving === 0 && upperMoving === 0) {
+          ti = tri.lower; yong = tri.upper;
+          tiPos = "下卦"; yongPos = "上卦";
+        } else {
+          ti = tri.lower; yong = tri.upper;
+          tiPos = "下卦"; yongPos = "上卦";
+        }
+      }
+      
+      const tiElem = TRIGRAM_ELEMENTS[ti];
+      const yongElem = TRIGRAM_ELEMENTS[yong];
+      const relation = getTiYongRelation(tiElem, yongElem);
+      
+      return {
+        ti: TRIGRAM_SHORT[ti], tiFull: TRIGRAM_NAMES[ti], tiElem: tiElem,
+        yong: TRIGRAM_SHORT[yong], yongFull: TRIGRAM_NAMES[yong], yongElem: yongElem,
+        relation: relation, relationDesc: getTiYongRelationDesc(relation),
+        tiPos: tiPos, yongPos: yongPos
+      };
+    }
+
+    // 根据动爻数量返回解卦规则说明
+    function getMovingRuleText(movingLines) {
+      const count = movingLines.length;
+      if (count === 0) return "六爻安静（无变卦）：看本卦卦辞作为总体评判。卦象处于稳定静态，暂无变化之机。";
+      if (count === 1) return `一爻动（第${movingLines[0]}爻）：看本卦第${movingLines[0]}爻的爻辞，此为最清晰的指引。`;
+      if (count === 2) return `两爻动（第${movingLines.join("、")}爻）：看本卦这两个动爻的爻辞，以上方动爻（第${Math.max(...movingLines)}爻）为主。`;
+      if (count === 3) return "三爻动：结合本卦卦辞和变卦卦辞综合来看。";
+      if (count === 4) return "四爻动：看变卦的两个静爻的爻辞，以下方静爻为主。";
+      if (count === 5) return "五爻动：看变卦的那一个静爻的爻辞。";
+      return "六爻全动：乾卦看用九辞，坤卦看用六辞，他卦看变卦卦辞。";
+    }
+
     let currentCast = null;
     let coinLines = [];
+    let coinChangings = [];
     let cupRecords = [];
     let oracleHistory = [];
     let ichingRequestSeq = 0;
@@ -1883,13 +1968,20 @@
 
     function renderCast(lines, changing, question = "未设问题") {
       const base = hexFromLines(lines);
-      const changed = hexFromLines(changedLines(lines, changing));
+      const hasChanging = changing.some(v => v);
       const mutual = hexFromLines(nuclear(lines));
       const opposite = hexFromLines(invert(lines));
       const reversed = hexFromLines(reverse(lines));
-      currentCast = { lines, changing, base, changed, mutual, opposite, reversed, question };
-
-      document.getElementById("hexagramView").innerHTML = `
+      const movingLines = changing.map((v, i) => v ? i + 1 : null).filter(Boolean);
+      const movingText = movingLines.map(v => `${v}爻`).join("、") || "无明显动爻";
+      const ruleText = getMovingRuleText(movingLines);
+      const tiYong = computeTiYong(lines, changing);
+      
+      let hexViewHtml;
+      if (hasChanging) {
+        const changed = hexFromLines(changedLines(lines, changing));
+        currentCast = { lines, changing, base, changed, mutual, opposite, reversed, question };
+        hexViewHtml = `
         <article class="hex-card">
           <div class="hex-symbol">${base[1]}</div>
           <h4>本卦 · ${base[0]}</h4>
@@ -1901,22 +1993,52 @@
           <h4>变卦 · ${changed[0]}</h4>
           <p>${changed[2]}</p>
           ${renderYao(changedLines(lines, changing))}
+        </article>`;
+      } else {
+        currentCast = { lines, changing, base, changed: base, mutual, opposite, reversed, question };
+        hexViewHtml = `
+        <article class="hex-card" style="grid-column: 1 / -1;">
+          <div class="hex-symbol">${base[1]}</div>
+          <h4>本卦 · ${base[0]}</h4>
+          <p>${base[2]}</p>
+          ${renderYao(lines)}
         </article>
-      `;
+        <article class="hex-card" style="grid-column: 1 / -1; background: var(--teal-soft); border: 1px solid var(--teal);">
+          <div style="font-size: 1.6rem; font-weight: 700; color: var(--teal); margin-bottom: 8px;">无变卦 · 六爻安静</div>
+          <p style="color: var(--ink); line-height: 1.7;">六爻皆无动爻，卦象处于静态稳定状态，暂无变化之机。宜以本卦卦辞为鉴，顺应当前时位行事，不宜强求变动。</p>
+        </article>`;
+      }
 
+      document.getElementById("hexagramView").innerHTML = hexViewHtml;
+
+      // 互卦、错卦、综卦
       document.getElementById("relatedHexagrams").innerHTML = [
-        ["互卦", mutual],
-        ["错卦", opposite],
-        ["综卦", reversed]
-      ].map(([label, item]) => `<div class="mini-card"><strong>${label}</strong><div class="hex-symbol" style="font-size:26px">${item[1]}</div><p>${item[0]}：${item[2]}</p></div>`).join("");
+        ["互卦", mutual, "发展过程中的隐藏因素、中间过程"],
+        ["错卦", opposite, "对立面的视角"],
+        ["综卦", reversed, "反过来看同一局势"]
+      ].map(([label, item, hint]) => `<div class="mini-card"><strong>${label}</strong><span class="badge" style="font-size:11px;margin-left:4px">${hint}</span><div class="hex-symbol" style="font-size:26px">${item[1]}</div><p>${item[0]}：${item[2]}</p></div>`).join("");
 
-      const moving = changing.map((v, i) => v ? `${i + 1}爻` : "").filter(Boolean).join("、") || "无明显动爻";
+      // 体用生克分析
+      const tiYongHtml = `
+        <div class="mini-card" style="grid-column:1/-1; background:var(--teal-soft); border:1px solid var(--teal);">
+          <strong>梅花易数 · 体用生克</strong>
+          <p style="margin-top:6px;"><strong>体卦（${tiYong.tiPos}）：</strong>${tiYong.tiFull} → 五行属${tiYong.tiElem}，代表求测者自身</p>
+          <p><strong>用卦（${tiYong.yongPos}）：</strong>${tiYong.yongFull} → 五行属${tiYong.yongElem}，代表事情与环境</p>
+          <p><strong>体用关系：</strong>${tiYong.relation} — ${tiYong.relationDesc}</p>
+        </div>`;
+
       document.getElementById("hexReading").innerHTML = `
         <h4>AI 解读</h4>
         <p><strong>所问：</strong>${escapeHtml(question || "未设问题")}</p>
-        <p><strong>卦辞白话：</strong>${base[0]}提示当前格局以“${base[2].replace("。", "")}”为主，变为${changed[0]}，说明事情会从当下态势转向“${changed[2].replace("。", "")}”。动爻为${moving}。</p>
-        <div class="reading-grid" id="ichingFieldReading">
-          ${readingItem("事业", "安安正在结合本卦、变卦与动爻生成事业解读...")}
+        <div class="reading-grid" style="margin-bottom:12px;">
+          <div class="mini-card" style="background:var(--teal-soft);"><strong>解卦规则</strong><p>${ruleText}</p></div>
+          <div class="mini-card"><strong>动爻</strong><p>${movingText}</p></div>
+          ${!hasChanging ? '<div class="mini-card" style="background:var(--paper-deep);"><strong>无变卦说明</strong><p>六爻皆不变，没有动爻。占得的本卦处于一种静态、稳定且暂时不发生转化的状态。解读无变卦通常直接关注本卦的卦辞、卦象及所处的时位，寓意所问之事的发展比较直接、单纯，或反映了一种长期的稳定趋势。</p></div>' : ""}
+        </div>
+        ${tiYongHtml}
+        <div class="reading-grid" id="ichingFieldReading" style="margin-top:12px;">
+          ${hasChanging ? readingItem("总览", "安安正在结合本卦、变卦与动爻解卦...") : readingItem("总览", "安安正在根据本卦卦辞解读...")}
+          ${readingItem("事业", "安安正在结合卦象生成事业解读...")}
           ${readingItem("感情", "安安正在结合卦象生成感情解读...")}
           ${readingItem("财运", "安安正在结合卦象生成财运解读...")}
           ${readingItem("健康", "安安正在结合卦象生成生活节律建议...")}
@@ -1934,31 +2056,58 @@
     function ichingPayload() {
       const cast = currentCast;
       if (!cast) return null;
+      const hasChanging = cast.changing.some(v => v);
+      const movingLines = cast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean);
+      
+      // 计算体用生克
+      const tiYong = computeTiYong(cast.lines, cast.changing);
+      
       return {
         question: cast.question || "未设问题",
         base: cast.base[0],
-        changed: cast.changed[0],
+        changed: hasChanging ? cast.changed[0] : cast.base[0],
         mutual: cast.mutual[0],
         opposite: cast.opposite[0],
         reversed: cast.reversed[0],
-        moving_lines: cast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean),
+        moving_lines: movingLines,
         base_text: cast.base[2],
-        changed_text: cast.changed[2],
-        current_time: new Date().toLocaleString("zh-CN")
+        changed_text: hasChanging ? cast.changed[2] : "无变卦",
+        current_time: new Date().toLocaleString("zh-CN"),
+        // 梅花易数体用生克
+        ti_gua: tiYong.ti,
+        yong_gua: tiYong.yong,
+        ti_element: tiYong.tiElem,
+        yong_element: tiYong.yongElem,
+        ti_yong_relation: tiYong.relation
       };
     }
 
     function fallbackIChingReading(cast) {
       const moving = cast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean);
-      const moveText = moving.length ? `动爻在第 ${moving.join("、")} 爻，说明变化点已经出现。` : "无明显动爻，宜先稳住现状再观察。";
-      return {
-        overview: `${cast.base[0]}转${cast.changed[0]}，当前主题是“${cast.base[2].replace("。", "")}”，后势转向“${cast.changed[2].replace("。", "")}”。${moveText}`,
-        career: `${cast.base[0]}提示先看当前职责与资源是否匹配，${cast.changed[0]}提示后续宜顺势调整节奏，先做小范围验证。`,
-        relationship: `关系上以${cast.base[0]}之象看当前互动模式，以${cast.changed[0]}之象看后续变化，宜少猜测，多用明确表达。`,
-        wealth: `财务上不宜只看短期热度，${cast.base[0]}重在守住基本盘，${cast.changed[0]}提示机会要配合风险边界。`,
-        health: `健康只作生活建议：按${cast.base[0]}之象先调作息与压力，按${cast.changed[0]}之象再逐步恢复运动和饮食节律。`,
-        decision: `决策上先列条件清单，再看三日内信息是否更明。若关键条件仍含糊，宜试探推进，不宜一次性重押。`
-      };
+      const hasChanging = moving.length > 0;
+      const rule = getMovingRuleText(moving);
+      const tiYong = computeTiYong(cast.lines, cast.changing);
+      const tiYongStr = `体用分析：${tiYong.ti}（${tiYong.tiElem}）为体卦，${tiYong.yong}（${tiYong.yongElem}）为用卦，关系为${tiYong.relation}（${tiYong.relationDesc}）。`;
+      
+      if (hasChanging) {
+        return {
+          overview: `${cast.base[0]}转${cast.changed[0]}，当前主题是“${cast.base[2].replace("。", "")}”，后势转向“${cast.changed[2].replace("。", "")}”。${tiYongStr}`,
+          career: `${cast.base[0]}提示先看当前职责与资源是否匹配，${cast.changed[0]}提示后续宜顺势调整节奏，先做小范围验证。`,
+          relationship: `关系上以${cast.base[0]}之象看当前互动模式，以${cast.changed[0]}之象看后续变化，宜少猜测，多用明确表达。`,
+          wealth: `财务上不宜只看短期热度，${cast.base[0]}重在守住基本盘，${cast.changed[0]}提示机会要配合风险边界。`,
+          health: `健康只作生活建议：按${cast.base[0]}之象先调作息与压力，按${cast.changed[0]}之象再逐步恢复运动和饮食节律。`,
+          decision: `决策上先列条件清单，再看三日内信息是否更明。若关键条件仍含糊，宜试探推进，不宜一次性重押。`
+        };
+      } else {
+        return {
+          overview: `${cast.base[0]}卦象处于静态稳定状态，六爻皆无动爻（无变卦）。寓意所问之事发展比较直接、单纯，宜直接关注本卦的卦辞、卦象及所处的时位来断事。${tiYongStr}`,
+          career: `${cast.base[0]}提示当前事业格局稳定，宜守不宜攻。暂无变化之机，耐心积累，顺应时位行事为佳。`,
+          relationship: `感情上${cast.base[0]}之象显示关系处于平稳期，当前状态较为固定，宜珍惜当下，不必刻意寻求变化。`,
+          wealth: `财运方面暂无波动迹象，${cast.base[0]}提示守住现有财务安排，不宜冒进投资或做大额变动。`,
+          health: `健康只作生活建议：当前身体状况较为稳定，${cast.base[0]}提示保持现有作息与运动节奏即可。`,
+          decision: `${cast.base[0]}显示当下不宜做重大决策变动，宜以静制动。如非紧急，可待时机成熟再行定夺。`
+        };
+      }
     }
 
     function renderIChingFields(reading) {
@@ -2033,6 +2182,9 @@
       
       const tosses = Array.from({ length: 3 }, () => Math.random() > .5 ? 3 : 2);
       const total = tosses.reduce((a, b) => a + b, 0);
+      // 6=老阴(动) 7=少阳(静) 8=少阴(静) 9=老阳(动)
+      const lineVal = total % 2 ? 1 : 0;
+      const isChanging = total === 6 || total === 9;
       
       const overlay = document.getElementById("coinOverlay");
       const resultText = document.getElementById("coinResultText");
@@ -2060,20 +2212,19 @@
       });
       
       setTimeout(() => {
-        const lineVal = total % 2 ? 1 : 0;
-        const lineName = lineVal ? "少阳" : "少阴";
-        const finalName = total === 9 ? "老阳 (动)" : total === 6 ? "老阴 (动)" : lineName;
-        resultText.textContent = `第 ${coinLines.length + 1} 爻：${total} (${finalName})`;
+        const labelMap = { 6: "老阴 (动)", 7: "少阳", 8: "少阴", 9: "老阳 (动)" };
+        resultText.textContent = `第 ${coinLines.length + 1} 爻：${total} (${labelMap[total]})`;
         resultText.classList.add("show");
         
         setTimeout(() => {
           overlay.classList.remove("show");
           coinLines.push(lineVal);
+          coinChangings.push(isChanging);
           document.getElementById("coinProgress").textContent = `已得 ${coinLines.length} / 6 爻：${coinLines.map(x => x ? "阳" : "阴").join("、")}`;
           btn.disabled = false;
           
           if (coinLines.length === 6) {
-            renderCast(coinLines, makeChanging(total + Date.now()), document.getElementById("coinQuestion").value);
+            renderCast(coinLines, coinChangings, document.getElementById("coinQuestion").value);
           }
         }, 1500);
       }, 1600);
@@ -2081,6 +2232,7 @@
 
     document.getElementById("coinReset").addEventListener("click", () => {
       coinLines = [];
+      coinChangings = [];
       document.getElementById("coinProgress").textContent = "已得 0 / 6 爻";
     });
 
