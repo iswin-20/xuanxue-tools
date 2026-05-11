@@ -44,6 +44,13 @@ class CultureReadingIn(BaseModel):
     current_time: str | None = None
 
 
+class DreamReadingIn(BaseModel):
+    dream: str = Field(min_length=2, max_length=1500)
+    mood: str | None = Field(default=None, max_length=120)
+    focus: str | None = Field(default=None, max_length=200)
+    current_time: str | None = None
+
+
 class IChingReadingIn(BaseModel):
     question: str = Field(default="未设问题", max_length=800)
     base: str
@@ -108,6 +115,22 @@ FACE_PROMPT = """你正在为“传统面相 AI”模块生成娱乐性文化解
 2. 五官与脸型的传统文化说法
 3. 人际沟通与生活建议
 4. 隐私与边界提醒"""
+
+
+DREAM_PROMPT = """你正在为“周公解梦”模块生成传统文化解读。
+定位：民俗文化参考、自我整理、生活提醒，不是预言。
+要求：
+1. 用通俗大白话解释梦境，不要吓人，不要说必然发生什么。
+2. 可以借用传统周公解梦、象征、五行与生活经验，但必须翻译成现代人能懂的话。
+3. 不要做医学诊断、心理疾病判断、灾祸断言、死亡暗示或恐吓表达。
+4. 不要使用 Markdown 格式，不要出现 **、###、- 等符号。
+5. 输出必须分条整齐，按这个格式：
+1. 梦里最关键的象
+2. 大白话解读
+3. 这可能提醒你什么
+4. 接下来可以怎么做
+5. 边界提醒
+每一条 1 到 3 句，务实、温和、好懂。"""
 
 
 ICHING_FIELD_PROMPT = """你正在为“易经算卦”模块生成分领域解读。
@@ -332,6 +355,29 @@ async def culture_reading(data: CultureReadingIn) -> OracleChatOut:
         [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "system", "content": module_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=850,
+    )
+
+
+@router.post("/dream-reading", response_model=OracleChatOut)
+async def dream_reading(data: DreamReadingIn) -> OracleChatOut:
+    now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
+    mood_text = data.mood.strip() if data.mood else "未填写"
+    focus_text = data.focus.strip() if data.focus else "未填写"
+    user_prompt = f"""当前时间：{now_text}
+用户梦境：{data.dream.strip()}
+醒来感受：{mood_text}
+最近关注：{focus_text}
+
+请按系统提示输出周公解梦式文化解读。
+必须通俗、分条、整齐，不要使用任何 Markdown 符号，不要出现 **。
+不要绝对预测，不要吓人，把梦当成自我整理和生活提醒。"""
+    return await _deepseek_chat(
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": DREAM_PROMPT},
             {"role": "user", "content": user_prompt},
         ],
         max_tokens=850,

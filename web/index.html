@@ -1631,6 +1631,7 @@
       <nav class="bottom-sheet-nav">
         <button data-target="iching"><span class="icon">䷀</span><span>易经算卦</span></button>
         <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
+        <button data-target="dream"><span class="icon">梦</span><span>周公解梦</span></button>
         <button data-target="cups"><span class="icon">杯</span><span>掷圣杯</span></button>
         <button data-target="muyu"><span class="icon">鱼</span><span>敲木鱼</span></button>
         <button data-target="incense"><span class="icon">香</span><span>敬香祈福</span></button>
@@ -1658,6 +1659,7 @@
         <button data-target="fengshui"><span class="icon">盘</span><span>风水罗盘</span></button>
         <button data-target="library"><span class="icon">书</span><span>国学内容库</span></button>
         <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
+        <button data-target="dream"><span class="icon">梦</span><span>周公解梦</span></button>
       </nav>
       <div class="sidebar-note">
         传统文化解读、互动娱乐与生活建议，不替代医学、法律、财务或心理咨询。涉及照片的分析仅在本地页面演示预览，不做身份识别。
@@ -1990,6 +1992,57 @@
             <div class="chat-submit-actions">
               <button class="send-btn" id="askOracle" type="button">发送</button>
               <button class="clear-chat-btn" id="clearOracle" type="button">清空</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface" id="dream">
+        <div class="disclaimer-banner">
+          <strong>提示：</strong>周公解梦属于传统民俗文化参考，适合做自我整理和生活提醒，不作确定性预言，也不替代心理或医疗建议。
+        </div>
+        <div class="section-head">
+          <div>
+            <h3>周公解梦</h3>
+            <p>写下梦里出现的人、事、物和醒来感受，安安会用传统象征和大白话帮你整理梦境提醒。</p>
+          </div>
+          <span class="badge">梦境解读</span>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <label for="dreamText">梦境内容</label>
+            <textarea id="dreamText" placeholder="例如：梦见自己在雨里赶路，路边有一盏灯，醒来有点着急。"></textarea>
+            <div class="form-row">
+              <div>
+                <label for="dreamMood">醒来感受</label>
+                <select id="dreamMood">
+                  <option value="">未填写</option>
+                  <option value="轻松">轻松</option>
+                  <option value="着急">着急</option>
+                  <option value="害怕">害怕</option>
+                  <option value="迷茫">迷茫</option>
+                  <option value="开心">开心</option>
+                  <option value="疲惫">疲惫</option>
+                </select>
+              </div>
+              <div>
+                <label for="dreamFocus">最近关注</label>
+                <input id="dreamFocus" placeholder="工作、感情、家人、财务..." />
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+              <button class="small-btn" id="interpretDream">开始解梦</button>
+              <button class="small-btn" id="clearDream" style="background:var(--paper-deep); color:var(--muted);">清空</button>
+            </div>
+            <div class="disclaimer">梦境解读偏向象征和情绪整理，不宜当作现实事件的唯一判断。</div>
+          </div>
+          <div class="panel">
+            <h4>AI 周公解梦</h4>
+            <div class="analysis-list" id="dreamReading">
+              <div class="ai-reading loading">写下梦境后生成解读。</div>
+            </div>
+            <div style="float:right; margin-top:12px;">
+              <button class="small-btn" id="exportDream" onclick="exportReport('dream')">导出报告</button>
             </div>
           </div>
         </div>
@@ -2819,12 +2872,78 @@
       }
     }
 
+    async function requestDreamReading(dream, mood, focus) {
+      const response = await fetch("/oracle/dream-reading", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dream,
+          mood,
+          focus,
+          current_time: new Date().toLocaleString("zh-CN")
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.detail || "AI 解梦服务暂不可用");
+      }
+      return data.answer;
+    }
+
+    function localDreamAnswer(dream, mood, focus) {
+      const shortDream = dream.length > 80 ? `${dream.slice(0, 80)}...` : dream;
+      return `1. 梦里最关键的象
+你提到的梦境是：${shortDream}
+这里最值得看的不是吉凶，而是梦里让你记住的画面和醒来后的感受。
+
+2. 大白话解读
+如果醒来感受是“${mood || "未填写"}”，它更像是在提醒你：最近心里有一件事还没完全放下。
+${focus ? `你最近关注“${focus}”，梦境可能把这件事换成了更隐晦的画面。` : "如果最近没有特别关注的事，可以先从作息、压力和人际沟通上找线索。"}
+
+3. 这可能提醒你什么
+第一，别急着把梦当成预兆，先看它反映了什么情绪。
+第二，梦里反复出现的人、地点、物品，通常对应现实里你反复惦记的部分。
+
+4. 接下来可以怎么做
+第一，今天先把梦里的三个关键词写下来。
+第二，找一件最容易处理的小事先收尾。
+第三，睡前少刷刺激内容，给自己留一点安静时间。
+
+5. 边界提醒
+以上只是传统民俗和自我整理参考，不代表确定会发生什么。`;
+    }
+
+    async function runDreamReading() {
+      const dream = document.getElementById("dreamText").value.trim();
+      const mood = document.getElementById("dreamMood").value;
+      const focus = document.getElementById("dreamFocus").value.trim();
+      if (!dream) {
+        alert("先写下梦境内容。");
+        return;
+      }
+      setReadingState("dreamReading", "安安正在解梦...", true);
+      try {
+        const answer = await requestDreamReading(dream, mood, focus);
+        setReadingState("dreamReading", answer);
+      } catch (error) {
+        setReadingState("dreamReading", `${localDreamAnswer(dream, mood, focus)}\n\n提示：${error.message}`);
+      }
+    }
+
     wireUpload("palmUpload", "palmPreview", "palmEmpty", (file) => {
       runCultureReading("palm", file, "palmReading");
     });
 
     wireUpload("faceUpload", "facePreview", "faceEmpty", (file) => {
       runCultureReading("face", file, "faceReading");
+    });
+
+    document.getElementById("interpretDream").addEventListener("click", runDreamReading);
+    document.getElementById("clearDream").addEventListener("click", () => {
+      document.getElementById("dreamText").value = "";
+      document.getElementById("dreamMood").value = "";
+      document.getElementById("dreamFocus").value = "";
+      setReadingState("dreamReading", "写下梦境后生成解读。", true);
     });
 
     const directions = ["北 坎 水", "东北 艮 土", "东 震 木", "东南 巽 木", "南 离 火", "西南 坤 土", "西 兑 金", "西北 乾 金"];
@@ -3639,6 +3758,21 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
           alert("暂无面相解读可导出，请先上传照片。"); return;
         }
         body += `<div class="item">${escapeHtml(text).replace(/\n/g, "<br>")}</div>`;
+
+      } else if (type === "dream") {
+        title = "周公解梦报告";
+        const dream = document.getElementById("dreamText")?.value?.trim() || "";
+        const mood = document.getElementById("dreamMood")?.value || "未填写";
+        const focus = document.getElementById("dreamFocus")?.value?.trim() || "未填写";
+        const reading = document.getElementById("dreamReading");
+        const text = reading ? reading.textContent?.trim() : "";
+        if (!dream || !text || text === "写下梦境后生成解读。") {
+          alert("暂无解梦内容可导出，请先输入梦境并生成解读。"); return;
+        }
+        body += `<h2>梦境内容</h2><p>${escapeHtml(dream)}</p>`;
+        body += `<h2>醒来感受</h2><p>${escapeHtml(mood)}</p>`;
+        body += `<h2>最近关注</h2><p>${escapeHtml(focus)}</p>`;
+        body += `<h2>AI 解梦</h2><div class="item">${escapeHtml(text).replace(/\n/g, "<br>")}</div>`;
 
       } else if (type === "oracle") {
         title = "问卜聊天记录";
