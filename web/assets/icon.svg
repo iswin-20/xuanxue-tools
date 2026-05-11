@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#16666b"/>
+      <stop offset="50%" style="stop-color:#b88b3e"/>
+      <stop offset="100%" style="stop-color:#f6e4b6"/>
+    </linearGradient>
+  </defs>
+  <!-- 圆形背景 -->
+  <circle cx="100" cy="100" r="96" fill="url(#bg)" stroke="#17211f" stroke-width="3"/>
+  <!-- 内圈 -->
+  <circle cx="100" cy="100" r="74" fill="none" stroke="rgba(23,33,31,.15)" stroke-width="2"/>
+  <!-- 算字 - 上部分竹字头 -->
+  <text x="100" y="110" font-family="serif" font-size="68" font-weight="bold"
+        fill="#17211f" text-anchor="middle" dominant-baseline="central">算</text>
+</svg>

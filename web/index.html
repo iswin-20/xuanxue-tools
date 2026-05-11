@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>安安 AI 国学工具箱</title>
+  <title>算算 AI 国学工具箱</title>
   <style>
     :root {
       --ink: #1f2524;
@@ -71,18 +71,6 @@
       gap: 12px;
       padding-bottom: 16px;
       border-bottom: 1px solid rgba(255, 248, 232, .14);
-    }
-
-    .mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: conic-gradient(from 30deg, #f6e4b6, #b88b3e, #16666b, #f6e4b6);
-      color: #17211f;
-      font-size: 22px;
-      box-shadow: inset 0 0 0 3px rgba(23, 33, 31, .28);
     }
 
     .brand h1 {
@@ -1643,9 +1631,9 @@
     </div>
     <aside class="sidebar">
       <div class="brand">
-        <div class="mark">☯</div>
+        <img src="assets/logo.png" alt="算算" width="42" height="42" style="border-radius:50%;object-fit:cover;box-shadow:inset 0 0 0 3px rgba(23,33,31,.28)">
         <div>
-          <h1>安安</h1>
+          <h1>算算</h1>
           <p>AI 国学 / 易经 / 民俗文化工具箱</p>
         </div>
       </div>
@@ -1846,7 +1834,7 @@
         <div class="section-head">
           <div>
             <h3>手相 AI</h3>
-            <p>上传手掌照片后，安安会调用 AI 生成生命线、智慧线、感情线、事业线的传统文化解读。</p>
+            <p>上传手掌照片后，算算会调用 AI 生成生命线、智慧线、感情线、事业线的传统文化解读。</p>
           </div>
           <span class="badge">AI 解读</span>
         </div>
@@ -1879,7 +1867,7 @@
         <div class="section-head">
           <div>
             <h3>面相 AI</h3>
-            <p>上传照片后，安安会调用 AI 围绕脸型、额头、眉眼、鼻相、嘴相做文化化描述。</p>
+            <p>上传照片后，算算会调用 AI 围绕脸型、额头、眉眼、鼻相、嘴相做文化化描述。</p>
           </div>
           <span class="badge">隐私友好</span>
         </div>
@@ -1978,7 +1966,7 @@
         <div class="panel oracle-panel">
           <div class="oracle-context">
             <div>
-              <strong>安安问卜</strong>
+              <strong>算算问卜</strong>
               <span>可结合最近一次起卦、当前时间与对话上下文回答。</span>
             </div>
             <div class="oracle-actions">
@@ -2004,7 +1992,7 @@
         <div class="section-head">
           <div>
             <h3>周公解梦</h3>
-            <p>写下梦里出现的人、事、物和醒来感受，安安会用传统象征和大白话帮你整理梦境提醒。</p>
+            <p>写下梦里出现的人、事、物和醒来感受，算算会用传统象征和大白话帮你整理梦境提醒。</p>
           </div>
           <span class="badge">梦境解读</span>
         </div>
@@ -2063,7 +2051,7 @@
   </div>
 
   <div class="fs-compass-overlay" id="fsCompassOverlay">
-    <div class="fs-logo">安安风水大罗盘</div>
+    <div class="fs-logo">算算风水大罗盘</div>
     <button class="fs-close" id="fsCloseBtn">×</button>
     
     <div class="fs-controls">
@@ -2460,12 +2448,12 @@
         </div>
         ${tiYongHtml}
         <div class="reading-grid" id="ichingFieldReading" style="margin-top:12px;">
-          ${hasChanging ? readingItem("总览", "安安正在结合本卦、变卦与动爻解卦...") : readingItem("总览", "安安正在根据本卦卦辞解读...")}
-          ${readingItem("事业", "安安正在结合卦象生成事业解读...")}
-          ${readingItem("感情", "安安正在结合卦象生成感情解读...")}
-          ${readingItem("财运", "安安正在结合卦象生成财运解读...")}
-          ${readingItem("健康", "安安正在结合卦象生成生活节律建议...")}
-          ${readingItem("决策", "安安正在结合卦象生成决策建议...")}
+          ${hasChanging ? readingItem("总览", "算算正在结合本卦、变卦与动爻解卦...") : readingItem("总览", "算算正在根据本卦卦辞解读...")}
+          ${readingItem("事业", "算算正在结合卦象生成事业解读...")}
+          ${readingItem("感情", "算算正在结合卦象生成感情解读...")}
+          ${readingItem("财运", "算算正在结合卦象生成财运解读...")}
+          ${readingItem("健康", "算算正在结合卦象生成生活节律建议...")}
+          ${readingItem("决策", "算算正在结合卦象生成决策建议...")}
         </div>
       `;
       requestIChingReading();
@@ -2860,7 +2848,7 @@
     }
 
     async function runCultureReading(type, file, targetId) {
-      setReadingState(targetId, "安安正在生成传统文化解读...", true);
+      setReadingState(targetId, "算算正在生成传统文化解读...", true);
       try {
         const answer = await requestCultureReading(type, file);
         setReadingState(targetId, answer);
@@ -2921,7 +2909,7 @@ ${focus ? `你最近关注“${focus}”，梦境可能把这件事换成了更�
         alert("先写下梦境内容。");
         return;
       }
-      setReadingState("dreamReading", "安安正在解梦...", true);
+      setReadingState("dreamReading", "算算正在解梦...", true);
       try {
         const answer = await requestDreamReading(dream, mood, focus);
         setReadingState("dreamReading", answer);
@@ -3796,7 +3784,7 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
 
       const html = `<!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>安安AI · ${title}</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>算算AI · ${title}</title>
 <style>
   body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f7f0df;color:#1f2524;max-width:680px;margin:40px auto;padding:0 20px;}
   .hdr{text-align:center;padding:28px 0 18px;border-bottom:2px solid #a83f2c;margin-bottom:24px;}
@@ -3814,16 +3802,16 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
   .ftr{text-align:center;padding:24px 0;font-size:12px;color:#6f6a60;border-top:1px solid rgba(52,42,31,.16);margin-top:30px;}
 </style></head>
 <body>
-<div class="hdr"><h1>安安 AI · ${title}</h1><p>生成时间：${now}</p></div>
+<div class="hdr"><h1>算算 AI · ${title}</h1><p>生成时间：${now}</p></div>
 ${body}
-<div class="ftr">由 安安 AI 国学工具箱 自动生成 · 仅供传统文化参考</div>
+<div class="ftr">由 算算 AI 国学工具箱 自动生成 · 仅供传统文化参考</div>
 </body></html>`;
 
       const blob = new Blob([html], { type: "text/html;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `安安AI_${title}_${new Date().toISOString().slice(0, 10)}.html`;
+      a.download = `算算AI_${title}_${new Date().toISOString().slice(0, 10)}.html`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

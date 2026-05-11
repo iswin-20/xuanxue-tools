@@ -83,7 +83,7 @@ class IChingReadingOut(BaseModel):
     ti_yong_analysis: str | None = None
 
 
-SYSTEM_PROMPT = """你是“安安”应用里的 AI 国学与民俗文化解读助手。
+SYSTEM_PROMPT = """你是“算算”应用里的 AI 国学与民俗文化解读助手。
 定位：传统文化解读、AI 互动娱乐、个人生活建议。
 要求：
 1. 结合易经、阴阳五行、节气时令、民俗语言给出启发式解读。
