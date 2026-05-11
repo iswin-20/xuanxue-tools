@@ -260,6 +260,26 @@
       width: auto;
     }
 
+    .export-btn {
+      min-height: 34px;
+      border-radius: var(--radius);
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      background: transparent;
+      color: var(--teal);
+      border: 1px solid var(--teal);
+      cursor: pointer;
+      transition: all .18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .export-btn:hover {
+      background: var(--teal);
+      color: #fff;
+    }
+
     .primary-btn:hover,
     .ghost-btn:hover,
     .small-btn:hover {
@@ -741,6 +761,73 @@
       font-size: 12px;
     }
 
+    .oracle-panel {
+      padding: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(22, 102, 107, .10), rgba(184, 139, 62, .08)),
+        var(--panel);
+    }
+
+    .oracle-context {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .40);
+    }
+
+    .oracle-context strong {
+      display: block;
+      color: var(--dark);
+      font-size: 14px;
+    }
+
+    .oracle-context span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .oracle-status {
+      flex: 0 0 auto;
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: rgba(22, 102, 107, .10);
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .oracle-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .oracle-action-btn {
+      min-height: 28px;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: rgba(31, 37, 36, .06);
+      color: var(--muted);
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .oracle-action-btn:hover {
+      background: rgba(255, 255, 255, .72);
+      border-color: var(--line);
+      color: var(--teal);
+    }
+
     .chat-log {
       min-height: 310px;
       max-height: 440px;
@@ -748,10 +835,8 @@
       display: grid;
       align-content: start;
       gap: 10px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, .50);
+      padding: 16px;
+      background: rgba(255, 255, 255, .34);
     }
 
     .message {
@@ -760,18 +845,23 @@
       border-radius: var(--radius);
       line-height: 1.75;
       color: var(--ink);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     .message.user {
       justify-self: end;
-      background: var(--teal);
+      background: linear-gradient(135deg, var(--teal), #1f7a72);
       color: #fff;
+      border-bottom-right-radius: 3px;
+      box-shadow: 0 10px 24px rgba(22, 102, 107, .18);
     }
 
     .message.ai {
       justify-self: start;
       background: var(--panel-solid);
       border: 1px solid var(--line);
+      border-bottom-left-radius: 3px;
     }
 
     .message.loading {
@@ -781,10 +871,65 @@
 
     .chat-compose {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) 88px;
       gap: 10px;
-      margin-top: 10px;
-      align-items: end;
+      align-items: stretch;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 252, 244, .84);
+    }
+
+    .chat-compose textarea {
+      min-height: 104px;
+      max-height: 140px;
+      resize: vertical;
+      border-radius: var(--radius);
+      background: #fffdf8;
+      line-height: 1.6;
+    }
+
+    .chat-submit-actions {
+      display: grid;
+      gap: 8px;
+      align-self: stretch;
+    }
+
+    .send-btn {
+      width: 88px;
+      height: 48px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: var(--radius);
+      background: var(--cinnabar);
+      color: #fff8e8;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(168, 63, 44, .22);
+    }
+
+    .clear-chat-btn {
+      width: 88px;
+      height: 48px;
+      min-height: 48px;
+      border-radius: var(--radius);
+      background: rgba(31, 37, 36, .08);
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .clear-chat-btn:hover {
+      background: rgba(31, 37, 36, .12);
+      color: var(--dark);
+    }
+
+    .send-btn:disabled,
+    .small-btn:disabled,
+    .clear-chat-btn:disabled {
+      cursor: not-allowed;
+      opacity: .58;
+      transform: none;
+      filter: none;
     }
 
     .placeholder-card {
@@ -887,6 +1032,7 @@
       .bottom-sheet { display: block; }
       .bottom-sheet-overlay.show { display: block; }
       .sidebar { display: none; }
+      .sidebar-note { display: none; }
       main { padding-bottom: 16px; }
     }
     .disclaimer-banner {
@@ -1001,10 +1147,29 @@
         min-width: 0;
         flex: 1 1 100%;
       }
-      .section-head,
-      .chat-compose {
+      .section-head {
         grid-template-columns: 1fr;
         display: grid;
+      }
+      .oracle-context {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .oracle-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .chat-compose {
+        grid-template-columns: 1fr;
+      }
+      .chat-submit-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+      .send-btn {
+        width: 100%;
+      }
+      .clear-chat-btn {
+        width: 100%;
       }
       .form-row,
       .library-toolbar,
@@ -1474,6 +1639,7 @@
         <button data-target="fengshui"><span class="icon">盘</span><span>风水罗盘</span></button>
         <button data-target="library"><span class="icon">书</span><span>国学内容库</span></button>
       </nav>
+    </div>
     <aside class="sidebar">
       <div class="brand">
         <div class="mark">☯</div>
@@ -1493,9 +1659,9 @@
         <button data-target="library"><span class="icon">书</span><span>国学内容库</span></button>
         <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
       </nav>
-
-      </nav>
-    </div>
+      <div class="sidebar-note">
+        传统文化解读、互动娱乐与生活建议，不替代医学、法律、财务或心理咨询。涉及照片的分析仅在本地页面演示预览，不做身份识别。
+      </div>
     </aside>
 
     <main>
@@ -1586,6 +1752,9 @@
             </div>
             <div class="relationship-grid" id="relatedHexagrams"></div>
             <div class="reading" id="hexReading"></div>
+            <div style="float:right; margin-top:12px;">
+              <button class="small-btn" id="exportIChing" onclick="exportReport('iching')">导出报告</button>
+            </div>
           </div>
         </div>
       </section>
@@ -1615,6 +1784,9 @@
             </div>
             <div class="history" id="cupHistory"></div>
             <div id="cupDeepSeekReading" class="ai-reading" style="display: none; margin-top: 12px;"></div>
+            <div style="float:right; margin-top:12px;">
+              <button class="small-btn" id="exportCups" onclick="exportReport('cups')">导出报告</button>
+            </div>
           </div>
         </div>
       </section>
@@ -1691,6 +1863,9 @@
             <div class="analysis-list" id="palmReading">
               <div class="ai-reading loading">上传手掌照片后生成解读。</div>
             </div>
+            <div style="float:right; margin-top:12px;">
+              <button class="small-btn" id="exportPalm" onclick="exportReport('palm')">导出报告</button>
+            </div>
           </div>
         </div>
       </section>
@@ -1720,6 +1895,9 @@
             <h4>AI 文化化面相解读</h4>
             <div class="analysis-list" id="faceReading">
               <div class="ai-reading loading">上传照片后生成解读。</div>
+            </div>
+            <div style="float:right; margin-top:12px;">
+              <button class="small-btn" id="exportFace" onclick="exportReport('face')">导出报告</button>
             </div>
           </div>
         </div>
@@ -1795,13 +1973,25 @@
           </div>
           <span class="badge">互动问答</span>
         </div>
-        <div class="panel">
-          <div class="chat-log" id="chatLog"></div>
-          <div class="chat-compose">
-            <textarea id="oracleQuestion" placeholder="例如：我最近适合换工作吗？"></textarea>
-            <button class="small-btn" id="askOracle">发送</button>
+        <div class="panel oracle-panel">
+          <div class="oracle-context">
+            <div>
+              <strong>安安问卜</strong>
+              <span>可结合最近一次起卦、当前时间与对话上下文回答。</span>
+            </div>
+            <div class="oracle-actions">
+              <div class="oracle-status" id="oracleStatus">待提问</div>
+              <button class="oracle-action-btn" id="exportOracle" onclick="exportReport('oracle')" type="button">导出</button>
+            </div>
           </div>
-          <div class="disclaimer">建议按“启发、提醒、行动清单”理解，不宜当作唯一决策依据。</div>
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+          <div class="chat-compose">
+            <textarea id="oracleQuestion" rows="2" placeholder="例如：我最近适合换工作吗？"></textarea>
+            <div class="chat-submit-actions">
+              <button class="send-btn" id="askOracle" type="button">发送</button>
+              <button class="clear-chat-btn" id="clearOracle" type="button">清空</button>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -2420,6 +2610,11 @@
       coinLines = [];
       coinChangings = [];
       document.getElementById("coinProgress").textContent = "已得 0 / 6 爻";
+      // 恢复空白占位状态
+      document.getElementById("hexagramView").innerHTML = '<div class="placeholder-card" id="hexPlaceholder"><div style="font-size:48px; opacity:0.2; margin-bottom:12px;">䷀</div><p style="color:var(--muted);">请选择起卦方式，开始摇卦</p><p style="color:var(--muted); font-size:13px; margin-top:4px;">支持时间、铜钱、数字和手动四种起卦方法</p></div>';
+      document.getElementById("relatedHexagrams").innerHTML = "";
+      document.getElementById("hexReading").innerHTML = "";
+      currentCast = null;
     });
 
     document.getElementById("numberCast").addEventListener("click", () => {
@@ -2460,6 +2655,10 @@
       for (let i = 1; i <= 6; i++) {
         document.getElementById(`manual${i}`).selectedIndex = 0;
       }
+      document.getElementById("hexagramView").innerHTML = '<div class="placeholder-card" id="hexPlaceholder"><div style="font-size:48px; opacity:0.2; margin-bottom:12px;">䷀</div><p style="color:var(--muted);">请选择起卦方式，开始摇卦</p><p style="color:var(--muted); font-size:13px; margin-top:4px;">支持时间、铜钱、数字和手动四种起卦方法</p></div>';
+      document.getElementById("relatedHexagrams").innerHTML = "";
+      document.getElementById("hexReading").innerHTML = "";
+      currentCast = null;
     });
 
     function throwCupResult() {
@@ -2867,7 +3066,19 @@
       const cast = currentCast || { base: hexagrams[23], changed: hexagrams[40] };
       const hour = new Date().getHours();
       const phase = hour < 11 ? "阳气初升，适合开局与沟通" : hour < 17 ? "日中事明，适合推进与确认" : "暮色收束，适合复盘与缓行";
-      return `DeepSeek 暂未连通，我先给出本地文化解读：以此刻来看，${phase}。卦象取${cast.base[0]}之意，变入${cast.changed[0]}，提示你先辨清真正阻力，再决定是否行动。若问“${escapeHtml(q)}”，建议先做一次信息盘点，列出可控、不可控、需要求证三类；三日内若关键条件仍不清楚，宜小步试探，不宜一次性押上全部承诺。`;
+      return `1. 先说结论：
+DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着押重注，适合先看清阻力。
+
+2. 卦象怎么看：
+现在的时间气象是“${phase}”。卦象从${cast.base[0]}走向${cast.changed[0]}，大白话就是：先看清眼前局面，再决定下一步怎么变。
+
+3. 可以怎么做：
+第一，先列出可控、不可控、需要求证三类信息。
+第二，三日内如果关键条件还不清楚，就小步试探。
+第三，不要一次性把全部承诺都压上去。
+
+4. 提醒：
+以上只作传统文化参考，不要当成唯一决策依据。`;
     }
 
     async function askDeepSeek(question) {
@@ -2888,19 +3099,35 @@
       return data.answer;
     }
 
-    document.getElementById("askOracle").addEventListener("click", async () => {
+    function setOracleBusy(busy) {
+      const button = document.getElementById("askOracle");
+      const status = document.getElementById("oracleStatus");
+      if (button) button.disabled = busy;
+      if (status) status.textContent = busy ? "解读中" : "可继续问";
+    }
+
+    function appendChatMessage(role, text) {
+      const log = document.getElementById("chatLog");
+      const message = document.createElement("div");
+      message.className = `message ${role}`;
+      message.textContent = text;
+      log.appendChild(message);
+      log.scrollTop = log.scrollHeight;
+      return message;
+    }
+
+    async function sendOracleQuestion() {
+      const button = document.getElementById("askOracle");
+      if (button?.disabled) return;
       const input = document.getElementById("oracleQuestion");
       const q = input.value.trim();
       if (!q) return;
       const log = document.getElementById("chatLog");
-      log.insertAdjacentHTML("beforeend", `<div class="message user">${escapeHtml(q)}</div>`);
+      appendChatMessage("user", q);
       oracleHistory.push({ role: "user", content: q });
       input.value = "";
-      log.scrollTop = log.scrollHeight;
-      const loading = document.createElement("div");
-      loading.className = "message ai loading";
-      loading.textContent = "正在请 DeepSeek 解卦...";
-      log.appendChild(loading);
+      setOracleBusy(true);
+      const loading = appendChatMessage("ai loading", "正在请 DeepSeek 解卦...");
       try {
         const answer = await askDeepSeek(q);
         loading.classList.remove("loading");
@@ -2911,10 +3138,31 @@
         loading.classList.remove("loading");
         loading.innerHTML = `${escapeHtml(answer)}<br><br><span class="muted">提示：${escapeHtml(error.message)}</span>`;
         oracleHistory.push({ role: "assistant", content: answer });
+      } finally {
+        setOracleBusy(false);
       }
       oracleHistory = oracleHistory.slice(-8);
       log.scrollTop = log.scrollHeight;
+    }
+
+    document.getElementById("askOracle").addEventListener("click", sendOracleQuestion);
+
+    document.getElementById("oracleQuestion").addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendOracleQuestion();
+      }
     });
+
+    document.getElementById("clearOracle").addEventListener("click", () => {
+      const log = document.getElementById("chatLog");
+      log.innerHTML = "";
+      oracleHistory = [];
+      document.getElementById("oracleStatus").textContent = "待提问";
+      seedChat();
+    });
+
+    seedChat();
 
     // Audio context for sound effects
     function getAudioCtx() {
@@ -3276,6 +3524,177 @@
     });
 
     updateCompass(0);
+
+    // 导出报告功能
+    function exportReport(type) {
+      const now = new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
+      let title, body = "";
+
+      if (type === "iching") {
+        title = "易经算卦报告";
+        const hexView = document.getElementById("hexagramView");
+        const related = document.getElementById("relatedHexagrams");
+        const reading = document.getElementById("hexReading");
+        const fields = document.getElementById("ichingFieldReading");
+        const hasContent = hexView && hexView.querySelector(".hex-card");
+
+        if (!hasContent) { alert("暂无卦象可导出，请先起卦。"); return; }
+
+        // 提取问题
+        let question = "未设问题";
+        const readingPs = reading ? reading.querySelectorAll("p") : [];
+        for (const p of readingPs) {
+          if (p.innerHTML.startsWith("<strong>所问：</strong>")) {
+            question = p.textContent.replace("所问：", "").trim();
+            break;
+          }
+        }
+
+        // 提取卦象信息
+        const hexCards = hexView.querySelectorAll(".hex-card");
+        body += `<h2>本卦</h2>`;
+        if (hexCards.length >= 1) {
+          const card = hexCards[0];
+          const symbol = card.querySelector(".hex-symbol")?.textContent || "";
+          const name = card.querySelector("h4")?.textContent || "";
+          const desc = card.querySelector("p")?.textContent || "";
+          body += `<p><b>${symbol} ${name}</b></p><p style="color:#6f6a60;">${desc}</p>`;
+        }
+        if (hexCards.length >= 2) {
+          body += `<h2>变卦</h2>`;
+          const card = hexCards[1];
+          const symbol = card.querySelector(".hex-symbol")?.textContent || "";
+          const name = card.querySelector("h4")?.textContent || "";
+          const desc = card.querySelector("p")?.textContent || "";
+          body += `<p><b>${symbol} ${name}</b></p><p style="color:#6f6a60;">${desc}</p>`;
+        }
+
+        // 互卦错卦综卦
+        if (related && related.innerHTML.trim()) {
+          body += `<h2>互卦 · 错卦 · 综卦</h2>`;
+          related.querySelectorAll(".mini-card").forEach(c => {
+            const label = c.querySelector("strong")?.textContent || "";
+            const symbol = c.querySelector(".hex-symbol")?.textContent || "";
+            const desc = c.querySelector("p")?.textContent || "";
+            body += `<div class="item"><b>${label}</b> ${symbol} ${desc}</div>`;
+          });
+        }
+
+        // 体用生克 + 解卦规则 + 动爻
+        if (reading) {
+          const readingItems = reading.querySelectorAll(".mini-card");
+          readingItems.forEach(c => {
+            const label = c.querySelector("strong")?.textContent || "";
+            const text = c.querySelector("p")?.textContent || "";
+            if (label) body += `<div class="item"><b>${escapeHtml(label)}</b><br>${escapeHtml(text)}</div>`;
+          });
+        }
+
+        // 分领域解读
+        if (fields) {
+          body += `<h2>AI 分领域解读</h2>`;
+          fields.querySelectorAll(".mini-card").forEach(c => {
+            const label = c.querySelector("strong")?.textContent || "";
+            const text = c.querySelector("p")?.textContent || "";
+            body += `<div class="field-item"><b>${escapeHtml(label)}</b><p>${escapeHtml(text)}</p></div>`;
+          });
+        }
+
+      } else if (type === "cups") {
+        title = "掷圣杯报告";
+        const history = document.getElementById("cupHistory");
+        const aiReading = document.getElementById("cupDeepSeekReading");
+        const question = document.getElementById("cupQuestion")?.value?.trim() || "未设问题";
+        const records = history ? history.querySelectorAll(".history-item") : [];
+
+        if (records.length === 0 && (!aiReading || aiReading.style.display === "none")) {
+          alert("暂无圣杯记录可导出，请先掷杯。"); return;
+        }
+
+        body += `<h2>所问之事</h2><p>${escapeHtml(question)}</p>`;
+        body += `<h2>掷杯记录</h2>`;
+        records.forEach((r, i) => {
+          const name = r.querySelector("strong")?.textContent || "";
+          const desc = r.querySelector("span")?.textContent || "";
+          body += `<div class="item"><b>第${i + 1}次：${escapeHtml(name)}</b><br>${escapeHtml(desc)}</div>`;
+        });
+        if (aiReading && aiReading.style.display !== "none") {
+          body += `<h2>AI 解读</h2><div class="item">${aiReading.innerHTML.replace(/<\/?strong>/g, "<b>").replace(/<br>/g, "<br>")}</div>`;
+        }
+
+      } else if (type === "palm") {
+        title = "手相AI解读报告";
+        const reading = document.getElementById("palmReading");
+        const text = reading ? reading.textContent?.trim() : "";
+        if (!text || text === "上传手掌照片后生成解读。") {
+          alert("暂无手相解读可导出，请先上传手掌照片。"); return;
+        }
+        body += `<div class="item">${escapeHtml(text).replace(/\n/g, "<br>")}</div>`;
+
+      } else if (type === "face") {
+        title = "面相AI解读报告";
+        const reading = document.getElementById("faceReading");
+        const text = reading ? reading.textContent?.trim() : "";
+        if (!text || text === "上传照片后生成解读。") {
+          alert("暂无面相解读可导出，请先上传照片。"); return;
+        }
+        body += `<div class="item">${escapeHtml(text).replace(/\n/g, "<br>")}</div>`;
+
+      } else if (type === "oracle") {
+        title = "问卜聊天记录";
+        const chatLog = document.getElementById("chatLog");
+        const msgs = chatLog ? chatLog.querySelectorAll(".message") : [];
+        if (msgs.length === 0) {
+          alert("暂无聊天记录可导出。"); return;
+        }
+        body += `<h2>对话记录</h2>`;
+        msgs.forEach(msg => {
+          const role = msg.classList.contains("user") ? "问" : "答";
+          const text = msg.textContent?.trim() || "";
+          if (text) {
+            body += `<div class="chat-msg ${msg.classList.contains("user") ? "user-msg" : "ai-msg"}"><b>${role}：</b>${escapeHtml(text)}</div>`;
+          }
+        });
+
+      } else {
+        return;
+      }
+
+      const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>安安AI · ${title}</title>
+<style>
+  body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f7f0df;color:#1f2524;max-width:680px;margin:40px auto;padding:0 20px;}
+  .hdr{text-align:center;padding:28px 0 18px;border-bottom:2px solid #a83f2c;margin-bottom:24px;}
+  .hdr h1{font-size:22px;color:#a83f2c;margin:0;}
+  .hdr p{font-size:13px;color:#6f6a60;margin:6px 0 0;}
+  h2{font-size:16px;color:#16666b;border-left:3px solid #16666b;padding-left:10px;margin:20px 0 10px;}
+  p, .item{font-size:14px;line-height:1.8;color:#1f2524;margin:6px 0;}
+  .chat-msg{padding:10px 14px;border-radius:6px;margin-bottom:8px;font-size:14px;line-height:1.7;}
+  .user-msg{background:rgba(168,63,44,.08);border-left:3px solid #a83f2c;}
+  .ai-msg{background:rgba(22,102,107,.06);border-left:3px solid #16666b;}
+  .chat-msg b{display:inline;color:inherit;}
+  .field-item{background:rgba(255,252,244,.8);padding:10px 14px;border-radius:6px;margin-bottom:10px;}
+  .field-item b{color:#a83f2c;display:block;margin-bottom:4px;}
+  .field-item p{margin:0;}
+  .ftr{text-align:center;padding:24px 0;font-size:12px;color:#6f6a60;border-top:1px solid rgba(52,42,31,.16);margin-top:30px;}
+</style></head>
+<body>
+<div class="hdr"><h1>安安 AI · ${title}</h1><p>生成时间：${now}</p></div>
+${body}
+<div class="ftr">由 安安 AI 国学工具箱 自动生成 · 仅供传统文化参考</div>
+</body></html>`;
+
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `安安AI_${title}_${new Date().toISOString().slice(0, 10)}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   </script>
 
 </body>
