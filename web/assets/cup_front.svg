@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="woodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4a056"/>
+      <stop offset="35%" style="stop-color:#c4893a"/>
+      <stop offset="70%" style="stop-color:#a06828"/>
+      <stop offset="100%" style="stop-color:#7d4a18"/>
+    </linearGradient>
+    <linearGradient id="woodShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8c878;stop-opacity:0.4"/>
+      <stop offset="50%" style="stop-color:#e8c878;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#5a3010;stop-opacity:0.3"/>
+    </linearGradient>
+    <radialGradient id="shadow" cx="50%" cy="50%" r="55%">
+      <stop offset="70%" style="stop-color:#3a2510;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#3a2510;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="innerShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset dx="2" dy="3" result="offset"/>
+      <feComposite in="SourceGraphic" in2="offset" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Main body - almond/half-moon shape with rounded edges -->
+  <path d="M100 12 C145 12 188 45 188 100 C188 155 145 188 100 188 C55 188 12 155 12 100 C12 45 55 12 100 12Z"
+        fill="url(#woodGrad)" stroke="#6a4018" stroke-width="1.5"/>
+  <!-- Highlight/shine -->
+  <path d="M100 20 C140 20 178 50 178 100 C178 150 140 180 100 180 C60 180 22 150 22 100 C22 50 60 20 100 20Z"
+        fill="url(#woodShine)"/>
+  <!-- Inner shadow overlay -->
+  <path d="M100 12 C145 12 188 45 188 100 C188 155 145 188 100 188 C55 188 12 155 12 100 C12 45 55 12 100 12Z"
+        fill="url(#shadow)"/>
+  <!-- Wood grain lines -->
+  <path d="M60 40 Q100 30 140 40" fill="none" stroke="#8a5820" stroke-width="0.8" opacity="0.3"/>
+  <path d="M50 60 Q100 48 150 60" fill="none" stroke="#8a5820" stroke-width="0.8" opacity="0.25"/>
+  <path d="M42 80 Q100 66 158 80" fill="none" stroke="#8a5820" stroke-width="0.8" opacity="0.2"/>
+  <path d="M40 100 Q100 84 160 100" fill="none" stroke="#8a5820" stroke-width="0.8" opacity="0.2"/>
+  <path d="M44 120 Q100 104 156 120" fill="none" stroke="#8a5820" stroke-width="0.8" opacity="0.25"/>
+  <path d="M50 140 Q100 126 150 140" fill="none" stroke="#8a5820" stroke-width="0.8" opacity="0.3"/>
+  <!-- Center ridge line (front side has subtle ridge) -->
+  <path d="M30 100 Q100 96 170 100" fill="none" stroke="#b07830" stroke-width="1.2" opacity="0.35"/>
+</svg>

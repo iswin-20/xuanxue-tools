@@ -6,19 +6,21 @@
   <title>算算 AI 国学工具箱</title>
   <style>
     :root {
-      --ink: #1f2524;
-      --paper: #f7f0df;
-      --paper-deep: #ebe0c9;
-      --panel: rgba(255, 252, 244, .92);
-      --panel-solid: #fffaf0;
-      --line: rgba(52, 42, 31, .16);
-      --muted: #6f6a60;
-      --teal: #16666b;
-      --teal-soft: #dceeed;
-      --cinnabar: #a83f2c;
-      --gold: #b88b3e;
-      --dark: #17211f;
-      --shadow: 0 18px 50px rgba(33, 28, 20, .13);
+      --ink: #2c2420;
+      --paper: #f6f0e6;
+      --paper-deep: #ece2d4;
+      --panel: rgba(248, 242, 234, .92);
+      --panel-solid: #f6efe6;
+      --line: rgba(80, 60, 45, .15);
+      --muted: #7a6e62;
+      --teal: #4a6b6f;
+      --teal-soft: #dde6e4;
+      --cinnabar: #b8443a;
+      --cinnabar-soft: #f3e2de;
+      --gold: #d4a853;
+      --gold-soft: #f4ecd6;
+      --dark: #2a221e;
+      --shadow: 0 18px 50px rgba(60, 45, 30, .14);
       --radius: 8px;
     }
 
@@ -29,8 +31,8 @@
       font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        linear-gradient(120deg, rgba(22, 102, 107, .10), transparent 34%),
-        linear-gradient(180deg, #f9f4e8, #efe2cc 62%, #e7d5b9);
+        linear-gradient(120deg, rgba(74, 107, 111, .10), transparent 34%),
+        linear-gradient(180deg, #f6f0e6, #ece2d4 62%, #e4d6c2);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -57,8 +59,8 @@
       height: 100vh;
       min-width: 0;
       padding: 22px;
-      background: rgba(23, 33, 31, .96);
-      color: #fff8e8;
+      background: var(--dark);
+      color: #f6efe6;
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -70,7 +72,7 @@
       align-items: center;
       gap: 12px;
       padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255, 248, 232, .14);
+      border-bottom: 1px solid rgba(246, 239, 230, .14);
     }
 
     .brand h1 {
@@ -78,11 +80,12 @@
       font-size: 20px;
       line-height: 1.18;
       letter-spacing: 0;
+      color: #f6efe6;
     }
 
     .brand p {
       margin: 4px 0 0;
-      color: rgba(255, 248, 232, .66);
+      color: rgba(246, 239, 230, .66);
       font-size: 12px;
     }
 
@@ -96,7 +99,7 @@
       min-height: 46px;
       border-radius: var(--radius);
       background: transparent;
-      color: rgba(255, 248, 232, .78);
+      color: rgba(246, 239, 230, .72);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -107,8 +110,8 @@
 
     .nav button:hover,
     .nav button.active {
-      background: rgba(255, 248, 232, .12);
-      color: #fff8e8;
+      background: rgba(246, 239, 230, .10);
+      color: #f6efe6;
       transform: translateX(2px);
     }
 
@@ -119,19 +122,19 @@
       display: grid;
       place-items: center;
       flex: 0 0 auto;
-      background: rgba(255, 248, 232, .10);
-      color: #e8c474;
+      background: rgba(246, 239, 230, .10);
+      color: var(--gold);
     }
 
     .sidebar-note {
       margin-top: auto;
-      border: 1px solid rgba(255, 248, 232, .14);
+      border: 1px solid rgba(246, 239, 230, .14);
       border-radius: var(--radius);
       padding: 12px;
-      color: rgba(255, 248, 232, .72);
+      color: rgba(246, 239, 230, .72);
       font-size: 12px;
       line-height: 1.7;
-      background: rgba(255, 248, 232, .06);
+      background: rgba(246, 239, 230, .06);
       overflow-wrap: anywhere;
       word-break: break-all;
     }
@@ -166,7 +169,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(23, 33, 31, .82), rgba(23, 33, 31, .38) 45%, rgba(23, 33, 31, .08));
+      background: linear-gradient(90deg, rgba(42, 34, 30, .82), rgba(42, 34, 30, .38) 45%, rgba(42, 34, 30, .08));
     }
 
     .hero-content {
@@ -175,7 +178,7 @@
       max-width: 690px;
       min-width: 0;
       padding: 40px;
-      color: #fff8e8;
+      color: #f6efe6;
     }
 
     .eyebrow {
@@ -183,7 +186,7 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 18px;
-      color: #f0d28a;
+      color: var(--gold);
       font-size: 13px;
       font-weight: 700;
     }
@@ -231,11 +234,11 @@
 
     .primary-btn {
       background: var(--cinnabar);
-      color: #fff8e8;
+      color: #f6efe6;
     }
 
     .ghost-btn {
-      color: #fff8e8;
+      color: #f6efe6;
       border: 1px solid rgba(255, 248, 232, .34);
       background: rgba(255, 248, 232, .08);
     }
@@ -368,8 +371,8 @@
     textarea { resize: vertical; min-height: 92px; }
 
     input:focus, select:focus, textarea:focus {
-      border-color: rgba(22, 102, 107, .55);
-      box-shadow: 0 0 0 3px rgba(22, 102, 107, .12);
+      border-color: rgba(74, 107, 111, .55);
+      box-shadow: 0 0 0 3px rgba(74, 107, 111, .12);
     }
 
     .segmented {
@@ -377,7 +380,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 6px;
       margin-bottom: 12px;
-      background: rgba(31, 37, 36, .06);
+      background: rgba(44, 36, 32, .06);
       padding: 5px;
       border-radius: var(--radius);
     }
@@ -393,7 +396,7 @@
     .segmented button.active {
       background: var(--panel-solid);
       color: var(--teal);
-      box-shadow: 0 3px 14px rgba(33, 28, 20, .10);
+      box-shadow: 0 3px 14px rgba(60, 45, 30, .10);
     }
 
     .method-box { display: none; }
@@ -408,7 +411,7 @@
     .hex-card {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: linear-gradient(180deg, #fffdf6, #f5ead8);
+      background: linear-gradient(180deg, #faf4ea, #ece2d4);
       padding: 14px;
       min-height: 150px;
     }
@@ -492,8 +495,8 @@
       border-radius: var(--radius);
       border: 1px solid var(--line);
       background:
-        radial-gradient(circle at center, rgba(184, 139, 62, .18), transparent 45%),
-        linear-gradient(145deg, rgba(22, 102, 107, .10), rgba(168, 63, 44, .08));
+        radial-gradient(circle at center, rgba(212, 168, 83, .18), transparent 45%),
+        linear-gradient(145deg, rgba(74, 107, 111, .10), rgba(184, 68, 58, .08));
       display: grid;
       place-items: center;
       overflow: hidden;
@@ -508,14 +511,10 @@
     .cup {
       width: 86px;
       height: 46px;
-      border-radius: 50% 50% 48% 48%;
-      background: radial-gradient(circle at 50% 35%, #f6e4b6, #b78b47 70%);
-      box-shadow: inset 0 -13px 0 rgba(91, 53, 24, .18), 0 16px 28px rgba(33, 28, 20, .18);
+      object-fit: contain;
       position: relative;
-    }
-
-    .cup.down {
-      background: radial-gradient(circle at 50% 65%, #7d4a26, #2c2017 70%);
+      filter: drop-shadow(0 8px 16px rgba(60, 45, 30, .25));
+      transition: none;
     }
 
     .cups.rolling {
@@ -546,7 +545,7 @@
 
     .upload-box {
       min-height: 220px;
-      border: 1px dashed rgba(31, 37, 36, .28);
+      border: 1px dashed rgba(44, 36, 32, .28);
       border-radius: var(--radius);
       display: grid;
       place-items: center;
@@ -593,7 +592,7 @@
     .bar {
       height: 10px;
       border-radius: 99px;
-      background: rgba(31, 37, 36, .10);
+      background: rgba(44, 36, 32, .10);
       overflow: hidden;
     }
 
@@ -735,7 +734,7 @@
       min-height: 26px;
       border-radius: 999px;
       padding: 0 9px;
-      background: rgba(22, 102, 107, .10);
+      background: rgba(74, 107, 111, .10);
       color: var(--teal);
       font-size: 12px;
     }
@@ -753,7 +752,7 @@
       padding: 0;
       overflow: hidden;
       background:
-        linear-gradient(145deg, rgba(22, 102, 107, .10), rgba(184, 139, 62, .08)),
+        linear-gradient(145deg, rgba(74, 107, 111, .10), rgba(212, 168, 83, .08)),
         var(--panel);
     }
 
@@ -786,7 +785,7 @@
       align-items: center;
       border-radius: 999px;
       padding: 0 10px;
-      background: rgba(22, 102, 107, .10);
+      background: rgba(74, 107, 111, .10);
       color: var(--teal);
       font-size: 12px;
       font-weight: 700;
@@ -803,7 +802,7 @@
       min-height: 28px;
       border-radius: 999px;
       padding: 0 10px;
-      background: rgba(31, 37, 36, .06);
+      background: rgba(44, 36, 32, .06);
       color: var(--muted);
       border: 1px solid transparent;
       font-size: 12px;
@@ -839,10 +838,10 @@
 
     .message.user {
       justify-self: end;
-      background: linear-gradient(135deg, var(--teal), #1f7a72);
+      background: linear-gradient(135deg, var(--teal), #4f7a7a);
       color: #fff;
       border-bottom-right-radius: 3px;
-      box-shadow: 0 10px 24px rgba(22, 102, 107, .18);
+      box-shadow: 0 10px 24px rgba(74, 107, 111, .18);
     }
 
     .message.ai {
@@ -872,7 +871,7 @@
       max-height: 140px;
       resize: vertical;
       border-radius: var(--radius);
-      background: #fffdf8;
+      background: #f6efe6;
       line-height: 1.6;
     }
 
@@ -889,10 +888,10 @@
       padding: 0 18px;
       border-radius: var(--radius);
       background: var(--cinnabar);
-      color: #fff8e8;
+      color: #f6efe6;
       font-size: 15px;
       font-weight: 700;
-      box-shadow: 0 10px 22px rgba(168, 63, 44, .22);
+      box-shadow: 0 10px 22px rgba(184, 68, 58, .22);
     }
 
     .clear-chat-btn {
@@ -900,14 +899,14 @@
       height: 48px;
       min-height: 48px;
       border-radius: var(--radius);
-      background: rgba(31, 37, 36, .08);
+      background: rgba(44, 36, 32, .08);
       color: var(--muted);
       font-size: 15px;
       font-weight: 700;
     }
 
     .clear-chat-btn:hover {
-      background: rgba(31, 37, 36, .12);
+      background: rgba(44, 36, 32, .12);
       color: var(--dark);
     }
 
@@ -945,16 +944,16 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: rgba(168, 63, 44, .92);
+      background: rgba(184, 68, 58, .92);
       backdrop-filter: blur(8px);
       justify-content: center;
       align-items: center;
       cursor: pointer;
       border: 0;
       padding: 0;
-      color: #fff8e8;
+      color: #f6efe6;
       font-size: 20px;
-      box-shadow: 0 2px 16px rgba(168, 63, 44, .35);
+      box-shadow: 0 2px 16px rgba(184, 68, 58, .35);
       transition: transform .2s;
     }
     .mobile-nav-icon:active { transform: translateX(-50%) scale(.92); }
@@ -976,7 +975,7 @@
       bottom: -100%;
       z-index: 999;
       max-height: 75vh;
-      background: linear-gradient(180deg, #fffaf0, #fef6e8);
+      background: linear-gradient(180deg, #f6efe6, #ece2d4);
       border-radius: 16px 16px 0 0;
       padding: 12px 16px 24px;
       transition: bottom .35s cubic-bezier(0.32, 0.72, 0, 1);
@@ -987,8 +986,8 @@
     .bottom-sheet-handle {
       width: 36px; height: 4px;
       border-radius: 2px;
-      background: var(--cinnabar);
-      opacity: .4;
+      background: var(--gold);
+      opacity: .5;
       margin: 0 auto 12px;
     }
     .bottom-sheet-nav {
@@ -1013,7 +1012,7 @@
     }
     .bottom-sheet-nav button:active { background: var(--paper-deep); }
     .bottom-sheet-nav button .icon { font-size: 20px; width: 28px; text-align: center; }
-    .bottom-sheet-nav button.active { background: #fef0ea; color: var(--cinnabar); font-weight: 600; }
+    .bottom-sheet-nav button.active { background: var(--cinnabar-soft); color: var(--cinnabar); font-weight: 600; }
 
     @media (max-width: 980px) {
       .mobile-nav-icon { display: flex; }
@@ -1027,9 +1026,9 @@
       padding: 12px 16px;
       margin-bottom: 16px;
       border-radius: var(--radius);
-      background: #fff3cd;
-      border: 1px solid #ffc107;
-      color: #664d00;
+      background: var(--gold-soft);
+      border: 1px solid var(--gold);
+      color: #6a5a3e;
       font-size: 13px;
       line-height: 1.6;
     }
@@ -1037,8 +1036,8 @@
       margin-top: 12px;
       padding: 10px 12px;
       border-left: 4px solid var(--gold);
-      background: rgba(184, 139, 62, .12);
-      color: #665638;
+      background: var(--gold-soft);
+      color: #6a5a3e;
       line-height: 1.65;
       font-size: 12px;
     }
@@ -1067,7 +1066,7 @@
       border-radius: var(--radius);
       background: var(--panel-solid);
       box-shadow: 0 24px 70px rgba(22, 17, 11, .28);
-      border: 1px solid rgba(184, 139, 62, .28);
+      border: 1px solid rgba(212, 168, 83, .28);
       padding: 22px;
       color: var(--ink);
     }
@@ -1189,7 +1188,7 @@
     .cup-overlay-bg {
       position: absolute;
       inset: 0;
-      background: url('assets/mazu_bg.png') center/cover no-repeat;
+      background: url('assets/mazu_bg.png?v=2') center/cover no-repeat;
       opacity: 0.35;
       z-index: 0;
     }
@@ -1205,7 +1204,8 @@
     .full-screen-cups .cup {
       width: 160px;
       height: 85px;
-      box-shadow: inset 0 -20px 0 rgba(91, 53, 24, .25), 0 30px 45px rgba(0, 0, 0, .5);
+      object-fit: contain;
+      filter: drop-shadow(0 30px 45px rgba(0, 0, 0, .55));
     }
     .full-screen-cups {
       gap: 50px;
@@ -1220,7 +1220,7 @@
     }
     .overlay-result {
       margin-top: 60px;
-      color: #fffaf0;
+      color: #f6efe6;
       text-shadow: 0 4px 15px rgba(0,0,0,0.9);
       opacity: 0;
       transform: translateY(30px);
@@ -1506,7 +1506,7 @@
       align-items: center; justify-content: center; width: 100%; height: 100%;
     }
     .fs-muyu-count-display {
-      position: absolute; top: 60px; font-size: 36px; color: #e8c474;
+      position: absolute; top: 60px; font-size: 36px; color: var(--gold);
       font-weight: bold; letter-spacing: 2px; text-shadow: 0 4px 15px rgba(0,0,0,0.8);
     }
     .fs-muyu-container {
@@ -1535,7 +1535,7 @@
     }
     .fs-muyu-ripple {
       position: absolute; width: 100%; height: 100%; border-radius: 50%;
-      border: 4px solid #e8c474; opacity: 0.8; top: 0; left: 0;
+      border: 4px solid var(--gold); opacity: 0.8; top: 0; left: 0;
       transform: scale(0.8); pointer-events: none;
       animation: fsRippleAnim 0.8s ease-out forwards; z-index: 1;
     }
@@ -1600,13 +1600,887 @@
       .fs-incense-burner .incense-smoke { top: -200px !important; height: 250px !important; transform: translateX(-50%) scale(1) !important; }
       .fs-incense-text { top: 8vh; font-size: 24px; letter-spacing: 8px; text-align: center; }
     }
-  </style>
+
+    /* 古风统一主题 */
+    :root {
+      --ink: #2c2420;
+      --paper: #f6f0e6;
+      --paper-deep: #ece2d4;
+      --panel: rgba(248, 242, 234, .92);
+      --panel-solid: #f6efe6;
+      --line: rgba(80, 60, 45, .15);
+      --muted: #7a6e62;
+      --teal: #4a6b6f;
+      --teal-soft: #dde6e4;
+      --cinnabar: #b8443a;
+      --cinnabar-soft: #f3e2de;
+      --gold: #d4a853;
+      --gold-soft: #f4ecd6;
+      --dark: #2a221e;
+      --shadow: 0 18px 50px rgba(60, 45, 30, .14);
+      --radius: 8px;
+    }
+
+    body {
+      background:
+        linear-gradient(120deg, rgba(74, 107, 111, .10), transparent 34%),
+        linear-gradient(180deg, #f6f0e6, #ece2d4 62%, #e4d6c2);
+    }
+
+    .sidebar {
+      background: var(--dark);
+      color: #f6efe6;
+    }
+
+    .brand {
+      border-color: rgba(246, 239, 230, .14);
+    }
+
+    .sidebar-note {
+      border-color: rgba(246, 239, 230, .14);
+      background: rgba(246, 239, 230, .06);
+      color: rgba(246, 239, 230, .72);
+    }
+
+    .brand p,
+    .nav button {
+      color: rgba(246, 239, 230, .72);
+    }
+
+    .nav .icon {
+      background: rgba(246, 239, 230, .10);
+      color: var(--gold);
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: rgba(246, 239, 230, .10);
+      color: #f6efe6;
+    }
+
+    .hero {
+      background: var(--dark);
+      box-shadow: var(--shadow);
+    }
+
+    .hero img {
+      opacity: .86;
+    }
+
+    .hero::after {
+      background:
+        linear-gradient(90deg, rgba(42, 34, 30, .82), rgba(42, 34, 30, .38) 45%, rgba(42, 34, 30, .08));
+    }
+
+    .hero-content,
+    .ghost-btn {
+      color: #f6efe6;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+    }
+
+    .hero p {
+      color: rgba(246, 239, 230, .82);
+    }
+
+    .surface,
+    .panel,
+    .placeholder-card,
+    .hex-card,
+    .field-card,
+    .oracle-panel {
+      backdrop-filter: blur(14px);
+    }
+
+    .surface,
+    .panel {
+      background: var(--panel);
+      border-color: var(--line);
+    }
+
+    input,
+    select,
+    textarea {
+      background: rgba(246, 239, 230, .82);
+      border-color: var(--line);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(74, 107, 111, .55);
+      box-shadow: 0 0 0 3px rgba(74, 107, 111, .12);
+    }
+
+    .primary-btn,
+    .small-btn {
+      background: var(--cinnabar);
+      color: #f6efe6;
+      box-shadow: 0 12px 28px rgba(184, 68, 58, .18);
+    }
+
+    .ghost-control,
+    #coinReset,
+    #resetCups,
+    #manualReset,
+    #clearDream {
+      background: rgba(44, 36, 32, .06) !important;
+      color: var(--ink) !important;
+      box-shadow: none;
+      border: 1px solid rgba(44, 36, 32, .10);
+    }
+
+    .export-btn,
+    .oracle-action-btn {
+      color: var(--teal);
+      border-color: rgba(74, 107, 111, .34);
+    }
+
+    .segmented {
+      background: rgba(44, 36, 32, .06);
+    }
+
+    .segmented button.active,
+    .badge,
+    .tag {
+      background: rgba(74, 107, 111, .10);
+      color: var(--teal);
+    }
+
+    .disclaimer-banner {
+      background: var(--gold-soft);
+      border-color: rgba(212, 168, 83, .42);
+      color: #6a5a3e;
+    }
+
+    .disclaimer {
+      border-left-color: var(--gold);
+      background: rgba(212, 168, 83, .12);
+      color: #6a5a3e;
+    }
+
+    .motion-hint {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .motion-hint.ready {
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .daily-fortune {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 16px;
+      padding: 18px;
+      border: 1px solid rgba(184, 68, 58, .24);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(212, 168, 83, .18), transparent 26%),
+        radial-gradient(circle at 86% 14%, rgba(74, 107, 111, .13), transparent 24%),
+        linear-gradient(135deg, rgba(184, 68, 58, .10), transparent 44%),
+        linear-gradient(180deg, rgba(248, 242, 234, .96), rgba(236, 226, 212, .88));
+      box-shadow: 0 18px 50px rgba(60, 45, 30, .13);
+      backdrop-filter: blur(18px);
+    }
+
+    .daily-fortune::before,
+    .daily-fortune::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .daily-fortune::before {
+      inset: -38px -22px;
+      opacity: .62;
+      background:
+        radial-gradient(circle at 7% 22%, transparent 0 20px, rgba(212, 168, 83, .18) 21px 23px, transparent 24px),
+        radial-gradient(circle at 14% 22%, transparent 0 26px, rgba(212, 168, 83, .14) 27px 29px, transparent 30px),
+        radial-gradient(circle at 23% 20%, transparent 0 19px, rgba(212, 168, 83, .13) 20px 22px, transparent 23px),
+        radial-gradient(circle at 72% 18%, transparent 0 22px, rgba(184, 68, 58, .12) 23px 25px, transparent 26px),
+        radial-gradient(circle at 82% 18%, transparent 0 31px, rgba(184, 68, 58, .10) 32px 34px, transparent 35px),
+        radial-gradient(circle at 92% 20%, transparent 0 21px, rgba(184, 68, 58, .12) 22px 24px, transparent 25px),
+        radial-gradient(circle at 18% 82%, transparent 0 28px, rgba(74, 107, 111, .12) 29px 31px, transparent 32px),
+        radial-gradient(circle at 29% 84%, transparent 0 20px, rgba(74, 107, 111, .10) 21px 23px, transparent 24px),
+        radial-gradient(circle at 78% 80%, transparent 0 26px, rgba(212, 168, 83, .13) 27px 29px, transparent 30px),
+        radial-gradient(circle at 89% 82%, transparent 0 19px, rgba(212, 168, 83, .11) 20px 22px, transparent 23px);
+    }
+
+    .daily-fortune::after {
+      inset: 10px;
+      border: 1px solid rgba(212, 168, 83, .20);
+      border-radius: calc(var(--radius) - 2px);
+      background:
+        linear-gradient(90deg, transparent 0 12%, rgba(212, 168, 83, .22) 12% 21%, transparent 21% 100%) top left / 160px 1px repeat-x,
+        linear-gradient(90deg, transparent 0 34%, rgba(184, 68, 58, .15) 34% 48%, transparent 48% 100%) bottom right / 190px 1px repeat-x;
+      opacity: .78;
+    }
+
+    .daily-main,
+    .daily-grid {
+      position: relative;
+      z-index: 1;
+    }
+
+    .daily-main {
+      min-width: 0;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+    }
+
+    .daily-kicker {
+      width: fit-content;
+      min-height: 26px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: rgba(184, 68, 58, .11);
+      color: var(--cinnabar);
+      border: 1px solid rgba(184, 68, 58, .18);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .daily-main h4 {
+      margin: 0;
+      color: var(--dark);
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .daily-main p {
+      margin: 0;
+      color: #6a5a3e;
+      line-height: 1.8;
+    }
+
+    .daily-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .daily-item {
+      min-height: 76px;
+      display: grid;
+      align-content: center;
+      gap: 6px;
+      padding: 12px;
+      border: 1px solid rgba(212, 168, 83, .22);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(248, 242, 234, .86), rgba(246, 240, 230, .72));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .38);
+    }
+
+    .daily-item span {
+      color: var(--cinnabar);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .daily-item strong {
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .sign-stage {
+      position: relative;
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(184, 68, 58, .22);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(42, 34, 30, .20), rgba(42, 34, 30, .58)),
+        url("assets/mazu_bg.png?v=2") center/cover no-repeat;
+      box-shadow: inset 0 -80px 120px rgba(42, 34, 30, .34);
+    }
+
+    .sign-tube {
+      position: relative;
+      width: min(150px, 46vw);
+      height: 190px;
+      display: grid;
+      place-items: end center;
+      isolation: isolate;
+    }
+
+    .sign-tube.shaking {
+      animation: signShake .68s cubic-bezier(.36, .07, .19, .97);
+    }
+
+    @keyframes signShake {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      16% { transform: rotate(-7deg) translateY(-4px); }
+      32% { transform: rotate(7deg) translateY(2px); }
+      48% { transform: rotate(-5deg) translateY(-3px); }
+      64% { transform: rotate(5deg) translateY(1px); }
+      80% { transform: rotate(-2deg) translateY(-1px); }
+    }
+
+    .sign-stick {
+      position: absolute;
+      bottom: 58px;
+      width: 11px;
+      height: 108px;
+      border-radius: 999px 999px 6px 6px;
+      background: linear-gradient(90deg, #b74435, #f0d08b 18% 50%, #9e2f2b);
+      box-shadow: 0 8px 18px rgba(42, 34, 30, .22);
+      transform-origin: bottom center;
+    }
+
+    .sign-stick:nth-child(1) { transform: rotate(-21deg) translateX(-34px); }
+    .sign-stick:nth-child(2) { transform: rotate(-12deg) translateX(-18px); }
+    .sign-stick:nth-child(3) { transform: rotate(-4deg) translateX(-6px); }
+    .sign-stick:nth-child(4) { transform: rotate(5deg) translateX(8px); }
+    .sign-stick:nth-child(5) { transform: rotate(14deg) translateX(22px); }
+    .sign-stick:nth-child(6) { transform: rotate(22deg) translateX(36px); }
+
+    .sign-cup {
+      position: relative;
+      z-index: 2;
+      width: 132px;
+      height: 88px;
+      border-radius: 24px 24px 76px 76px / 18px 18px 88px 88px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(255, 235, 196, .92), transparent 40%),
+        linear-gradient(135deg, #8d1f25, #bd3f31 48%, #5f191d);
+      box-shadow:
+        inset 0 14px 18px rgba(255, 234, 194, .22),
+        inset 0 -22px 24px rgba(52, 14, 16, .30),
+        0 24px 46px rgba(42, 34, 30, .34);
+    }
+
+    .sign-cup::before {
+      content: "";
+      position: absolute;
+      inset: 9px 14px auto;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(42, 34, 30, .32);
+      border: 1px solid rgba(255, 234, 194, .24);
+    }
+
+    .sign-result-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .sign-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .sign-title-row h4 {
+      margin: 0;
+      color: var(--dark);
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .sign-grade {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 12px;
+      background: var(--cinnabar-soft);
+      color: var(--cinnabar);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .sign-poem {
+      margin: 0;
+      padding: 12px;
+      border-left: 4px solid var(--cinnabar);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .56);
+      color: var(--dark);
+      line-height: 1.9;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .sign-plain {
+      margin: 0;
+      padding: 14px;
+      border: 1px solid rgba(74, 107, 111, .18);
+      border-radius: var(--radius);
+      background: rgba(74, 107, 111, .08);
+      color: var(--dark);
+      line-height: 1.8;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .sign-meaning {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .sign-reading-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .sign-reading-item {
+      min-height: 96px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: rgba(255, 255, 255, .58);
+    }
+
+    .sign-reading-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--teal);
+      font-size: 13px;
+    }
+
+    .sign-reading-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 13px;
+    }
+
+    .sign-question {
+      margin: 0;
+      color: #6a5a3e;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .cup-stage {
+      position: relative;
+      background:
+        linear-gradient(145deg, rgba(66, 87, 255, .10), rgba(15, 118, 110, .10)),
+        linear-gradient(180deg, rgba(255, 255, 255, .72), rgba(232, 237, 245, .86));
+      box-shadow: inset 0 -22px 44px rgba(16, 24, 40, .05);
+    }
+
+    .cup-stage::after,
+    .coins-container::after,
+    .full-screen-cups::after {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: 22px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(17, 24, 39, .20), transparent);
+    }
+
+    .cups {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cup {
+      width: 108px;
+      height: 56px;
+      border: 1px solid rgba(118, 18, 23, .28);
+      border-radius: 95% 16% 92% 18% / 100% 18% 88% 14%;
+      background:
+        radial-gradient(ellipse at 28% 28%, rgba(255, 211, 202, .88), rgba(255, 211, 202, 0) 28%),
+        linear-gradient(135deg, #f04b54 0%, #cf2330 48%, #8f111b 100%);
+      box-shadow:
+        inset 8px 8px 16px rgba(255, 255, 255, .22),
+        inset -12px -12px 18px rgba(83, 10, 16, .28),
+        0 18px 34px rgba(116, 20, 28, .24);
+      clip-path: polygon(4% 64%, 13% 40%, 29% 20%, 51% 8%, 75% 6%, 96% 17%, 86% 32%, 69% 49%, 48% 64%, 25% 73%, 8% 72%);
+      transform-origin: center center;
+    }
+
+    .cup::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 22%;
+      top: 24%;
+      height: 34%;
+      border-radius: 999px;
+      background: linear-gradient(160deg, rgba(255, 236, 230, .82), rgba(255, 255, 255, .06) 58%, transparent);
+      transform: rotate(-16deg);
+    }
+
+    .cup::after {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 13%;
+      bottom: 16%;
+      height: 18%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(77, 8, 14, .26), rgba(77, 8, 14, .04));
+      transform: rotate(-9deg);
+    }
+
+    .cup.down {
+      background:
+        radial-gradient(ellipse at 56% 36%, rgba(255, 176, 166, .30), rgba(255, 176, 166, 0) 34%),
+        linear-gradient(135deg, #de3440 0%, #b71825 52%, #7c0d17 100%);
+      box-shadow:
+        inset -8px -10px 16px rgba(71, 6, 13, .32),
+        inset 6px 7px 14px rgba(255, 255, 255, .12),
+        0 18px 34px rgba(70, 8, 16, .30);
+    }
+
+    .cup-overlay,
+    .coin-overlay {
+      background:
+        linear-gradient(135deg, rgba(16, 24, 40, .96), rgba(24, 34, 48, .92)),
+        rgba(16, 24, 40, .94);
+      backdrop-filter: blur(18px);
+    }
+
+    .cup-overlay-bg {
+      background:
+        linear-gradient(135deg, rgba(16, 24, 40, .30), rgba(15, 118, 110, .10) 44%, rgba(16, 24, 40, .28)),
+        url('assets/mazu_bg.png?v=2') center/cover no-repeat;
+      opacity: .38;
+      filter: saturate(1.08) contrast(1.04);
+    }
+
+    .full-screen-cups {
+      position: relative;
+      display: block;
+      width: min(560px, 88vw);
+      height: min(360px, 48vh);
+      min-height: 280px;
+      perspective: 1100px;
+    }
+
+    .full-screen-cups .cup {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 164px;
+      height: 86px;
+      will-change: transform;
+    }
+
+    .full-screen-cups.rolling {
+      animation: none;
+      transform: none;
+    }
+
+    .overlay-result {
+      margin-top: 28px;
+      color: #f6efe6;
+    }
+
+    .overlay-result h2 {
+      color: var(--gold);
+      letter-spacing: 0;
+    }
+
+    .overlay-result p {
+      color: rgba(246, 239, 230, .78);
+    }
+
+    .coin-overlay {
+      gap: 24px;
+    }
+
+    .coins-container {
+      position: relative;
+      display: block;
+      width: min(560px, 88vw);
+      height: min(390px, 54vh);
+      min-height: 300px;
+      margin-bottom: 0;
+      perspective: 1200px;
+    }
+
+    .coin-wrapper {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 106px;
+      height: 106px;
+      will-change: transform;
+    }
+
+    .coin-inner {
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, .34),
+        inset 0 0 0 1px rgba(255, 255, 255, .28);
+    }
+
+    .coin-face {
+      color: #172033;
+      border: 1px solid rgba(17, 24, 39, .20);
+      font-size: 30px;
+      letter-spacing: 0;
+      overflow: hidden;
+    }
+
+    .coin-face::before {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 15px;
+      z-index: 2;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, .28);
+    }
+
+    .coin-face.front {
+      background:
+        radial-gradient(circle at 34% 24%, rgba(255, 255, 255, .88), transparent 22%),
+        linear-gradient(135deg, #f8d57a, #d99c2b 52%, #9f641e);
+    }
+
+    .coin-face.back {
+      background:
+        radial-gradient(circle at 35% 24%, rgba(246, 239, 230, .72), transparent 24%),
+        linear-gradient(135deg, #d4a853, #b8853a 55%, #8a6630);
+      transform: rotateY(180deg);
+    }
+
+    .coin-face::after {
+      inset: 32%;
+      border-radius: 6px;
+      border: 2px solid rgba(17, 24, 39, .22);
+      background: rgba(255, 255, 255, .20);
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, .08);
+      z-index: 1;
+    }
+
+    .coin-result-text {
+      color: var(--gold);
+      font-size: clamp(22px, 4vw, 34px);
+      letter-spacing: 0;
+      text-align: center;
+      max-width: min(680px, 88vw);
+    }
+
+    .message.user {
+      background: linear-gradient(135deg, var(--teal), #4f7a7a);
+    }
+
+    .bar span {
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+    }
+
+    .oracle-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 12000;
+      display: block;
+      min-width: 0;
+      padding: 28px;
+      overflow: auto;
+      background:
+        linear-gradient(135deg, rgba(42, 34, 30, .94), rgba(42, 34, 30, .86)),
+        radial-gradient(circle at 18% 12%, rgba(184, 68, 58, .18), transparent 34%);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .oracle-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .oracle-modal .section-head,
+    .oracle-modal .oracle-panel {
+      width: min(980px, 100%);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .oracle-modal .section-head {
+      margin-top: 22px;
+      color: #f6efe6;
+    }
+
+    .oracle-modal .section-head h3 {
+      color: #f6efe6;
+    }
+
+    .oracle-modal .section-head p {
+      color: rgba(246, 239, 230, .72);
+    }
+
+    .oracle-close {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(246, 239, 230, .12);
+      color: #f6efe6;
+      border: 1px solid rgba(246, 239, 230, .18);
+      font-size: 26px;
+      line-height: 1;
+      backdrop-filter: blur(12px);
+    }
+
+    .oracle-modal .oracle-panel {
+      background: rgba(248, 242, 234, .96);
+      box-shadow: 0 28px 90px rgba(60, 45, 30, .28);
+    }
+
+    body.oracle-open {
+      overflow: hidden;
+    }
+
+    .mobile-nav-icon {
+      background: rgba(184, 68, 58, .92);
+      color: #f6efe6;
+      box-shadow: 0 14px 34px rgba(184, 68, 58, .26);
+    }
+
+    .bottom-sheet-overlay {
+      background: rgba(60, 45, 30, .54);
+    }
+
+    .bottom-sheet {
+      background: linear-gradient(180deg, #f6efe6, #ece2d4);
+      box-shadow: 0 -20px 60px rgba(60, 45, 30, .18);
+    }
+
+    .bottom-sheet-handle {
+      background: var(--gold);
+    }
+
+    .bottom-sheet-nav button.active {
+      background: var(--cinnabar-soft);
+      color: var(--cinnabar);
+    }
+
+    .folk-dialog {
+      border-color: rgba(212, 168, 83, .28);
+    }
+
+    @media (max-width: 620px) {
+      .full-screen-cups .cup {
+        width: 132px;
+        height: 70px;
+        object-fit: contain;
+      }
+
+      .coin-wrapper {
+        width: 86px;
+        height: 86px;
+      }
+
+      .daily-fortune,
+      .daily-grid,
+      .sign-reading-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .oracle-modal {
+        padding: 18px 12px;
+      }
+
+      .oracle-modal .section-head {
+        padding-right: 42px;
+      }
+    }
+  
+    /* ===== 放生积德 ===== */
+    .pond-stage {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      background: linear-gradient(180deg, #0b3d6b 0%, #06529e 30%, #0a7ac6 100%);
+      overflow: hidden;
+      cursor: pointer;
+      border-radius: 0;
+    }
+    .pond-water {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(100, 200, 255, 0.15), transparent 50%),
+                  radial-gradient(ellipse at 70% 60%, rgba(60, 180, 240, 0.10), transparent 40%);
+      animation: pondRipple 8s ease-in-out infinite;
+    }
+    @keyframes pondRipple {
+      0%, 100% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.02) translateY(-4px); }
+    }
+    .pond-fish-container { position: absolute; inset: 0; z-index: 2; }
+    .pond-fish {
+      position: absolute; font-size: 28px; line-height: 1;
+      user-select: none; pointer-events: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      will-change: transform;
+      transition: none;
+    }
+    .pond-fish.flip { transform: scaleX(-1); }
+
+    .pond-info {
+      position: absolute; top: 12px; right: 14px; z-index: 5;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      font-size: 13px; color: rgba(200, 240, 210, 0.85);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.25); padding: 8px 14px;
+      border-radius: 10px; backdrop-filter: blur(4px);
+    }
+    .pond-count { font-weight: bold; }
+    .pond-merit { color: rgba(255, 215, 100, 0.9); font-weight: bold; }
+    #fishCollection { line-height: 2; }
+    #fishCollection .fish-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 10px;
+      background: linear-gradient(135deg, rgba(40, 140, 80, 0.12), rgba(32, 120, 70, 0.08));
+      border: 1px solid rgba(40, 140, 80, 0.2);
+      border-radius: 999px; font-size: 13px; color: var(--ink);
+    }
+    #fishCollection .fish-tag .count { color: var(--teal); font-weight: bold; }
+    @media (max-width: 660px) {
+      .pond-stage { min-height: 280px; }
+      .pond-fish { font-size: 22px; }
+      .pond-info { font-size: 11px; padding: 5px 10px; }
+    }
+
+</style>
 </head>
 <body>
   <div class="folk-modal" id="folkDisclaimerModal" role="dialog" aria-modal="true" aria-labelledby="folkDisclaimerTitle">
     <div class="folk-dialog">
-      <h2 id="folkDisclaimerTitle">民俗文化参考提示</h2>
-      <p>本工具用于传统文化、民俗互动与自我整理体验，生成内容仅供娱乐和文化参考，不替代医疗、法律、财务、心理咨询等专业建议，也不作为确定性预测或决策唯一依据。</p>
+      <h2 id="folkDisclaimerTitle">使用须知</h2>
+      <p>本工具基于传统文化与 AI 提供解读参考。不替代医疗、法律、财务、心理咨询等专业建议。</p>
       <button class="primary-btn" id="folkDisclaimerClose">我知道了</button>
     </div>
   </div>
@@ -1617,11 +2491,12 @@
     <div class="bottom-sheet" id="bottomSheet">
       <div class="bottom-sheet-handle"></div>
       <nav class="bottom-sheet-nav">
+        <button data-target="dailySign"><span class="icon">签</span><span>每日一签</span></button>
         <button data-target="iching"><span class="icon">䷀</span><span>易经算卦</span></button>
-        <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
         <button data-target="dream"><span class="icon">梦</span><span>周公解梦</span></button>
         <button data-target="cups"><span class="icon">杯</span><span>掷圣杯</span></button>
         <button data-target="muyu"><span class="icon">鱼</span><span>敲木鱼</span></button>
+        <button data-target="fangsheng"><span class="icon">放</span><span>放生积德</span></button>
         <button data-target="incense"><span class="icon">香</span><span>敬香祈福</span></button>
         <button data-target="palm"><span class="icon">掌</span><span>手相 AI</span></button>
         <button data-target="face"><span class="icon">相</span><span>面相 AI</span></button>
@@ -1634,40 +2509,43 @@
         <img src="assets/logo.png" alt="算算" width="42" height="42" style="border-radius:50%;object-fit:cover;box-shadow:inset 0 0 0 3px rgba(23,33,31,.28)">
         <div>
           <h1>算算</h1>
-          <p>AI 国学 / 易经 / 民俗文化工具箱</p>
         </div>
       </div>
       <nav class="nav" aria-label="工具导航">
-        <button class="active" data-target="iching"><span class="icon">䷀</span><span>易经算卦</span></button>
+        <button class="active" data-target="dailySign"><span class="icon">签</span><span>每日一签</span></button>
+        <button data-target="iching"><span class="icon">䷀</span><span>易经算卦</span></button>
         <button data-target="cups"><span class="icon">杯</span><span>掷圣杯</span></button>
         <button data-target="muyu"><span class="icon">鱼</span><span>敲木鱼</span></button>
+        <button data-target="fangsheng"><span class="icon">放</span><span>放生积德</span></button>
         <button data-target="incense"><span class="icon">香</span><span>敬香祈福</span></button>
         <button data-target="palm"><span class="icon">掌</span><span>手相 AI</span></button>
         <button data-target="face"><span class="icon">相</span><span>面相 AI</span></button>
         <button data-target="fengshui"><span class="icon">盘</span><span>风水罗盘</span></button>
         <button data-target="library"><span class="icon">书</span><span>国学内容库</span></button>
-        <button data-target="oracle"><span class="icon">问</span><span>AI 问卜聊天</span></button>
         <button data-target="dream"><span class="icon">梦</span><span>周公解梦</span></button>
       </nav>
       <div class="sidebar-note">
-        传统文化解读、互动娱乐与生活建议，不替代医学、法律、财务或心理咨询。涉及照片的分析仅在本地页面演示预览，不做身份识别。
+        基于传统文化与 AI 的解读参考。不替代医学、法律、财务或心理咨询。
       </div>
     </aside>
 
     <main>
-      <section class="surface active" id="iching">
-        <section class="hero" style="margin-bottom: 32px; border-radius: var(--radius); overflow: hidden;">
-          <img src="assets/guoxue-hero.jpg" alt="罗盘、卦书与水墨纹理的国学工具箱主视觉" />
-          <div class="hero-content">
-            <div class="eyebrow">文化解读 · AI 互动 · 生活建议</div>
-            <h2>AI 国学工具箱</h2>
-            <p>把六十四卦、筊杯、手相面相、风水罗盘、黄历宜忌和国学内容库整合在一个可互动的页面里。语气保留传统文化的诗性，结论保持现代产品该有的边界感。</p>
-            <div class="quick-actions">
-              <button class="primary-btn" data-jump="oracle">问一个问题</button>
-              <button class="ghost-btn" data-jump="library">浏览内容库</button>
-            </div>
+      <section class="surface" id="iching">
+        <div class="daily-fortune" id="dailyFortune">
+          <div class="daily-main">
+            <span class="daily-kicker">今日黄历</span>
+            <h4 id="dailyTitle">每日运势</h4>
+            <p id="dailySummary">正在生成今日宜忌...</p>
           </div>
-        </section>
+          <div class="daily-grid">
+            <div class="daily-item"><span>宜</span><strong id="dailyGood">整理计划</strong></div>
+            <div class="daily-item"><span>忌</span><strong id="dailyAvoid">冲动决定</strong></div>
+            <div class="daily-item"><span>吉时</span><strong id="dailyHours">辰时 / 午时</strong></div>
+            <div class="daily-item"><span>财神方位</span><strong id="dailyWealthDir">-</strong></div>
+            <div class="daily-item"><span>贵神方位</span><strong id="dailyNobleDir">-</strong></div>
+            <div class="daily-item"><span>喜神方位</span><strong id="dailyHappyDir">-</strong></div>
+          </div>
+        </div>
 
         <div class="section-head">
           <div>
@@ -1695,11 +2573,13 @@
             <div class="method-box" data-method-box="coins">
               <label for="coinQuestion">所问之事</label>
               <textarea id="coinQuestion" placeholder="先静心默念问题，再连续掷六爻。"></textarea>
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:8px; flex-wrap:wrap;">
                 <button class="small-btn" id="coinToss">掷一爻</button>
+                <button class="small-btn ghost-control" id="enableCoinShake" data-enable-shake="coin" type="button">开启摇晃</button>
                 <button class="small-btn" id="coinReset" style="background:var(--paper-deep); color:var(--muted);">重置</button>
               </div>
               <p class="muted" id="coinProgress">已得 0 / 6 爻</p>
+              <p class="motion-hint" id="coinShakeStatus">手机端可开启后摇一摇掷铜钱，桌面端可直接点击。</p>
             </div>
 
             <div class="method-box" data-method-box="numbers">
@@ -1729,7 +2609,7 @@
               </div>
             </div>
 
-            <div class="disclaimer">此处用传统象义生成文化化建议，不作确定性预测。</div>
+            <div class="disclaimer">基于卦象与传统文化的解读，供参考。</div>
           </div>
 
           <div class="panel">
@@ -1743,8 +2623,48 @@
             <div class="relationship-grid" id="relatedHexagrams"></div>
             <div class="reading" id="hexReading"></div>
             <div style="float:right; margin-top:12px;">
+              <button class="small-btn" id="openOracleFromIChing" data-open-oracle type="button">AI 问卜</button>
               <button class="small-btn" id="exportIChing" onclick="exportReport('iching')">导出报告</button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="surface active" id="dailySign">
+        <div class="section-head">
+          <div>
+            <h3>每日一签</h3>
+            <p>按妈祖庙签筒形式做成六十四签：静心默念所问，抽一支今日签，查看签诗与分项解读。</p>
+          </div>
+          <span class="badge">六十四签</span>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <label for="signQuestion">所问之事</label>
+            <textarea id="signQuestion" placeholder="例如：今天推进这件事顺不顺？"></textarea>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+              <button class="small-btn" id="drawTodaySign">诚心求签</button>
+            </div>
+            <div class="disclaimer">签文只作传统民俗文化参考，不替代现实判断。</div>
+            <div class="sign-stage" style="margin-top:14px;">
+              <div class="sign-tube" id="signTube" aria-hidden="true">
+                <span class="sign-stick"></span>
+                <span class="sign-stick"></span>
+                <span class="sign-stick"></span>
+                <span class="sign-stick"></span>
+                <span class="sign-stick"></span>
+                <span class="sign-stick"></span>
+                <div class="sign-cup"></div>
+              </div>
+            </div>
+          </div>
+          <div class="panel sign-result-card" id="signResult">
+            <div class="sign-title-row">
+              <h4>今日签</h4>
+              <span class="sign-grade">待抽签</span>
+            </div>
+            <p class="sign-poem">静心片刻，默念所问，然后抽一支签。</p>
+            <p class="sign-meaning">签筒里共有 64 支签，包含签诗、解曰、事业、财利、感情、出行与生活提醒。</p>
           </div>
         </div>
       </section>
@@ -1761,15 +2681,19 @@
           <div class="panel">
             <label for="cupQuestion">请写下问题</label>
             <textarea id="cupQuestion" placeholder="例如：这件事现在推进是否合适？"></textarea>
-            <button class="small-btn" id="throwCups">掷杯</button>
-            <button class="small-btn" id="resetCups">清空记录</button>
-            <div class="disclaimer">民俗互动体验，适合做自我提问与情绪整理。</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="small-btn" id="throwCups">掷杯</button>
+              <button class="small-btn ghost-control" id="enableCupShake" data-enable-shake="cup" type="button">开启摇晃</button>
+              <button class="small-btn" id="resetCups">清空记录</button>
+            </div>
+            <p class="motion-hint" id="cupShakeStatus">手机端可开启后摇一摇掷杯，物件会随力道抛起和落下。</p>
+            <div class="disclaimer">基于民俗文化的解读参考。</div>
           </div>
           <div class="panel">
             <div class="cup-stage">
               <div class="cups" id="cupPair">
-                <div class="cup"></div>
-                <div class="cup down"></div>
+                <img class="cup" id="cup0" src="assets/cup_front.png" alt="圣杯正面">
+                <img class="cup" id="cup1" src="assets/cup_back.png" alt="圣杯反面">
               </div>
             </div>
             <div class="history" id="cupHistory"></div>
@@ -1807,7 +2731,43 @@
         </div>
       </section>
 
-      <section class="surface" id="incense">
+            <section class="surface" id="fangsheng">
+        <div class="section-head">
+          <div>
+            <h3>放生积德</h3>
+            <p>将鱼放入池塘，每条鱼都是一份功德。积累善念，心清如水。</p>
+          </div>
+          <span class="badge">功德无量</span>
+        </div>
+        <div class="panel" style="padding:0; overflow:hidden;">
+          <div class="pond-stage" id="pondStage">
+            <div class="pond-water" id="pondWater"></div>
+            <div class="pond-fish-container" id="pondFishContainer"></div>
+            <div class="pond-info">
+              <div class="pond-count">🐟 <span id="fishCount">0</span>/<span id="maxFishDisplay">100</span> 条鱼</div>
+              <div class="pond-merit">功德：<span id="fangShengMerit">0</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="tool-grid" style="margin-top:12px;">
+          <div class="panel">
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+              <button class="small-btn" id="releaseFishBtn" style="font-size:16px; padding:10px 24px;">放生一条鱼 🐟</button>
+              <button class="small-btn ghost-control" id="releaseTenBtn">放生十尾</button>
+              <button class="small-btn ghost-control" id="resetPondBtn">清空池塘</button>
+            </div>
+            <p class="muted" style="margin-top:10px;">每放生一条鱼积累一份功德，鱼在池塘中自由游动。</p>
+          </div>
+          <div class="panel" style="max-height:220px; overflow-y:auto;">
+            <h4 style="margin:0 0 8px;">已放生的鱼</h4>
+            <div id="fishCollection" style="display:flex; flex-wrap:wrap; gap:6px;">
+              <span class="muted">还没有放生鱼</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<section class="surface" id="incense">
         <div class="section-head">
           <div>
             <h3>敬香祈福</h3>
@@ -1829,7 +2789,7 @@
 
       <section class="surface" id="palm">
         <div class="disclaimer-banner">
-          <strong>提示：</strong>手相分析基于传统文化解读与 AI 互动娱乐，不替代医学或心理咨询。涉及照片的分析仅在本地演示，不做身份识别。
+          <strong>提示：</strong>基于传统手相文化与 AI 解读。不替代医学或心理咨询。
         </div>
         <div class="section-head">
           <div>
@@ -1846,7 +2806,7 @@
               <div id="palmEmpty">选择一张手掌照片</div>
               <img id="palmPreview" alt="手掌照片预览" />
             </div>
-            <div class="disclaimer">仅供娱乐和传统文化参考。请勿上传他人照片或包含敏感信息的图片。</div>
+            <div class="disclaimer">请勿上传他人照片或包含敏感信息的图片。</div>
           </div>
           <div class="panel">
             <h4>AI 传统手相解读</h4>
@@ -1862,7 +2822,7 @@
 
       <section class="surface" id="face">
         <div class="disclaimer-banner">
-          <strong>提示：</strong>面相分析基于传统文化解读与 AI 互动娱乐，不替代医学或心理咨询。涉及照片的分析仅在本地演示，不做身份识别。
+          <strong>提示：</strong>基于传统面相文化与 AI 解读。不替代医学或心理咨询。
         </div>
         <div class="section-head">
           <div>
@@ -1879,7 +2839,7 @@
               <div id="faceEmpty">选择一张清晰正面照</div>
               <img id="facePreview" alt="面相照片预览" />
             </div>
-            <div class="disclaimer">不做身份识别，不推断敏感属性，不替代任何专业评估。</div>
+            <div class="disclaimer">不做身份识别，不推断敏感属性。</div>
           </div>
           <div class="panel">
             <h4>AI 文化化面相解读</h4>
@@ -1940,6 +2900,23 @@
           </div>
           <span class="badge">知识索引</span>
         </div>
+        <div class="panel" style="margin-top:16px;">
+          <div class="section-head" style="margin-bottom:8px;">
+            <div>
+              <h3 style="font-size:16px;margin:0;">AI 问答</h3>
+              <p style="margin:4px 0 0;font-size:13px;color:var(--muted);">问任何国学、易经、五行相关的问题</p>
+            </div>
+          </div>
+          <div class="chat-log" id="libraryChatLog" style="min-height:120px;max-height:260px;margin-bottom:10px;">
+            <div class="message ai">有什么国学相关的问题可以直接问我，我用大白话回答。</div>
+          </div>
+          <div class="chat-compose" style="grid-template-columns:1fr 80px;padding:8px 0 0;border-top:none;background:transparent;">
+            <textarea id="libraryQuestion" placeholder="比如：五行相生相克是什么意思？" style="min-height:60px;max-height:100px;"></textarea>
+            <div class="chat-submit-actions" style="grid-template-columns:1fr;">
+              <button class="send-btn" id="askLibrary" style="width:100%;height:48px;font-size:14px;">提问</button>
+            </div>
+          </div>
+        </div>
         <div class="library-toolbar">
           <input id="librarySearch" placeholder="搜索：五行、节气、八卦、黄历、财神..." />
           <select id="libraryCategory">
@@ -1953,13 +2930,15 @@
           </select>
         </div>
         <div class="library-grid" id="libraryGrid"></div>
+
       </section>
 
-      <section class="surface" id="oracle">
+      <section class="oracle-modal" id="oracle" aria-hidden="true">
+        <button class="oracle-close" id="closeOracle" type="button" aria-label="返回易经算卦">×</button>
         <div class="section-head">
           <div>
             <h3>AI 问卜聊天</h3>
-            <p>结合当前时间、起卦结果、五行语汇与传统文化表达，给出适合日常决策的启发式回答。</p>
+            <p>结合当前时间与卦象，直接回答你的问题。</p>
           </div>
           <span class="badge">互动问答</span>
         </div>
@@ -1987,7 +2966,7 @@
 
       <section class="surface" id="dream">
         <div class="disclaimer-banner">
-          <strong>提示：</strong>周公解梦属于传统民俗文化参考，适合做自我整理和生活提醒，不作确定性预言，也不替代心理或医疗建议。
+          <strong>提示：</strong>基于传统周公解梦文化与 AI 的梦境解读。不替代心理或医疗建议。
         </div>
         <div class="section-head">
           <div>
@@ -2022,7 +3001,7 @@
               <button class="small-btn" id="interpretDream">开始解梦</button>
               <button class="small-btn" id="clearDream" style="background:var(--paper-deep); color:var(--muted);">清空</button>
             </div>
-            <div class="disclaimer">梦境解读偏向象征和情绪整理，不宜当作现实事件的唯一判断。</div>
+            <div class="disclaimer">基于传统周公解梦文化的梦境解读。</div>
           </div>
           <div class="panel">
             <h4>AI 周公解梦</h4>
@@ -2042,8 +3021,8 @@
     <div class="cup-overlay-bg"></div>
     <div class="cup-overlay-content">
       <div class="cups full-screen-cups" id="overlayCupPair">
-        <div class="cup"></div>
-        <div class="cup down"></div>
+        <img class="cup" id="overlayCup0" src="assets/cup_front.png" alt="圣杯正面">
+        <img class="cup" id="overlayCup1" src="assets/cup_back.png" alt="圣杯反面">
       </div>
       <div id="overlayResult" class="overlay-result"></div>
       <button class="primary-btn" id="closeOverlay" style="display:none; margin-top:40px; min-width: 200px; font-size: 1.1rem; padding: 12px 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">确认结果并返回</button>
@@ -2211,90 +3190,7 @@
       ["未济", "䷿", "火水未济，尚未完成，谨慎渡河。"]
     ];
 
-    // 八卦五行属性（按三爻二进制值 0-7）
-    const TRIGRAM_ELEMENTS = ["土", "木", "水", "金", "土", "火", "木", "金"];
-    const TRIGRAM_NAMES = ["坤（地）", "震（雷）", "坎（水）", "兑（泽）", "艮（山）", "离（火）", "巽（风）", "乾（天）"];
-    const TRIGRAM_SHORT = ["坤", "震", "坎", "兑", "艮", "离", "巽", "乾"];
-
-    // 五行生克关系
-    function getTiYongRelation(tiElem, yongElem) {
-      if (tiElem === yongElem) return "体用比和";
-      const generates = { "金": "水", "水": "木", "木": "火", "火": "土", "土": "金" };
-      const overcomes = { "金": "木", "木": "土", "土": "水", "水": "火", "火": "金" };
-      if (generates[yongElem] === tiElem) return "用生体";
-      if (generates[tiElem] === yongElem) return "体生用";
-      if (overcomes[yongElem] === tiElem) return "用克体";
-      if (overcomes[tiElem] === yongElem) return "体克用";
-      return "未知";
-    }
-
-    function getTiYongRelationDesc(rel) {
-      const desc = {
-        "用生体": "大吉，事情容易成功，有贵人相助",
-        "体生用": "耗费心力，虽可成功但代价较大",
-        "体用比和": "顺畅，合作互助，内外一致",
-        "用克体": "阻力重重，事情难以办成",
-        "体克用": "经过自身努力可掌控局面、克服困难"
-      };
-      return desc[rel] || "";
-    }
-
-    // 从六爻中提取上下卦值（下卦=初至三爻，上卦=四至六爻）
-    function getTrigramValues(lines) {
-      return {
-        lower: (lines[0] || 0) + (lines[1] || 0) * 2 + (lines[2] || 0) * 4,
-        upper: (lines[3] || 0) + (lines[4] || 0) * 2 + (lines[5] || 0) * 4
-      };
-    }
-
-    // 计算体卦和用卦（梅花易数）
-    function computeTiYong(lines, changing) {
-      const tri = getTrigramValues(lines);
-      const lowerMoving = changing.slice(0, 3).filter(v => v).length;
-      const upperMoving = changing.slice(3, 6).filter(v => v).length;
-      
-      let ti, yong, tiPos, yongPos;
-      if (upperMoving > lowerMoving) {
-        ti = tri.lower; yong = tri.upper;
-        tiPos = "下卦"; yongPos = "上卦";
-      } else if (lowerMoving > upperMoving) {
-        ti = tri.upper; yong = tri.lower;
-        tiPos = "上卦"; yongPos = "下卦";
-      } else {
-        // 无动爻或两卦动爻数相等 → 以动爻所在位置判断，否则以下卦为体
-        if (lowerMoving === 0 && upperMoving === 0) {
-          ti = tri.lower; yong = tri.upper;
-          tiPos = "下卦"; yongPos = "上卦";
-        } else {
-          ti = tri.lower; yong = tri.upper;
-          tiPos = "下卦"; yongPos = "上卦";
-        }
-      }
-      
-      const tiElem = TRIGRAM_ELEMENTS[ti];
-      const yongElem = TRIGRAM_ELEMENTS[yong];
-      const relation = getTiYongRelation(tiElem, yongElem);
-      
-      return {
-        ti: TRIGRAM_SHORT[ti], tiFull: TRIGRAM_NAMES[ti], tiElem: tiElem,
-        yong: TRIGRAM_SHORT[yong], yongFull: TRIGRAM_NAMES[yong], yongElem: yongElem,
-        relation: relation, relationDesc: getTiYongRelationDesc(relation),
-        tiPos: tiPos, yongPos: yongPos
-      };
-    }
-
-    // 根据动爻数量返回解卦规则说明
-    function getMovingRuleText(movingLines) {
-      const count = movingLines.length;
-      if (count === 0) return "六爻安静（无变卦）：看本卦卦辞作为总体评判。卦象处于稳定静态，暂无变化之机。";
-      if (count === 1) return `一爻动（第${movingLines[0]}爻）：看本卦第${movingLines[0]}爻的爻辞，此为最清晰的指引。`;
-      if (count === 2) return `两爻动（第${movingLines.join("、")}爻）：看本卦这两个动爻的爻辞，以上方动爻（第${Math.max(...movingLines)}爻）为主。`;
-      if (count === 3) return "三爻动：结合本卦卦辞和变卦卦辞综合来看。";
-      if (count === 4) return "四爻动：看变卦的两个静爻的爻辞，以下方静爻为主。";
-      if (count === 5) return "五爻动：看变卦的那一个静爻的爻辞。";
-      return "六爻全动：乾卦看用九辞，坤卦看用六辞，他卦看变卦卦辞。";
-    }
-
+	    // 体用生克相关函数已移除 — 所有解读统一由 AI 直接完成
     let currentCast = null;
     let coinLines = [];
     let coinChangings = [];
@@ -2385,9 +3281,7 @@
       const reversed = hexFromLines(reverse(lines));
       const movingLines = changing.map((v, i) => v ? i + 1 : null).filter(Boolean);
       const movingText = movingLines.map(v => `${v}爻`).join("、") || "无明显动爻";
-      const ruleText = getMovingRuleText(movingLines);
-      const tiYong = computeTiYong(lines, changing);
-      
+
       let hexViewHtml;
       if (hasChanging) {
         const changed = hexFromLines(changedLines(lines, changing));
@@ -2429,24 +3323,13 @@
         ["综卦", reversed, "反过来看同一局势"]
       ].map(([label, item, hint]) => `<div class="mini-card"><strong>${label}</strong><span class="badge" style="font-size:11px;margin-left:4px">${hint}</span><div class="hex-symbol" style="font-size:26px">${item[1]}</div><p>${item[0]}：${item[2]}</p></div>`).join("");
 
-      // 体用生克分析
-      const tiYongHtml = `
-        <div class="mini-card" style="grid-column:1/-1; background:var(--teal-soft); border:1px solid var(--teal);">
-          <strong>梅花易数 · 体用生克</strong>
-          <p style="margin-top:6px;"><strong>体卦（${tiYong.tiPos}）：</strong>${tiYong.tiFull} → 五行属${tiYong.tiElem}，代表求测者自身</p>
-          <p><strong>用卦（${tiYong.yongPos}）：</strong>${tiYong.yongFull} → 五行属${tiYong.yongElem}，代表事情与环境</p>
-          <p><strong>体用关系：</strong>${tiYong.relation} — ${tiYong.relationDesc}</p>
-        </div>`;
-
       document.getElementById("hexReading").innerHTML = `
         <h4>AI 解读</h4>
         <p><strong>所问：</strong>${escapeHtml(question || "未设问题")}</p>
         <div class="reading-grid" style="margin-bottom:12px;">
-          <div class="mini-card" style="background:var(--teal-soft);"><strong>解卦规则</strong><p>${ruleText}</p></div>
           <div class="mini-card"><strong>动爻</strong><p>${movingText}</p></div>
           ${!hasChanging ? '<div class="mini-card" style="background:var(--paper-deep);"><strong>无变卦说明</strong><p>六爻皆不变，没有动爻。占得的本卦处于一种静态、稳定且暂时不发生转化的状态。解读无变卦通常直接关注本卦的卦辞、卦象及所处的时位，寓意所问之事的发展比较直接、单纯，或反映了一种长期的稳定趋势。</p></div>' : ""}
         </div>
-        ${tiYongHtml}
         <div class="reading-grid" id="ichingFieldReading" style="margin-top:12px;">
           ${hasChanging ? readingItem("总览", "算算正在结合本卦、变卦与动爻解卦...") : readingItem("总览", "算算正在根据本卦卦辞解读...")}
           ${readingItem("事业", "算算正在结合卦象生成事业解读...")}
@@ -2469,10 +3352,7 @@
       if (!cast) return null;
       const hasChanging = cast.changing.some(v => v);
       const movingLines = cast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean);
-      
-      // 计算体用生克
-      const tiYong = computeTiYong(cast.lines, cast.changing);
-      
+
       return {
         question: cast.question || "未设问题",
         base: cast.base[0],
@@ -2484,25 +3364,16 @@
         base_text: cast.base[2],
         changed_text: hasChanging ? cast.changed[2] : "无变卦",
         current_time: new Date().toLocaleString("zh-CN"),
-        // 梅花易数体用生克
-        ti_gua: tiYong.ti,
-        yong_gua: tiYong.yong,
-        ti_element: tiYong.tiElem,
-        yong_element: tiYong.yongElem,
-        ti_yong_relation: tiYong.relation
       };
     }
 
     function fallbackIChingReading(cast) {
       const moving = cast.changing.map((item, index) => item ? index + 1 : null).filter(Boolean);
       const hasChanging = moving.length > 0;
-      const rule = getMovingRuleText(moving);
-      const tiYong = computeTiYong(cast.lines, cast.changing);
-      const tiYongStr = `体用分析：${tiYong.ti}（${tiYong.tiElem}）为体卦，${tiYong.yong}（${tiYong.yongElem}）为用卦，关系为${tiYong.relation}（${tiYong.relationDesc}）。`;
-      
+
       if (hasChanging) {
         return {
-          overview: `${cast.base[0]}转${cast.changed[0]}，当前主题是“${cast.base[2].replace("。", "")}”，后势转向“${cast.changed[2].replace("。", "")}”。${tiYongStr}`,
+          overview: `${cast.base[0]}转${cast.changed[0]}，当前主题是“${cast.base[2].replace("。", "")}”，后势转向“${cast.changed[2].replace("。", "")}”。`,
           career: `${cast.base[0]}提示先看当前职责与资源是否匹配，${cast.changed[0]}提示后续宜顺势调整节奏，先做小范围验证。`,
           relationship: `关系上以${cast.base[0]}之象看当前互动模式，以${cast.changed[0]}之象看后续变化，宜少猜测，多用明确表达。`,
           wealth: `财务上不宜只看短期热度，${cast.base[0]}重在守住基本盘，${cast.changed[0]}提示机会要配合风险边界。`,
@@ -2511,7 +3382,7 @@
         };
       } else {
         return {
-          overview: `${cast.base[0]}卦象处于静态稳定状态，六爻皆无动爻（无变卦）。寓意所问之事发展比较直接、单纯，宜直接关注本卦的卦辞、卦象及所处的时位来断事。${tiYongStr}`,
+          overview: `${cast.base[0]}卦象处于静态稳定状态，六爻皆无动爻（无变卦）。寓意所问之事发展比较直接、单纯，宜直接关注本卦的卦辞、卦象及所处的时位来断事。`,
           career: `${cast.base[0]}提示当前事业格局稳定，宜守不宜攻。暂无变化之机，耐心积累，顺应时位行事为佳。`,
           relationship: `感情上${cast.base[0]}之象显示关系处于平稳期，当前状态较为固定，宜珍惜当下，不必刻意寻求变化。`,
           wealth: `财运方面暂无波动迹象，${cast.base[0]}提示守住现有财务安排，不宜冒进投资或做大额变动。`,
@@ -2570,8 +3441,334 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function openOracleChat() {
+      const oracle = document.getElementById("oracle");
+      if (!oracle) return;
+      selectSurface("iching");
+      oracle.classList.add("show");
+      oracle.setAttribute("aria-hidden", "false");
+      document.body.classList.add("oracle-open");
+      setTimeout(() => document.getElementById("oracleQuestion")?.focus(), 120);
+    }
+
+    function closeOracleChat() {
+      const oracle = document.getElementById("oracle");
+      if (!oracle) return;
+      oracle.classList.remove("show");
+      oracle.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("oracle-open");
+      selectSurface("iching");
+    }
+
+    function renderDailyFortune() {
+      const today = new Date();
+      const dateText = today.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric", weekday: "long" });
+      const cacheKey = "fortune_" + today.getFullYear() + String(today.getMonth() + 1).padStart(2, "0") + String(today.getDate()).padStart(2, "0");
+
+      // Check localStorage cache (fixed per day)
+      try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+          const data = JSON.parse(cached);
+          applyDailyFortune(data, dateText);
+          return;
+        }
+      } catch (e) {}
+
+      // Show default data immediately, then update from DeepSeek
+      document.getElementById("dailyTitle").textContent = dateText + " · 传统黄历";
+      document.getElementById("dailySummary").textContent = "正在用 AI 推算今日黄历，稍后自动更新…";
+      document.getElementById("dailyGood").textContent = "稳中求进";
+      document.getElementById("dailyAvoid").textContent = "冲动决策";
+      document.getElementById("dailyHours").textContent = "辰时 / 午时";
+      document.getElementById("dailyWealthDir").textContent = "待推算";
+      document.getElementById("dailyNobleDir").textContent = "待推算";
+      document.getElementById("dailyHappyDir").textContent = "待推算";
+
+      // Fetch from DeepSeek API
+      fetch("/oracle/daily-fortune", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          current_time: today.toLocaleString("zh-CN")
+        })
+      })
+      .then(function (response) { return response.json().catch(function () { return ({}); }); })
+      .then(function (data) {
+        if (data && data.title && data.summary) {
+          localStorage.setItem(cacheKey, JSON.stringify(data));
+          applyDailyFortune(data, dateText);
+        }
+      })
+      .catch(function () {
+        document.getElementById("dailyTitle").textContent = dateText + " · 今日黄历";
+        document.getElementById("dailySummary").textContent = "今日诸事皆宜，保持好心态。";
+        document.getElementById("dailyGood").textContent = "稳中求进";
+        document.getElementById("dailyAvoid").textContent = "冲动决策";
+        document.getElementById("dailyHours").textContent = "卯时 / 午时";
+        document.getElementById("dailyWealthDir").textContent = "待推算";
+        document.getElementById("dailyNobleDir").textContent = "待推算";
+        document.getElementById("dailyHappyDir").textContent = "待推算";
+      });
+    }
+
+    function applyDailyFortune(data, dateText) {
+      document.getElementById("dailyTitle").textContent = dateText + " · " + (data.title || "今日黄历");
+      document.getElementById("dailySummary").textContent = data.summary || "宜保持好心态。";
+      document.getElementById("dailyGood").textContent = data.good || "稳中求进";
+      document.getElementById("dailyAvoid").textContent = data.avoid || "冲动决策";
+      document.getElementById("dailyHours").textContent = data.hours || "卯时 / 午时";
+      document.getElementById("dailyWealthDir").textContent = data.wealth_direction || "待推算";
+      document.getElementById("dailyNobleDir").textContent = data.noble_direction || "待推算";
+      document.getElementById("dailyHappyDir").textContent = data.happy_direction || "待推算";
+    }
+
+    const mazuSignRows = [
+      ["上上", "春风入户百花开，云散天晴月满台。所问若能循正道，贵人相助喜相来。", "气象开朗，阻力渐散，适合顺势推进。"],
+      ["上吉", "一轮明月照前溪，路上行人得所依。凡事只宜心放稳，自然门户有光辉。", "方向已经清楚，先稳住节奏，再谈扩大。"],
+      ["中吉", "舟行浅水待潮生，莫把迟疑作不成。时到风来帆自举，眼前小事要分明。", "事情不是没有机会，只是还要等条件齐。"],
+      ["中平", "山重水复路迢迢，欲速前行反自劳。守住本心休妄动，清风过后见新桥。", "先守后动，越急越乱，宜把基础补稳。"],
+      ["小吉", "花开半树尚含香，雨露来时色更长。若问前程须细看，一分耕种一分昌。", "有小成之象，贵在持续，不宜贪快。"],
+      ["上吉", "金鸡报晓出云端，暗处光明一线看。若得诚心相照应，旧忧新喜两相安。", "旧问题开始松动，适合沟通与修补。"],
+      ["中平", "石上栽花莫怨迟，根深土厚有成时。眼前休问花多少，先把枝条护得宜。", "先做难而必要的准备，成果会慢慢显现。"],
+      ["上上", "龙门浪暖鱼初跃，紫气东来路渐开。凡事得人相引助，一声雷动见春回。", "有突破之象，适合主动争取与展示。"],
+      ["平签", "雾里看花未见真，半晴半雨最迷人。凡谋须向明中问，莫听旁言乱此心。", "信息不全，先查证，不要被外界声音带偏。"],
+      ["中吉", "小舟独泊柳阴边，待得东风好上船。所问不宜争一刻，缓行反可得周全。", "慢一点更稳，适合预约、排期、再确认。"],
+      ["上吉", "宝镜重磨照旧颜，尘埃拂去见青山。若能改过从头起，失处还成得处看。", "复盘有用，修正之后反而会更顺。"],
+      ["中平", "门前流水自东西，行客须知路有迷。莫把近忧当大祸，静听钟鼓定高低。", "短期波动不代表结局，先把情绪放稳。"],
+      ["小吉", "竹影摇窗夜未央，一灯如豆也生光。小心护得初心在，明日阶前草木香。", "微光可贵，适合低成本试探。"],
+      ["上上", "凤凰台上听箫声，和气临门百事成。若问家门并事业，清风送喜到前程。", "人和最关键，合作与家庭沟通都见好。"],
+      ["中吉", "行人路上遇知音，一语相投胜万金。若问谋为须借力，独行不若众同心。", "找对人比硬扛更重要，适合合作。"],
+      ["中平", "月到中天云未开，半明半暗费疑猜。待看三日风吹后，自有分明好信来。", "暂时不明朗，给事情一点观察期。"],
+      ["上吉", "枯木逢春又发枝，旧时心愿渐相宜。若问前途无大碍，只须勤谨莫迟疑。", "恢复与重启之象，适合把旧计划重新捡起。"],
+      ["平签", "井底观天见未宽，出门方觉路漫漫。凡事多听多比较，一偏之见莫凭栏。", "视角还不够宽，适合请教或做调研。"],
+      ["中吉", "浮云散尽见青天，谋事从容莫怨缘。若把寸心安正处，后来消息自然圆。", "心态端正，流程走完，结果会更稳。"],
+      ["小吉", "梅花雪里报春回，一点清香入酒杯。所问虽非顷刻至，暗中已有好根栽。", "好事在酝酿，适合默默铺垫。"],
+      ["上上", "天赐良机到眼前，开门见喜福相连。若能谦和持正念，百事从今更自然。", "机会较好，但要谦和守正，别过度张扬。"],
+      ["中平", "夜雨敲窗梦未安，醒来犹觉路微寒。且将旧事收拾好，莫向风中问急船。", "先整理旧账与遗留问题，再开启新动作。"],
+      ["中吉", "一枝丹桂出墙来，香气先从静处开。凡事不须频催促，时机成熟自然裁。", "适合耐心等待，催得太急会减分。"],
+      ["上吉", "海上潮平月正圆，渔舟归港喜团圆。所求若与众人利，水到渠成不费言。", "利人利己的事更容易成，适合共赢方案。"],
+      ["守签", "高山流水隔重云，欲问前程未十分。今日只宜修内务，明朝再听好回音。", "先守住阵地，重要决定可缓一缓。"],
+      ["小吉", "庭前新草带朝晖，燕子衔泥慢慢归。细处经营多得力，粗心大意恐相违。", "小处见成败，细节是今天的关键。"],
+      ["上吉", "玉兔东升照海门，远人消息近黄昏。若问归期并音信，耐心等候有佳闻。", "消息会来，但需要耐心等确认。"],
+      ["中平", "风吹残叶过前溪，旧路重行脚步低。若要新局开得稳，先将旧怨两边息。", "关系中的旧情绪要先化开。"],
+      ["中吉", "得失从来一念间，退身一步见青山。不争眼下蝇头利，后面方知路更宽。", "退一步不是输，是给后续留空间。"],
+      ["上上", "红日初升万象新，门庭喜气动芳尘。求谋若合天和意，一路春风到此身。", "新开始很顺，适合启动重要事项。"],
+      ["平签", "桥边流水急潺潺，过客临流莫等闲。先看脚跟安不稳，再谈彼岸有无山。", "先确认自身条件，别只盯结果。"],
+      ["中吉", "云中雁字有回音，远近相逢各有心。若问人情须坦荡，真诚一句抵千金。", "沟通宜直接，真诚比技巧更有用。"],
+      ["小吉", "灯花一点报平安，冷处添衣夜不寒。小愿可成凭谨慎，大谋仍要细盘桓。", "小事可顺，大事还需多准备。"],
+      ["上吉", "水绕青山路自通，闲云也遇好东风。凡谋不必多忧虑，稳走三程见始终。", "道路逐渐打通，适合分阶段推进。"],
+      ["中平", "桃李无言待雨催，花期未到莫频猜。若将根本勤培护，日后枝头结果来。", "现在看不出结果，但投入不会白费。"],
+      ["上吉", "朱门有客报佳音，旧锁新开见好心。若问营谋并合作，贵人一句值千金。", "贵人或关键联系人会起作用。"],
+      ["守签", "浅水行舟恐触沙，前头风浪未堪夸。暂收帆影归湾里，待得潮生再出家。", "暂缓更好，先避开明显风险。"],
+      ["中吉", "松柏经霜色更青，风吹不改旧时形。所问若能长久做，慢中自有好前程。", "长线更有利，别被短期波动吓退。"],
+      ["上上", "祥云捧日上高楼，喜鹊枝头唱不休。家宅事业皆和顺，所求多可得良筹。", "整体顺势，适合定计划、见人、谈合作。"],
+      ["平签", "路逢岔口两三条，心急何曾辨细苗。停步问清来去处，免将近道作迢迢。", "选择多时先别急，问清规则再走。"],
+      ["小吉", "春雨无声润小园，嫩芽初露未成繁。问事只宜轻轻试，一朝深种一朝安。", "适合试水，不适合一次投入太多。"],
+      ["中吉", "明珠藏匣未生尘，只待良工识此身。所求若能凭本事，迟早有人看得真。", "能力会被看见，先把作品和证据做好。"],
+      ["上吉", "一帆风顺渡江津，岸上花开见故人。凡事有缘相助力，笑谈之间得好因。", "人缘与时机都不错，适合主动联络。"],
+      ["中平", "秋风吹叶落阶前，旧梦新愁各一边。若问去留须冷静，莫因一怒断姻缘。", "重大关系或去留问题，不宜情绪化决定。"],
+      ["守签", "夜行山路少星光，步步留心莫逞强。平地尚须防石子，何况前途有短墙。", "谨慎为主，先把风险清单列出来。"],
+      ["中吉", "白鹤飞来落水边，清音一唳破尘烟。若求名利休偏执，淡处反能得自然。", "放轻执念，事情反而容易转顺。"],
+      ["上上", "龙得云雨上青霄，万里鹏程在此朝。正道经营多得意，门前喜气渐相招。", "上升之象明显，适合抓住窗口期。"],
+      ["平签", "杯中明月水中花，看似分明隔一纱。眼下所闻须再验，虚虚实实莫轻夸。", "容易有误会或假象，先核实。"],
+      ["小吉", "新燕初飞试羽毛，高枝未稳莫争高。一步一停皆有益，积成气力上云霄。", "初期练手最重要，别急着求大成。"],
+      ["中吉", "田中禾稻渐成行，汗滴泥中有饭香。若问收成非偶得，勤耕自会满仓箱。", "靠持续投入见收获，今天适合执行。"],
+      ["上吉", "花灯照夜人团圆，旧事新情两得全。若问姻缘并家宅，和声一句胜千言。", "感情与家事重在温和表达。"],
+      ["中平", "雨打梨花落满庭，半含惆怅半含晴。莫将一事看成败，转过弯来又有情。", "一时失落不是定局，保留余地。"],
+      ["守签", "关门静坐听风声，外事纷纷未可凭。今日修心兼修业，明朝自有路分明。", "减少外耗，专注可控范围。"],
+      ["中吉", "青山不语水长流，凡事从容莫强求。若把旧缘新意合，前途自有好筹谋。", "适合整合资源，不宜硬碰硬。"],
+      ["上上", "麒麟献瑞到门庭，百福临身喜气盈。心正行端天自佑，所谋多见好光明。", "好签，适合做正向而重要的推进。"],
+      ["平签", "半窗斜日半窗阴，进退之间费苦心。若问成败须看势，不如先把本钱寻。", "先看资源和条件，再判断要不要进。"],
+      ["小吉", "远山含黛水含烟，小路弯弯到眼前。莫嫌今日行程慢，一步也能近良缘。", "慢进也有进展，保持节奏即可。"],
+      ["中吉", "渔父收纶晚照红，一竿一线有清风。名利若来须守分，满而不溢福常同。", "有得也要守分寸，别因贪多失稳。"],
+      ["上吉", "开门忽见满庭芳，喜信随风到草堂。若问求谋多顺遂，只须诚信莫张扬。", "顺利中要保持低调和诚信。"],
+      ["中平", "浮萍逐水任西东，未定根基莫论功。先择一方深扎下，方知后日有春风。", "先定主线，别同时分散太多。"],
+      ["守签", "寒梅未放雪先催，独守枝头待日回。此日不宜争胜负，退藏一步免成灰。", "避争执，适合暂停、收敛、保全。"],
+      ["中吉", "旧雨新晴路渐平，行人到此可安行。若将心事明白说，两下相逢有好声。", "把话说清楚，关系和事项都会顺一些。"],
+      ["上上", "天后慈航照海滨，风平浪静渡迷津。诚心所问皆归正，福在眼前更在身。", "收束圆满之象，适合定心、定向、定行动。"],
+      ["上吉", "香烟一缕上瑶台，心事从容次第开。若把善缘勤护住，明朝喜信自然来。", "善缘渐聚，适合把愿望落到具体行动上。"]
+    ];
+
+    const mazuSignProfiles = {
+      "上上": {
+        work: "今天状态不错，可以主动推进最重要的一件事。",
+        wealth: "钱的事可以谈，但先把价格、时间、责任写清楚。",
+        love: "适合好好说话，别绕弯子，真诚一点更容易顺。",
+        travel: "出门办事可以安排，提前看好路线就行。",
+        life: "别因为顺就太兴奋，正常吃饭睡觉，稳住好运。"
+      },
+      "上吉": {
+        work: "事情有希望，适合找人沟通、提方案、争取支持。",
+        wealth: "可以考虑赚钱机会，但不要听一句话就掏钱。",
+        love: "有误会就说开，不要靠猜。",
+        travel: "可以出门，证件、时间、路线提前确认。",
+        life: "今天适合把心静下来，少被杂事牵着走。"
+      },
+      "中吉": {
+        work: "能推进，但要一步一步来，别一下子答应太多。",
+        wealth: "先守住预算，再看有没有小机会。",
+        love: "少猜，多问清楚，对关系更好。",
+        travel: "可以安排，但路上留点缓冲时间。",
+        life: "今天别熬太狠，把节奏放稳就好。"
+      },
+      "小吉": {
+        work: "适合先试一下、做个小版本，不要急着拍板大事。",
+        wealth: "小钱可以动，大钱先别冲动。",
+        love: "先释放一点善意，关系会慢慢变好。",
+        travel: "短途比较合适，复杂行程要再查清楚。",
+        life: "先改一个小习惯，比立大目标更靠谱。"
+      },
+      "中平": {
+        work: "先别急，信息还不够，重要事再观察一下。",
+        wealth: "今天花钱要保守，别为了情绪买单。",
+        love: "先听懂对方，再回应，别急着反驳。",
+        travel: "出门以稳为主，最好准备备用方案。",
+        life: "把眼前的小秩序理顺，心就没那么乱。"
+      },
+      "平签": {
+        work: "情况还不明朗，今天适合查资料、问人、复盘。",
+        wealth: "涉及钱的事一定二次确认，别只听一边说法。",
+        love: "先别下结论，给对方一点解释空间。",
+        travel: "先查清楚再出发，别临时乱跑。",
+        life: "少听太多杂音，先问自己真正想要什么。"
+      },
+      "守签": {
+        work: "今天先守住，不适合硬冲，先补漏洞。",
+        wealth: "钱的事保守一点，别做大额承诺。",
+        love: "别争输赢，先让情绪降下来。",
+        travel: "能缓就缓，必须出门就多准备一套方案。",
+        life: "先照顾睡眠、饮食和压力，别在累的时候做大决定。"
+      }
+    };
+
+    const mazuSigns = mazuSignRows.map(([grade, poem, meaning], index) => ({
+      no: index + 1,
+      grade,
+      poem,
+      meaning,
+      ...mazuSignProfiles[grade]
+    }));
+    let signReadingSeq = 0;
+
+    function randomSignIndex() {
+      return Math.floor(Math.random() * mazuSigns.length);
+    }
+
+    function plainSignMeaning(sign) {
+      const map = {
+        "上上": "这是很顺的一签。今天可以主动一点，把最重要的事往前推，但别飘，按规矩做更稳。",
+        "上吉": "这是偏好的签。事情有机会变顺，关键是主动沟通、准备清楚，不要只等别人来帮你。",
+        "中吉": "这是稳中有进的签。可以做，但别贪快，先拆成小步骤，一步一步来。",
+        "小吉": "这是小有起色的签。先从小事做起，试一下、改一下，慢慢就能看到变化。",
+        "中平": "这是提醒你先稳住的签。现在信息还不全，别急着下结论，先把眼前的事理清楚。",
+        "平签": "这是让你多看清楚的签。不要只听一边说法，查清楚、想明白，再决定。",
+        "守签": "这是宜守不宜攻的签。今天先别硬冲，适合收拾问题、避开风险、养足精神。"
+      };
+      return map[sign.grade] || "这支签提醒你先把心放稳，做事看清现实条件，再慢慢推进。";
+    }
+
+    function localDetailedSignReading(sign, question) {
+      return `大白话总解：
+${plainSignMeaning(sign)}
+这支签不是让你等天上掉答案，而是提醒你：先看清眼前条件，再把能做的事情一步步做好。
+${question ? `你问的是“${question}”，所以重点不是马上判定成败，而是看现在该不该推进、怎么推进。` : "如果你没有具体问题，可以把它当成今天的行动提醒。"}
+
+你现在最该注意：
+1. 不要只看结果，先看自己手里有什么资源。
+2. 不要因为一时心急，把话说满、把钱花重、把决定做死。
+3. 今天最适合先处理一件最关键的小事，让局面慢慢变清楚。
+
+可以怎么做：
+1. 先写下你最担心的三个点。
+2. 把能马上确认的信息先确认清楚。
+3. 找一个靠谱的人聊一聊，别自己闷着猜。
+4. 今天先做低风险的小推进，别一下子把全部筹码压上去。`;
+    }
+
+    async function requestSignReading(sign, question) {
+      const response = await fetch("/oracle/sign-reading", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: question || "今日提醒",
+          sign_no: sign.no,
+          grade: sign.grade,
+          poem: sign.poem,
+          meaning: sign.meaning,
+          current_time: new Date().toLocaleString("zh-CN")
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.detail || "AI 签文解读暂不可用");
+      return data.answer;
+    }
+
+    function renderMazuSign(sign, mode = "今日签") {
+      const question = document.getElementById("signQuestion")?.value.trim();
+      const target = document.getElementById("signResult");
+      if (!target) return;
+      const seq = ++signReadingSeq;
+      target.innerHTML = `
+        <div class="sign-title-row">
+          <h4>${mode} · 第 ${sign.no} 签</h4>
+          <span class="sign-grade">${sign.grade}</span>
+        </div>
+        <p class="sign-question">所问：${escapeHtml(question || "今日提醒")}</p>
+        <p class="sign-poem">签诗原文：${escapeHtml(sign.poem)}</p>
+        <p class="sign-plain">大白话：${escapeHtml(plainSignMeaning(sign))}</p>
+        <p class="sign-meaning"><strong>这支签在提醒你：</strong>${escapeHtml(sign.meaning)}</p>
+        <div class="ai-reading" id="signAiReading">${escapeHtml(localDetailedSignReading(sign, question))}</div>
+      `;
+      const readingBox = document.getElementById("signAiReading");
+      readingBox.textContent = "正在请 DeepSeek 解答…";
+      readingBox?.classList.add("loading");
+      requestSignReading(sign, question).then(answer => {
+        if (seq !== signReadingSeq) return;
+        const box = document.getElementById("signAiReading");
+        if (!box) return;
+        box.classList.remove("loading");
+        box.textContent = answer;
+      }).catch(error => {
+        if (seq !== signReadingSeq) return;
+        const box = document.getElementById("signAiReading");
+        if (!box) return;
+        box.classList.remove("loading");
+        box.textContent = `${localDetailedSignReading(sign, question)}\n\n提示：DeepSeek 暂时没连上，先显示本地解读。${error.message}`;
+      });
+    }
+
+    function animateSignTube(callback) {
+      const tube = document.getElementById("signTube");
+      if (!tube) {
+        callback();
+        return;
+      }
+      tube.classList.remove("shaking");
+      void tube.offsetWidth;
+      tube.classList.add("shaking");
+      window.setTimeout(() => {
+        tube.classList.remove("shaking");
+        callback();
+      }, 680);
+    }
+
+    function drawTodaySign() {
+      animateSignTube(() => renderMazuSign(mazuSigns[randomSignIndex()], "今日签"));
+    }
+
     document.querySelectorAll(".nav button").forEach(btn => btn.addEventListener("click", () => selectSurface(btn.dataset.target)));
     document.querySelectorAll("[data-jump]").forEach(btn => btn.addEventListener("click", () => selectSurface(btn.dataset.jump)));
+    document.querySelectorAll("[data-open-oracle]").forEach(btn => btn.addEventListener("click", openOracleChat));
+    document.getElementById("closeOracle")?.addEventListener("click", closeOracleChat);
+    document.getElementById("oracle")?.addEventListener("click", event => {
+      if (event.target.id === "oracle") closeOracleChat();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && document.getElementById("oracle")?.classList.contains("show")) closeOracleChat();
+    });
+    renderDailyFortune();
+    document.getElementById("drawTodaySign")?.addEventListener("click", drawTodaySign);
 
     document.querySelectorAll("#castMethods button").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -2586,65 +3783,193 @@
       renderCast(makeLines(seed), makeChanging(seed), document.getElementById("timeQuestion").value);
     });
 
-    document.getElementById("coinToss").addEventListener("click", () => {
-      if (coinLines.length >= 6) return;
-      const btn = document.getElementById("coinToss");
-      btn.disabled = true;
-      
-      const tosses = Array.from({ length: 3 }, () => Math.random() > .5 ? 3 : 2);
-      const total = tosses.reduce((a, b) => a + b, 0);
-      // 6=老阴(动) 7=少阳(静) 8=少阴(静) 9=老阳(动)
-      const lineVal = total % 2 ? 1 : 0;
-      const isChanging = total === 6 || total === 9;
-      
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    function nextFrame() {
+      return new Promise(resolve => requestAnimationFrame(resolve));
+    }
+
+    function clearRunningAnimations(elements) {
+      elements.forEach(el => {
+        el.getAnimations().forEach(animation => animation.cancel());
+      });
+    }
+
+    async function playCoinPhysics(tosses, shakePower = 0) {
       const overlay = document.getElementById("coinOverlay");
       const resultText = document.getElementById("coinResultText");
+      const container = document.getElementById("coinsContainer");
+      const wrappers = [document.getElementById("coin1"), document.getElementById("coin2"), document.getElementById("coin3")];
+      const strength = Math.min(1.75, 1 + shakePower / 34);
+
       overlay.classList.add("show");
       resultText.classList.remove("show");
-      
-      const wrappers = [document.getElementById("coin1"), document.getElementById("coin2"), document.getElementById("coin3")];
-      
-      wrappers.forEach((wrapper, i) => {
-        const inner = wrapper.querySelector('.coin-inner');
-        const isHeads = tosses[i] === 3;
-        const targetY = isHeads ? 0 : 180;
-        
-        wrapper.animate([
-          { transform: 'translateY(0) scale(1)' },
-          { transform: 'translateY(-300px) scale(1.5)', offset: 0.5 },
-          { transform: 'translateY(0) scale(1)' }
-        ], { duration: 1500, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' });
-        
-        inner.animate([
-          { transform: 'rotateY(0deg) rotateX(0deg)' },
-          { transform: `rotateY(${1800 + targetY}deg) rotateX(720deg)`, offset: 0.8 },
-          { transform: `rotateY(${1800 + targetY}deg) rotateX(0deg)` }
-        ], { duration: 1500, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)', fill: 'forwards' });
+      clearRunningAnimations(wrappers.flatMap(wrapper => [wrapper, wrapper.querySelector(".coin-inner")]));
+      await nextFrame();
+
+      const rect = container.getBoundingClientRect();
+      const size = wrappers[0].offsetWidth || 100;
+      const floor = rect.height - size - 34;
+      const leftWall = 12;
+      const rightWall = Math.max(leftWall + size, rect.width - size - 12);
+      const startX = rect.width / 2 - size / 2;
+      const startY = rect.height - size - 42;
+
+      const coins = wrappers.map((wrapper, i) => ({
+        wrapper,
+        inner: wrapper.querySelector(".coin-inner"),
+        x: startX + (i - 1) * 18,
+        y: startY,
+        vx: (i - 1) * 4.4 + (Math.random() - .5) * 5.8 * strength,
+        vy: -18 * strength - Math.random() * 8,
+        rz: (Math.random() - .5) * 50,
+        vr: (Math.random() - .5) * 18,
+        spinX: Math.random() * 180,
+        spinY: Math.random() * 180,
+        vSpinX: 30 + Math.random() * 20,
+        vSpinY: 38 + Math.random() * 24,
+        targetY: tosses[i] === 3 ? 0 : 180
+      }));
+
+      const start = performance.now();
+      let last = start;
+      const duration = 1880 + Math.random() * 180;
+
+      await new Promise(resolve => {
+        function tick(now) {
+          const dt = Math.min(2.1, (now - last) / 16.7);
+          last = now;
+          const elapsed = now - start;
+          const damping = elapsed > duration * .68 ? .965 : .988;
+
+          coins.forEach(coin => {
+            coin.vy += .62 * dt;
+            coin.x += coin.vx * dt;
+            coin.y += coin.vy * dt;
+            coin.rz += coin.vr * dt;
+            coin.spinX += coin.vSpinX * dt;
+            coin.spinY += coin.vSpinY * dt;
+
+            if (coin.x < leftWall) {
+              coin.x = leftWall;
+              coin.vx = Math.abs(coin.vx) * .74;
+              coin.vr *= -0.82;
+            } else if (coin.x > rightWall) {
+              coin.x = rightWall;
+              coin.vx = -Math.abs(coin.vx) * .74;
+              coin.vr *= -0.82;
+            }
+
+            if (coin.y > floor) {
+              coin.y = floor;
+              coin.vy = -Math.abs(coin.vy) * (.54 + Math.random() * .18);
+              coin.vx *= .86;
+              coin.vr *= .76;
+              coin.vSpinX *= .72;
+              coin.vSpinY *= .72;
+            }
+
+            coin.vx *= damping;
+            coin.vr *= damping;
+            coin.wrapper.style.transform = `translate3d(${coin.x}px, ${coin.y}px, 0) rotateZ(${coin.rz}deg)`;
+            coin.inner.style.transform = `rotateY(${coin.spinY}deg) rotateX(${coin.spinX}deg)`;
+          });
+
+          if (elapsed < duration) {
+            requestAnimationFrame(tick);
+          } else {
+            resolve();
+          }
+        }
+        requestAnimationFrame(tick);
       });
-      
-      setTimeout(() => {
+
+      const settleStart = performance.now();
+      const settleDuration = 420;
+      const finalGap = Math.min(42, Math.max(20, (rect.width - size * 3) / 5));
+      const groupWidth = size * 3 + finalGap * 2;
+      const finalY = floor;
+      const finals = coins.map((coin, i) => ({
+        coin,
+        fromX: coin.x,
+        fromY: coin.y,
+        fromRz: coin.rz,
+        fromSpinX: coin.spinX,
+        fromSpinY: coin.spinY,
+        toX: rect.width / 2 - groupWidth / 2 + i * (size + finalGap),
+        toY: finalY,
+        toRz: (i - 1) * 5,
+        toSpinX: 0,
+        toSpinY: 1440 + coin.targetY
+      }));
+
+      await new Promise(resolve => {
+        function settle(now) {
+          const t = Math.min(1, (now - settleStart) / settleDuration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          finals.forEach(item => {
+            const { coin } = item;
+            const x = item.fromX + (item.toX - item.fromX) * eased;
+            const y = item.fromY + (item.toY - item.fromY) * eased;
+            const rz = item.fromRz + (item.toRz - item.fromRz) * eased;
+            const spinX = item.fromSpinX + (item.toSpinX - item.fromSpinX) * eased;
+            const spinY = item.fromSpinY + (item.toSpinY - item.fromSpinY) * eased;
+            coin.wrapper.style.transform = `translate3d(${x}px, ${y}px, 0) rotateZ(${rz}deg)`;
+            coin.inner.style.transform = `rotateY(${spinY}deg) rotateX(${spinX}deg)`;
+          });
+          if (t < 1) requestAnimationFrame(settle);
+          else resolve();
+        }
+        requestAnimationFrame(settle);
+      });
+    }
+
+    async function tossCoinLine(shakePower = 0) {
+      if (coinLines.length >= 6) return;
+      const btn = document.getElementById("coinToss");
+      if (btn.disabled) return;
+      btn.disabled = true;
+
+      const overlay = document.getElementById("coinOverlay");
+      const resultText = document.getElementById("coinResultText");
+      try {
+        const tosses = Array.from({ length: 3 }, () => Math.random() > .5 ? 3 : 2);
+        const total = tosses.reduce((a, b) => a + b, 0);
+        // 6=老阴(动) 7=少阳(静) 8=少阴(静) 9=老阳(动)
+        const lineVal = total % 2 ? 1 : 0;
+        const isChanging = total === 6 || total === 9;
+
+        await playCoinPhysics(tosses, shakePower);
+
         const labelMap = { 6: "老阴 (动)", 7: "少阳", 8: "少阴", 9: "老阳 (动)" };
         resultText.textContent = `第 ${coinLines.length + 1} 爻：${total} (${labelMap[total]})`;
         resultText.classList.add("show");
-        
-        setTimeout(() => {
-          overlay.classList.remove("show");
-          coinLines.push(lineVal);
-          coinChangings.push(isChanging);
-          
-          const yinYang = coinLines.map(x => x ? "阳" : "阴");
-          const movingMark = coinChangings.map((c, i) => c ? "⚡" : "").filter(Boolean);
-          const progressStr = yinYang.join("、") + (movingMark.length ? "（" + movingMark.join("") + "动）" : "");
-          document.getElementById("coinProgress").textContent = `已得 ${coinLines.length} / 6 爻：${progressStr}`;
-          btn.disabled = false;
-          
-          if (coinLines.length === 6) {
-            renderCast(coinLines, coinChangings, document.getElementById("coinQuestion").value);
-          } else {
-            renderCoinProgress(coinLines, coinChangings);
-          }
-        }, 1500);
-      }, 1600);
+        await sleep(900);
+
+        overlay.classList.remove("show");
+        coinLines.push(lineVal);
+        coinChangings.push(isChanging);
+
+        const yinYang = coinLines.map(x => x ? "阳" : "阴");
+        const movingMark = coinChangings.map((c, i) => c ? "⚡" : "").filter(Boolean);
+        const progressStr = yinYang.join("、") + (movingMark.length ? "（" + movingMark.join("") + "动）" : "");
+        document.getElementById("coinProgress").textContent = `已得 ${coinLines.length} / 6 爻：${progressStr}`;
+
+        if (coinLines.length === 6) {
+          renderCast(coinLines, coinChangings, document.getElementById("coinQuestion").value);
+        } else {
+          renderCoinProgress(coinLines, coinChangings);
+        }
+      } catch (error) {
+        console.error(error);
+        overlay.classList.remove("show");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById("coinToss").addEventListener("click", () => {
+      tossCoinLine();
     });
 
     document.getElementById("coinReset").addEventListener("click", () => {
@@ -2709,74 +4034,191 @@
       return { name: "阴杯", shape: [0, 0], text: "两面皆覆，宜暂缓、复核条件，或换一种问法。" };
     }
 
-    document.getElementById("throwCups").addEventListener("click", () => {
-      const overlay = document.getElementById("cupOverlay");
+    async function playCupPhysics(result, shakePower = 0) {
       const pair = document.getElementById("overlayCupPair");
+      const cups = Array.from(pair.querySelectorAll(".cup"));
+      const strength = Math.min(1.8, 1 + shakePower / 32);
+
+      pair.classList.add("rolling");
+      cups.forEach((cup, i) => {
+        cup.src = "assets/cup_front.png";
+        cup.style.transform = "";
+      });
+      await nextFrame();
+
+      const rect = pair.getBoundingClientRect();
+      const cupWidth = cups[0].offsetWidth || 160;
+      const cupHeight = cups[0].offsetHeight || 85;
+      const floor = rect.height - cupHeight - 24;
+      const leftWall = 8;
+      const rightWall = Math.max(leftWall + cupWidth, rect.width - cupWidth - 8);
+      const startY = rect.height - cupHeight - 38;
+      const startX = rect.width / 2 - cupWidth / 2;
+
+      const bodies = cups.map((cup, i) => ({
+        cup,
+        x: startX + (i - .5) * (cupWidth * .28),
+        y: startY,
+        vx: (i === 0 ? -7 : 7) * strength + (Math.random() - .5) * 4,
+        vy: -17 * strength - Math.random() * 8,
+        angle: (i === 0 ? -10 : 10) + (Math.random() - .5) * 16,
+        va: (i === 0 ? -15 : 15) * strength + (Math.random() - .5) * 10,
+        squash: 1
+      }));
+
+      const start = performance.now();
+      let last = start;
+      const duration = 1820 + Math.random() * 220;
+
+      await new Promise(resolve => {
+        function tick(now) {
+          const dt = Math.min(2.1, (now - last) / 16.7);
+          last = now;
+          const elapsed = now - start;
+
+          bodies.forEach(body => {
+            body.vy += .72 * dt;
+            body.x += body.vx * dt;
+            body.y += body.vy * dt;
+            body.angle += body.va * dt;
+            body.squash += (1 - body.squash) * .18;
+
+            if (body.x < leftWall) {
+              body.x = leftWall;
+              body.vx = Math.abs(body.vx) * .68;
+              body.va *= -0.78;
+            } else if (body.x > rightWall) {
+              body.x = rightWall;
+              body.vx = -Math.abs(body.vx) * .68;
+              body.va *= -0.78;
+            }
+
+            if (body.y > floor) {
+              body.y = floor;
+              body.vy = -Math.abs(body.vy) * (.45 + Math.random() * .16);
+              body.vx *= .80;
+              body.va *= .70;
+              body.squash = .88;
+            }
+
+            body.vx *= .988;
+            body.va *= .982;
+            body.cup.style.transform = `translate3d(${body.x}px, ${body.y}px, 0) rotate(${body.angle}deg) scaleY(${body.squash})`;
+          });
+
+          if (elapsed < duration) {
+            requestAnimationFrame(tick);
+          } else {
+            resolve();
+          }
+        }
+        requestAnimationFrame(tick);
+      });
+
+      const settleStart = performance.now();
+      const settleDuration = 460;
+      const finalGap = Math.min(58, Math.max(24, (rect.width - cupWidth * 2) / 3));
+      const groupWidth = cupWidth * 2 + finalGap;
+      const finals = bodies.map((body, i) => ({
+        body,
+        fromX: body.x,
+        fromY: body.y,
+        fromAngle: body.angle,
+        toX: rect.width / 2 - groupWidth / 2 + i * (cupWidth + finalGap),
+        toY: floor,
+        toAngle: result.shape[i] === 0 ? 180 + (i === 0 ? -4 : 4) : (i === 0 ? -5 : 5)
+      }));
+
+      await new Promise(resolve => {
+        function settle(now) {
+          const t = Math.min(1, (now - settleStart) / settleDuration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          finals.forEach((item, i) => {
+            const { body } = item;
+            const x = item.fromX + (item.toX - item.fromX) * eased;
+            const y = item.fromY + (item.toY - item.fromY) * eased;
+            const angle = item.fromAngle + (item.toAngle - item.fromAngle) * eased;
+            body.cup.src = result.shape[i] === 0 ? "assets/cup_back.png" : "assets/cup_front.png";
+            body.cup.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg)`;
+          });
+          if (t < 1) requestAnimationFrame(settle);
+          else resolve();
+        }
+        requestAnimationFrame(settle);
+      });
+
+      pair.classList.remove("rolling");
+    }
+
+    function renderCupResult(result) {
+      cupRecords.unshift(result);
+      cupRecords = cupRecords.slice(0, 3);
+      const yesCount = cupRecords.filter(x => x.name === "圣杯").length;
+      const rule = cupRecords.length < 3 ? `还可再掷 ${3 - cupRecords.length} 次` : (yesCount >= 2 ? "三次规则：偏向可行" : "三次规则：宜再审题");
       const resultDiv = document.getElementById("overlayResult");
       const closeBtn = document.getElementById("closeOverlay");
+
+      resultDiv.innerHTML = `
+        <h2>${result.name}</h2>
+        <p>${result.text}</p>
+        <p style="margin-top: 20px; font-size: 1.1rem;">${rule}</p>
+      `;
+      resultDiv.classList.add("show");
+      closeBtn.style.display = "inline-block";
+
+      document.getElementById("cupHistory").innerHTML = cupRecords.map((item, i) => `
+        <div class="history-item"><strong>${i + 1}. ${item.name}</strong><span>${item.text}</span></div>
+      `).join("") + `<div class="disclaimer">${rule}。问题：${escapeHtml(document.getElementById("cupQuestion").value || "未设问题")}</div>`;
+
+      const smallPair = document.getElementById("cupPair");
+      const smallCups = smallPair.querySelectorAll(".cup");
+      smallCups.forEach((cup, i) => cup.src = result.shape[i] === 0 ? "assets/cup_back.png" : "assets/cup_front.png");
+
+      if (cupRecords.length === 3) {
+        const question = document.getElementById("cupQuestion").value || "未设问题";
+        const recordsStr = cupRecords.map(r => r.name).join("、");
+        const prompt = `我问了问题：“${question}”，连续三次掷杯的结果是：${recordsStr}。请用传统文化视角简短解读这个结果对我决策的启发。`;
+        const readingBox = document.getElementById("cupDeepSeekReading");
+        readingBox.style.display = "block";
+        readingBox.classList.add("loading");
+        readingBox.textContent = "正在请 DeepSeek 进行推演...";
+
+        askDeepSeek(prompt).then(ans => {
+           readingBox.classList.remove("loading");
+           readingBox.innerHTML = `<strong>AI 推演：</strong><br>` + escapeHtml(ans);
+        }).catch(err => {
+           readingBox.classList.remove("loading");
+           readingBox.innerHTML = `<strong>本地推演：</strong><br>结合连续三次结果（${recordsStr}），建议先复盘当前条件是否成熟。顺势而为，不宜强求。<br><span class="muted">提示：${escapeHtml(err.message)}</span>`;
+        });
+      }
+    }
+
+    async function throwCupsOnce(shakePower = 0) {
+      const overlay = document.getElementById("cupOverlay");
+      const resultDiv = document.getElementById("overlayResult");
+      const closeBtn = document.getElementById("closeOverlay");
+      const btn = document.getElementById("throwCups");
+
+      if (btn.disabled) return;
+      btn.disabled = true;
       
       overlay.classList.add("show");
       resultDiv.classList.remove("show");
       closeBtn.style.display = "none";
-      
-      // Reset cups
-      const cups = pair.querySelectorAll(".cup");
-      cups.forEach(cup => cup.classList.remove("down"));
-      
-      // Start rolling animation
-      setTimeout(() => {
-        pair.classList.add("rolling");
-        
-        setTimeout(() => {
-          pair.classList.remove("rolling");
-          const result = throwCupResult();
-          
-          // Apply result to overlay cups
-          cups.forEach((cup, i) => cup.classList.toggle("down", result.shape[i] === 0));
-          
-          cupRecords.unshift(result);
-          cupRecords = cupRecords.slice(0, 3);
-          const yesCount = cupRecords.filter(x => x.name === "圣杯").length;
-          const rule = cupRecords.length < 3 ? `还可再掷 ${3 - cupRecords.length} 次` : (yesCount >= 2 ? "三次规则：偏向可行" : "三次规则：宜再审题");
-          
-          // Show result in overlay
-          resultDiv.innerHTML = `
-            <h2>${result.name}</h2>
-            <p>${result.text}</p>
-            <p style="margin-top: 20px; font-size: 1.1rem; color: #ccc;">${rule}</p>
-          `;
-          resultDiv.classList.add("show");
-          closeBtn.style.display = "inline-block";
-          
-          // Update the background page history
-          document.getElementById("cupHistory").innerHTML = cupRecords.map((item, i) => `
-            <div class="history-item"><strong>${i + 1}. ${item.name}</strong><span>${item.text}</span></div>
-          `).join("") + `<div class="disclaimer">${rule}。问题：${escapeHtml(document.getElementById("cupQuestion").value || "未设问题")}</div>`;
-          
-          // Update the small cups on the page too
-          const smallPair = document.getElementById("cupPair");
-          const smallCups = smallPair.querySelectorAll(".cup");
-          smallCups.forEach((cup, i) => cup.classList.toggle("down", result.shape[i] === 0));
-          
-          if (cupRecords.length === 3) {
-            const question = document.getElementById("cupQuestion").value || "未设问题";
-            const recordsStr = cupRecords.map(r => r.name).join("、");
-            const prompt = `我问了问题：“${question}”，连续三次掷杯的结果是：${recordsStr}。请用传统文化视角简短解读这个结果对我决策的启发。`;
-            const readingBox = document.getElementById("cupDeepSeekReading");
-            readingBox.style.display = "block";
-            readingBox.classList.add("loading");
-            readingBox.textContent = "正在请 DeepSeek 进行推演...";
-            
-            askDeepSeek(prompt).then(ans => {
-               readingBox.classList.remove("loading");
-               readingBox.innerHTML = `<strong>AI 推演：</strong><br>` + escapeHtml(ans);
-            }).catch(err => {
-               readingBox.classList.remove("loading");
-               readingBox.innerHTML = `<strong>本地推演：</strong><br>结合连续三次结果（${recordsStr}），建议先复盘当前条件是否成熟。顺势而为，不宜强求。<br><span class="muted">提示：${escapeHtml(err.message)}</span>`;
-            });
-          }
-        }, 2400); // 3 cycles of 0.8s
-      }, 300);
+      try {
+        const result = throwCupResult();
+        await playCupPhysics(result, shakePower);
+        renderCupResult(result);
+      } catch (error) {
+        console.error(error);
+        overlay.classList.remove("show");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById("throwCups").addEventListener("click", () => {
+      throwCupsOnce();
     });
 
     document.getElementById("closeOverlay").addEventListener("click", () => {
@@ -2786,6 +4228,76 @@
     document.getElementById("resetCups").addEventListener("click", () => {
       cupRecords = [];
       document.getElementById("cupHistory").innerHTML = "";
+    });
+
+    let shakeListening = false;
+    let lastMotionMagnitude = 0;
+    let lastShakeAt = 0;
+
+    function setShakeStatus(message, ready = false) {
+      ["coinShakeStatus", "cupShakeStatus"].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = message;
+        el.classList.toggle("ready", ready);
+      });
+    }
+
+    async function enableShakeInput() {
+      if (!("DeviceMotionEvent" in window)) {
+        setShakeStatus("当前浏览器没有开放运动传感器，仍可点击按钮完成投掷。");
+        return;
+      }
+
+      try {
+        if (typeof DeviceMotionEvent.requestPermission === "function") {
+          const permission = await DeviceMotionEvent.requestPermission();
+          if (permission !== "granted") {
+            setShakeStatus("未获得运动传感器权限，请允许后再摇动手机。");
+            return;
+          }
+        }
+
+        if (!shakeListening) {
+          window.addEventListener("devicemotion", handleDeviceMotion, { passive: true });
+          shakeListening = true;
+        }
+        setShakeStatus("摇晃已开启：在铜钱或圣杯页面摇一摇即可触发。", true);
+      } catch (error) {
+        setShakeStatus(`无法开启摇晃：${error.message}`);
+      }
+    }
+
+    function handleDeviceMotion(event) {
+      const acc = event.accelerationIncludingGravity || event.acceleration;
+      if (!acc) return;
+
+      const x = acc.x || 0;
+      const y = acc.y || 0;
+      const z = acc.z || 0;
+      const magnitude = Math.sqrt(x * x + y * y + z * z);
+      const jerk = Math.abs(magnitude - lastMotionMagnitude);
+      lastMotionMagnitude = magnitude;
+
+      const now = Date.now();
+      const power = Math.max(magnitude, jerk * 1.45);
+      if (power < 22 || now - lastShakeAt < 2300) return;
+      if (document.querySelector(".coin-overlay.show, .cup-overlay.show")) return;
+
+      const activeSurface = document.querySelector(".surface.active");
+      const coinBox = document.querySelector('[data-method-box="coins"]');
+      lastShakeAt = now;
+      if (navigator.vibrate) navigator.vibrate(28);
+
+      if (activeSurface?.id === "iching" && coinBox?.classList.contains("active")) {
+        tossCoinLine(power);
+      } else if (activeSurface?.id === "cups") {
+        throwCupsOnce(power);
+      }
+    }
+
+    document.querySelectorAll("[data-enable-shake]").forEach(button => {
+      button.addEventListener("click", enableShakeInput);
     });
 
     function wireUpload(inputId, previewId, emptyId, callback) {
@@ -3149,6 +4661,47 @@ ${focus ? `你最近关注“${focus}”，梦境可能把这件事换成了更�
     document.getElementById("libraryCategory").addEventListener("change", renderLibrary);
     renderLibrary();
 
+    async function askLibraryQuestion() {
+      const btn = document.getElementById("askLibrary");
+      if (btn.disabled) return;
+      const input = document.getElementById("libraryQuestion");
+      const q = input.value.trim();
+      if (!q) return;
+      const log = document.getElementById("libraryChatLog");
+      log.innerHTML += `<div class="message user">${escapeHtml(q)}</div>`;
+      input.value = "";
+      btn.disabled = true;
+      const loading = document.createElement("div");
+      loading.className = "message ai loading";
+      loading.textContent = "正在解答...";
+      log.appendChild(loading);
+      log.scrollTop = log.scrollHeight;
+      try {
+        const response = await fetch("/oracle/library-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: q,
+            current_time: new Date().toLocaleString("zh-CN")
+          })
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.detail || "服务暂不可用");
+        loading.classList.remove("loading");
+        loading.textContent = data.answer;
+      } catch (err) {
+        loading.classList.remove("loading");
+        loading.innerHTML = `<span style="color:var(--cinnabar);">解答失败：${escapeHtml(err.message)}</span>`;
+      } finally {
+        btn.disabled = false;
+        log.scrollTop = log.scrollHeight;
+      }
+    }
+    document.getElementById("askLibrary").addEventListener("click", askLibraryQuestion);
+    document.getElementById("libraryQuestion").addEventListener("keydown", e => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); askLibraryQuestion(); }
+    });
+
     function seedChat() {
       const log = document.getElementById("chatLog");
       if (log.children.length === 0) {
@@ -3185,7 +4738,7 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
 第三，不要一次性把全部承诺都压上去。
 
 4. 提醒：
-以上只作传统文化参考，不要当成唯一决策依据。`;
+以上基于传统文化解读，供参考。`;
     }
 
     async function askDeepSeek(question) {
@@ -3665,7 +5218,7 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
           const symbol = card.querySelector(".hex-symbol")?.textContent || "";
           const name = card.querySelector("h4")?.textContent || "";
           const desc = card.querySelector("p")?.textContent || "";
-          body += `<p><b>${symbol} ${name}</b></p><p style="color:#6f6a60;">${desc}</p>`;
+          body += `<p><b>${symbol} ${name}</b></p><p style="color:#667085;">${desc}</p>`;
         }
         if (hexCards.length >= 2) {
           body += `<h2>变卦</h2>`;
@@ -3673,7 +5226,7 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
           const symbol = card.querySelector(".hex-symbol")?.textContent || "";
           const name = card.querySelector("h4")?.textContent || "";
           const desc = card.querySelector("p")?.textContent || "";
-          body += `<p><b>${symbol} ${name}</b></p><p style="color:#6f6a60;">${desc}</p>`;
+          body += `<p><b>${symbol} ${name}</b></p><p style="color:#667085;">${desc}</p>`;
         }
 
         // 互卦错卦综卦
@@ -3687,7 +5240,7 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
           });
         }
 
-        // 体用生克 + 解卦规则 + 动爻
+        // 动爻与卦象说明
         if (reading) {
           const readingItems = reading.querySelectorAll(".mini-card");
           readingItems.forEach(c => {
@@ -3786,20 +5339,77 @@ DeepSeek 暂未连通，我先给你一个本地参考：这件事先别急着�
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>算算AI · ${title}</title>
 <style>
-  body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f7f0df;color:#1f2524;max-width:680px;margin:40px auto;padding:0 20px;}
-  .hdr{text-align:center;padding:28px 0 18px;border-bottom:2px solid #a83f2c;margin-bottom:24px;}
-  .hdr h1{font-size:22px;color:#a83f2c;margin:0;}
-  .hdr p{font-size:13px;color:#6f6a60;margin:6px 0 0;}
-  h2{font-size:16px;color:#16666b;border-left:3px solid #16666b;padding-left:10px;margin:20px 0 10px;}
-  p, .item{font-size:14px;line-height:1.8;color:#1f2524;margin:6px 0;}
+  body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f7fb;color:#111827;max-width:680px;margin:40px auto;padding:0 20px;}
+  .hdr{text-align:center;padding:28px 0 18px;border-bottom:2px solid #4257ff;margin-bottom:24px;}
+  .hdr h1{font-size:22px;color:#111827;margin:0;}
+  .hdr p{font-size:13px;color:#667085;margin:6px 0 0;}
+  h2{font-size:16px;color:#0f766e;border-left:3px solid #4257ff;padding-left:10px;margin:20px 0 10px;}
+  p, .item{font-size:14px;line-height:1.8;color:#111827;margin:6px 0;}
   .chat-msg{padding:10px 14px;border-radius:6px;margin-bottom:8px;font-size:14px;line-height:1.7;}
-  .user-msg{background:rgba(168,63,44,.08);border-left:3px solid #a83f2c;}
-  .ai-msg{background:rgba(22,102,107,.06);border-left:3px solid #16666b;}
+  .user-msg{background:rgba(66,87,255,.08);border-left:3px solid #4257ff;}
+  .ai-msg{background:rgba(15,118,110,.07);border-left:3px solid #0f766e;}
   .chat-msg b{display:inline;color:inherit;}
-  .field-item{background:rgba(255,252,244,.8);padding:10px 14px;border-radius:6px;margin-bottom:10px;}
-  .field-item b{color:#a83f2c;display:block;margin-bottom:4px;}
+  .field-item{background:rgba(255,255,255,.82);padding:10px 14px;border-radius:6px;margin-bottom:10px;}
+  .field-item b{color:#4257ff;display:block;margin-bottom:4px;}
   .field-item p{margin:0;}
-  .ftr{text-align:center;padding:24px 0;font-size:12px;color:#6f6a60;border-top:1px solid rgba(52,42,31,.16);margin-top:30px;}
+  .ftr{text-align:center;padding:24px 0;font-size:12px;color:#667085;border-top:1px solid rgba(17,24,39,.12);margin-top:30px;}
+
+    /* ===== 放生积德 ===== */
+    .pond-stage {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      background: linear-gradient(180deg, #0b3d6b 0%, #06529e 30%, #0a7ac6 100%);
+      overflow: hidden;
+      cursor: pointer;
+      border-radius: 0;
+    }
+    .pond-water {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(100, 200, 255, 0.15), transparent 50%),
+                  radial-gradient(ellipse at 70% 60%, rgba(60, 180, 240, 0.10), transparent 40%);
+      animation: pondRipple 8s ease-in-out infinite;
+    }
+    @keyframes pondRipple {
+      0%, 100% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.02) translateY(-4px); }
+    }
+    .pond-fish-container { position: absolute; inset: 0; z-index: 2; }
+    .pond-fish {
+      position: absolute; font-size: 28px; line-height: 1;
+      user-select: none; pointer-events: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      will-change: transform;
+      transition: none;
+    }
+    .pond-fish.flip { transform: scaleX(-1); }
+
+    .pond-info {
+      position: absolute; top: 12px; right: 14px; z-index: 5;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      font-size: 13px; color: rgba(200, 240, 210, 0.85);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.25); padding: 8px 14px;
+      border-radius: 10px; backdrop-filter: blur(4px);
+    }
+    .pond-count { font-weight: bold; }
+    .pond-merit { color: rgba(255, 215, 100, 0.9); font-weight: bold; }
+    #fishCollection { line-height: 2; }
+    #fishCollection .fish-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 10px;
+      background: linear-gradient(135deg, rgba(40, 140, 80, 0.12), rgba(32, 120, 70, 0.08));
+      border: 1px solid rgba(40, 140, 80, 0.2);
+      border-radius: 999px; font-size: 13px; color: var(--ink);
+    }
+    #fishCollection .fish-tag .count { color: var(--teal); font-weight: bold; }
+    @media (max-width: 660px) {
+      .pond-stage { min-height: 280px; }
+      .pond-fish { font-size: 22px; }
+      .pond-info { font-size: 11px; padding: 5px 10px; }
+    }
+
 </style></head>
 <body>
 <div class="hdr"><h1>算算 AI · ${title}</h1><p>生成时间：${now}</p></div>
@@ -3817,7 +5427,178 @@ ${body}
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
-  </script>
+  
+    // ===== 放生积德 Logic =====
+    const FISH_CHARS = ['鲤鱼', '鲢鱼', '鳙鱼', '草鱼', '青鱼', '鲫鱼', '鲈鱼', '鳜鱼', '鲮鱼', '鲑鱼', '鳟鱼', '鲷鱼', '鲳鱼', '鳗鱼', '鳝鱼', '鲶鱼', '鲨鱼', '鲸鱼'];
+    const FISH_COLORS = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff8e53', '#c084fc', '#fb923c', '#38bdf8', '#f472b6', '#34d399'];
+    const FISH_SIZES = [22, 24, 26, 28, 30, 32];
+
+    let pondFish = [];
+    let pondAnimId = null;
+    let fangShengTotalMerit = 0;
+
+    function loadPondData() {
+      try {
+        const raw = localStorage.getItem('fangsheng_data');
+        if (raw) {
+          const data = JSON.parse(raw);
+          pondFish = data.fish || [];
+          fangShengTotalMerit = data.totalMerit || 0;
+        }
+      } catch (e) { pondFish = []; fangShengTotalMerit = 0; }
+    }
+
+    function savePondData() {
+      try {
+        localStorage.setItem('fangsheng_data', JSON.stringify({ fish: pondFish, totalMerit: fangShengTotalMerit }));
+      } catch (e) {}
+    }
+
+    const MAX_FISH = 100;
+
+    function addFishToPond(count) {
+      const space = MAX_FISH - pondFish.length;
+      if (space <= 0) {
+        alert('池塘已满（最多' + MAX_FISH + '条鱼）');
+        return;
+      }
+      const actual = Math.min(count, space);
+      for (let i = 0; i < actual; i++) {
+        const fish = {
+          id: Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2, 6),
+          char: FISH_CHARS[Math.floor(Math.random() * FISH_CHARS.length)],
+          x: Math.random() * 85 + 5,
+          y: Math.random() * 70 + 5,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: (Math.random() - 0.5) * 1.2,
+          size: FISH_SIZES[Math.floor(Math.random() * FISH_SIZES.length)],
+          color: FISH_COLORS[Math.floor(Math.random() * FISH_COLORS.length)],
+          flip: Math.random() > 0.5,
+          merit: 1
+        };
+        pondFish.push(fish); fangShengTotalMerit += fish.merit;
+      }
+      savePondData();
+      renderFishCollection();
+      updatePondCounters();
+    }
+
+    function startPondAnimation() {
+      if (pondAnimId) cancelAnimationFrame(pondAnimId);
+      const container = document.getElementById('pondFishContainer');
+      if (!container) return;
+
+      function step() {
+        container.innerHTML = '';
+        const rect = container.getBoundingClientRect();
+        const w = rect.width || 400;
+        const h = rect.height || 300;
+
+        for (const fish of pondFish) {
+          // Random wandering
+          fish.vx += (Math.random() - 0.5) * 0.08;
+          fish.vy += (Math.random() - 0.5) * 0.08;
+          // Speed limit
+          const speed = Math.sqrt(fish.vx * fish.vx + fish.vy * fish.vy);
+          const maxSpeed = 0.8;
+          if (speed > maxSpeed) {
+            fish.vx = (fish.vx / speed) * maxSpeed;
+            fish.vy = (fish.vy / speed) * maxSpeed;
+          }
+          // Move
+          fish.x += fish.vx;
+          fish.y += fish.vy;
+          // Wall collision
+          if (fish.x < 0) { fish.x = 0; fish.vx = Math.abs(fish.vx); fish.flip = false; }
+          if (fish.x > 100) { fish.x = 100; fish.vx = -Math.abs(fish.vx); fish.flip = true; }
+          if (fish.y < 0) { fish.y = 0; fish.vy = Math.abs(fish.vy); }
+          if (fish.y > 100) { fish.y = 100; fish.vy = -Math.abs(fish.vy); }
+
+          // Create DOM element
+          const el = document.createElement('span');
+          el.className = 'pond-fish' + (fish.flip ? ' flip' : '');
+          el.textContent = fish.char;
+          el.style.cssText = 'left:' + fish.x + '%;top:' + fish.y + '%;font-size:' + fish.size + 'px;color:' + fish.color + ';position:absolute;';
+          container.appendChild(el);
+        }
+        pondAnimId = requestAnimationFrame(step);
+      }
+      pondAnimId = requestAnimationFrame(step);
+    }
+
+    function renderFishCollection() {
+      const container = document.getElementById('fishCollection');
+      if (!container) return;
+      const counts = {};
+      for (const fish of pondFish) {
+        counts[fish.char] = (counts[fish.char] || 0) + 1;
+      }
+      const chars = Object.keys(counts);
+      if (chars.length === 0) {
+        container.innerHTML = '<span class="muted">还没有放生鱼</span>';
+        return;
+      }
+      container.innerHTML = '';
+      for (const ch of chars.sort()) {
+        const tag = document.createElement('span');
+        tag.className = 'fish-tag';
+        tag.innerHTML = '<span>' + ch + '</span><span class="count">x' + counts[ch] + '</span>';
+        container.appendChild(tag);
+      }
+    }
+
+    function updatePondCounters() {
+      const fishCountEl = document.getElementById('fishCount');
+      const meritEl = document.getElementById('fangShengMerit');
+      if (fishCountEl) fishCountEl.textContent = pondFish.length;
+      if (meritEl) meritEl.textContent = fangShengTotalMerit;
+    }
+
+
+
+    // ---- Event listeners ----
+    document.addEventListener('DOMContentLoaded', () => {
+      loadPondData();
+      renderFishCollection();
+      updatePondCounters();
+
+      const releaseBtn = document.getElementById('releaseFishBtn');
+      const releaseTenBtn = document.getElementById('releaseTenBtn');
+      const resetBtn = document.getElementById('resetPondBtn');
+
+      if (releaseBtn) {
+        releaseBtn.addEventListener('click', () => {
+          addFishToPond(1);
+          startPondAnimation();
+        });
+      }
+      if (releaseTenBtn) {
+        releaseTenBtn.addEventListener('click', () => {
+          addFishToPond(10);
+          startPondAnimation();
+        });
+      }
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (confirm('确定要清空池塘吗？所有鱼将被清出池塘。')) {
+            pondFish = [];
+            savePondData();
+            renderFishCollection();
+            updatePondCounters();
+            if (pondAnimId) cancelAnimationFrame(pondAnimId);
+            const container = document.getElementById('pondFishContainer');
+            if (container) container.innerHTML = '';
+          }
+        });
+      }
+
+      // Start pond animation if there are fish
+      if (pondFish.length > 0) {
+        startPondAnimation();
+      }
+    });
+
+</script>
 
 </body>
 </html>

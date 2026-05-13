@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="woodGradBack" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8a5828"/>
+      <stop offset="40%" style="stop-color:#6a4018"/>
+      <stop offset="80%" style="stop-color:#4a2a10"/>
+      <stop offset="100%" style="stop-color:#3a1e08"/>
+    </linearGradient>
+    <linearGradient id="woodShineBack" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8a5828;stop-opacity:0.3"/>
+      <stop offset="50%" style="stop-color:#8a5828;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#3a1e08;stop-opacity:0.3"/>
+    </linearGradient>
+    <radialGradient id="shadowBack" cx="50%" cy="50%" r="55%">
+      <stop offset="70%" style="stop-color:#1a0e04;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#1a0e04;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <!-- Main body -->
+  <path d="M100 12 C145 12 188 45 188 100 C188 155 145 188 100 188 C55 188 12 155 12 100 C12 45 55 12 100 12Z"
+        fill="url(#woodGradBack)" stroke="#3a1e08" stroke-width="1.5"/>
+  <!-- Shine -->
+  <path d="M100 20 C140 20 178 50 178 100 C178 150 140 180 100 180 C60 180 22 150 22 100 C22 50 60 20 100 20Z"
+        fill="url(#woodShineBack)"/>
+  <!-- Shadow -->
+  <path d="M100 12 C145 12 188 45 188 100 C188 155 145 188 100 188 C55 188 12 155 12 100 C12 45 55 12 100 12Z"
+        fill="url(#shadowBack)"/>
+  <!-- Back side has a slight concave/dark center -->
+  <ellipse cx="100" cy="100" rx="55" ry="60" fill="#3a1e08" opacity="0.15"/>
+  <!-- Wood grain lines -->
+  <path d="M55 50 Q100 38 145 50" fill="none" stroke="#5a3410" stroke-width="0.7" opacity="0.3"/>
+  <path d="M45 70 Q100 56 155 70" fill="none" stroke="#5a3410" stroke-width="0.7" opacity="0.25"/>
+  <path d="M38 90 Q100 74 162 90" fill="none" stroke="#5a3410" stroke-width="0.7" opacity="0.2"/>
+  <path d="M38 110 Q100 94 162 110" fill="none" stroke="#5a3410" stroke-width="0.7" opacity="0.2"/>
+  <path d="M45 130 Q100 116 155 130" fill="none" stroke="#5a3410" stroke-width="0.7" opacity="0.25"/>
+  <path d="M55 150 Q100 138 145 150" fill="none" stroke="#5a3410" stroke-width="0.7" opacity="0.3"/>
+  <!-- Small dot marking on back side (traditional) -->
+  <circle cx="100" cy="90" r="4" fill="#2a1406" opacity="0.4"/>
+  <circle cx="100" cy="114" r="3" fill="#2a1406" opacity="0.25"/>
+</svg>

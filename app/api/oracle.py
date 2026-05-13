@@ -6,6 +6,7 @@ import httpx
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from app.core import lunar_calendar
 from app.core.config import settings
 
 router = APIRouter(prefix="/oracle", tags=["oracle"])
@@ -51,6 +52,20 @@ class DreamReadingIn(BaseModel):
     current_time: str | None = None
 
 
+class LibraryChatIn(BaseModel):
+    question: str = Field(min_length=1, max_length=800)
+    current_time: str | None = None
+
+
+class SignReadingIn(BaseModel):
+    question: str = Field(default="今日提醒", max_length=800)
+    sign_no: int = Field(ge=1, le=64)
+    grade: str = Field(max_length=20)
+    poem: str = Field(max_length=300)
+    meaning: str = Field(max_length=300)
+    current_time: str | None = None
+
+
 class IChingReadingIn(BaseModel):
     question: str = Field(default="未设问题", max_length=800)
     base: str
@@ -62,12 +77,6 @@ class IChingReadingIn(BaseModel):
     base_text: str | None = None
     changed_text: str | None = None
     current_time: str | None = None
-    # 梅花易数体用生克
-    ti_gua: str | None = None          # 体卦名
-    yong_gua: str | None = None        # 用卦名
-    ti_element: str | None = None      # 体卦五行
-    yong_element: str | None = None    # 用卦五行
-    ti_yong_relation: str | None = None  # 体用关系（用生体/体生用/体用比和/用克体/体克用）
 
 
 class IChingReadingOut(BaseModel):
@@ -78,9 +87,38 @@ class IChingReadingOut(BaseModel):
     health: str
     decision: str
     model: str
-    # 解卦方法说明
-    interpretation_rule: str | None = None
-    ti_yong_analysis: str | None = None
+
+
+
+class DailyFortuneIn(BaseModel):
+    current_time: str | None = None
+
+
+class DailyFortuneOut(BaseModel):
+    title: str
+    summary: str
+    good: str
+    avoid: str
+    hours: str
+    wealth_direction: str
+    noble_direction: str
+    happy_direction: str
+    model: str
+
+
+DAILY_FORTUNE_PROMPT = """你根据精确的农历数据生成黄历描述。
+输入会提供：公历日期、农历月日、年干支、月干支、日干支、值神、建除。
+输出 JSON：
+title（农历月日+干支+值神，如 "三月廿七 · 丁亥日 · 勾陈"）
+summary（3-4句今日运势，结合五行生克和值神含义，通俗易懂）
+good（宜，4-6条具体事项，顿号分隔，如 "签约、出行、祭祀、会友、求财"）
+avoid（忌，4-6条具体事项，顿号分隔）
+hours（吉时，必须带具体钟点，如 "23:00-01:00 子时 / 07:00-09:00 辰时"，2到4个吉时）
+wealth_direction（财神方位）
+noble_direction（贵神方位）
+happy_direction（喜神方位）
+不要 Markdown。仅供民俗参考。
+"""
 
 
 SYSTEM_PROMPT = """你是“算算”应用里的 AI 国学与民俗文化解读助手。
@@ -133,14 +171,49 @@ DREAM_PROMPT = """你正在为“周公解梦”模块生成传统文化解读�
 每一条 1 到 3 句，务实、温和、好懂。"""
 
 
+LIBRARY_PROMPT = """你正在为“国学内容库 AI 问答”模块回答问题。
+要求：
+1. 只回答国学、易经、五行、历法、民俗、道教、风水等传统文化相关内容。
+2. 用大白话解释，先给结论，再给例子或类比。
+3. 不做绝对预测，不做医学、法律、财务等高风险建议。
+4. 如果问题和传统文化无关，简短说明范围，并引导用户换一个相关问题。
+5. 不要使用 Markdown 格式，不要使用 **、## 等符号。
+6. 结尾提醒内容仅供传统文化学习和娱乐参考。"""
+
+
+SIGN_PROMPT = """你正在为“每日一签 / 妈祖签”模块做签文解读。
+要求：
+1. 必须用非常通俗的大白话，像朋友解释一样，别写文言文，别堆术语。
+2. 不要把签文说成绝对预言，不要吓人，不要保证发财、复合、升职或治病。
+3. 输出要详细一点，但要好读，按下面格式：
+大白话总解：
+用 3 到 5 句解释这支签到底在提醒什么。
+
+你现在最该注意：
+列 3 条，每条一句话，具体、现实。
+
+可以怎么做：
+列 4 条，每条要能马上照着做。
+
+分项参考：
+事业：2 句
+财利：2 句
+感情：2 句
+出行：1 到 2 句
+生活：1 到 2 句
+
+最后提醒：
+一句话说明仅供传统民俗文化参考。
+4. 不要使用 Markdown 符号，不要使用 **、##、- 这样的格式符号。"""
+
+
 ICHING_FIELD_PROMPT = """你正在为“易经算卦”模块生成分领域解读。
 
 【语言要求 - 非常重要】
-用非常通俗易懂的大白话解释，就像朋友聊天一样。避免使用文言文、古语、专业术语。
-每句话都要让普通人一听就明白。可以举生活中的例子。
+用最直白的大白话。不要文言文，不要术语堆砌。每句话让人一听就懂。
 
 【解卦框架】
-一、察大象（看大环境）：先看本卦卦名与卦象，判断整体格局好坏。
+一、察大象（看大环境）：先看本卦卦名与卦象，直接判断整体格局好坏。
 二、定焦点（看动爻）：根据动爻数量按古法规则解读：
 - 0个动爻（六爻安静）：看本卦卦辞
 - 1个动爻：看该动爻的爻辞
@@ -149,17 +222,16 @@ ICHING_FIELD_PROMPT = """你正在为“易经算卦”模块生成分领域解�
 - 4个动爻：看变卦的两个静爻的爻辞，以下方的为主
 - 5个动爻：看变卦那一个静爻的爻辞
 - 6个动爻：乾坤看用九/用六，他卦看变卦卦辞
-三、审体用（梅花易数生克）：如提供了体用信息，参考体用生克关系辅助判断。
-四、观始终（看趋势）：从本卦经过互卦走向变卦，给出完整趋势。
+三、观始终（看趋势）：从本卦经过互卦走向变卦，给出完整趋势。
 
 【输出要求】
 只能使用用户提供的卦名和卦义，不得篡改卦名。
-用最通俗的大白话输出，避免古文，多举生活化的例子。
+用最直白的大白话输出。
 输出必须是一个 JSON 对象，不要 Markdown，不要代码块，字段为：
-overview, career, relationship, wealth, health, decision, interpretation_rule, ti_yong_analysis。
-每个字段 60 到 120 个中文字符，要说得清楚、明白、接地气。
+overview, career, relationship, wealth, health, decision。
+每个字段 60 到 120 个中文字符。
 health 字段只能给作息、压力、运动、饮食节律等生活建议，不要做疾病诊断。
-decision 字段要给具体可操作的建议，不要讲空话套话，不要绝对预测。"""
+decision 字段要给具体可操作的建议，不要讲空话套话。"""
 
 
 def _cast_context(cast: OracleCast | None) -> str:
@@ -201,7 +273,7 @@ def _extract_json_object(text: str) -> dict[str, Any]:
     return json.loads(clean[start : end + 1])
 
 
-async def _deepseek_chat(messages: list[dict[str, str]], max_tokens: int = 900) -> OracleChatOut:
+async def _deepseek_chat(messages: list[dict[str, str]], max_tokens: int = 900, model: str | None = None) -> OracleChatOut:
     if not settings.deepseek_api_key:
         raise HTTPException(
             status_code=503,
@@ -209,7 +281,7 @@ async def _deepseek_chat(messages: list[dict[str, str]], max_tokens: int = 900) 
         )
 
     payload: dict[str, Any] = {
-        "model": settings.deepseek_model,
+        "model": model or settings.deepseek_model,
         "messages": messages,
         "temperature": 0.78,
         "max_tokens": max_tokens,
@@ -248,8 +320,8 @@ async def _deepseek_chat(messages: list[dict[str, str]], max_tokens: int = 900) 
     return OracleChatOut(answer=answer, model=result.get("model") or settings.deepseek_model)
 
 
-async def _deepseek_json(messages: list[dict[str, str]], max_tokens: int = 900) -> tuple[dict[str, Any], str]:
-    result = await _deepseek_chat(messages, max_tokens=max_tokens)
+async def _deepseek_json(messages: list[dict[str, str]], max_tokens: int = 900, model: str | None = None) -> tuple[dict[str, Any], str]:
+    result = await _deepseek_chat(messages, max_tokens=max_tokens, model=model)
     try:
         return _extract_json_object(result.answer), result.model
     except (json.JSONDecodeError, ValueError) as exc:
@@ -283,28 +355,6 @@ async def chat(data: OracleChatIn) -> OracleChatOut:
 async def iching_reading(data: IChingReadingIn) -> IChingReadingOut:
     now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
     moving = "、".join(str(x) for x in data.moving_lines) if data.moving_lines else "无明显动爻"
-    moving_count = len(data.moving_lines)
-    
-    # 确定解卦规则
-    if moving_count == 0:
-        rule_text = "六爻安静，无动爻（无变卦）。看本卦卦辞作为总体评判。"
-    elif moving_count == 1:
-        rule_text = f"一爻动（第{data.moving_lines[0]}爻），看本卦该动爻的爻辞。"
-    elif moving_count == 2:
-        rule_text = f"两爻动（第{'、'.join(str(x) for x in data.moving_lines)}爻），看本卦这两个动爻的爻辞，以上方动爻（第{max(data.moving_lines)}爻）为主。"
-    elif moving_count == 3:
-        rule_text = "三爻动，结合本卦卦辞和变卦卦辞综合来看。"
-    elif moving_count == 4:
-        rule_text = "四爻动，看变卦的两个静爻的爻辞，以下方静爻为主。"
-    elif moving_count == 5:
-        rule_text = "五爻动，看变卦的那一个静爻的爻辞。"
-    else:
-        rule_text = "六爻全动，乾卦看用九辞，坤卦看用六辞，他卦看变卦卦辞。"
-    
-    # 体用生克信息
-    ti_yong_text = ""
-    if data.ti_gua and data.yong_gua:
-        ti_yong_text = f"{data.ti_gua}（{data.ti_element}）为体卦（代表求测者），{data.yong_gua}（{data.yong_element}）为用卦（代表事情），体用关系为{data.ti_yong_relation}。"
 
     user_prompt = f"""当前时间：{now_text}
 用户所问：{data.question or '未设问题'}
@@ -314,8 +364,6 @@ async def iching_reading(data: IChingReadingIn) -> IChingReadingOut:
 错卦：{data.opposite or '未提供'}
 综卦：{data.reversed or '未提供'}
 动爻：{moving}
-解卦规则：{rule_text}
-{ti_yong_text}
 
 禁止出现未在上面列出的卦名；禁止把本卦或变卦改写成其他卦。
 请按提示词要求输出严格 JSON。"""
@@ -331,14 +379,9 @@ async def iching_reading(data: IChingReadingIn) -> IChingReadingOut:
     missing = [key for key in required if not str(parsed.get(key, "")).strip()]
     if missing:
         raise HTTPException(status_code=502, detail=f"DeepSeek 返回缺少字段：{', '.join(missing)}")
-    
-    interpretation_rule = str(parsed.get("interpretation_rule", rule_text)).strip()
-    ti_yong_analysis = str(parsed.get("ti_yong_analysis", ti_yong_text)).strip()
-    
+
     return IChingReadingOut(
         model=model,
-        interpretation_rule=interpretation_rule,
-        ti_yong_analysis=ti_yong_analysis,
         **{key: str(parsed[key]).strip() for key in required}
     )
 
@@ -381,4 +424,96 @@ async def dream_reading(data: DreamReadingIn) -> OracleChatOut:
             {"role": "user", "content": user_prompt},
         ],
         max_tokens=850,
+    )
+
+
+@router.post("/library-chat", response_model=OracleChatOut)
+async def library_chat(data: LibraryChatIn) -> OracleChatOut:
+    now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
+    user_prompt = f"""当前时间：{now_text}
+用户问题：{data.question.strip()}
+
+请用通俗中文回答。先用 1 到 2 句话直接说明，再分 2 到 4 条解释。"""
+    return await _deepseek_chat(
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": LIBRARY_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=700,
+        model="deepseek-v4-flash",
+    )
+
+
+
+# In-memory daily fortune cache
+_fortune_cache: dict[str, DailyFortuneOut] = {}
+
+
+@router.post("/daily-fortune", response_model=DailyFortuneOut)
+async def daily_fortune(data: DailyFortuneIn | None = None) -> DailyFortuneOut:
+    now = datetime.now()
+    date_key = now.strftime("%Y-%m-%d")
+
+    if date_key in _fortune_cache:
+        return _fortune_cache[date_key]
+
+    now_text = data.current_time if data and data.current_time else now.isoformat(timespec="seconds")
+
+    # Compute accurate lunar calendar data
+    lunar = lunar_calendar.get_lunar_date(now.date())
+    user_prompt = f"""当前时间：{now_text}
+公历日期：{now.year}年{now.month}月{now.day}日
+农历日期：{lunar["lunar_month_name"]} {lunar["lunar_day_name"]}
+年干支：{lunar["ganzhi_year"]}（{lunar["shengxiao"]}年）
+月干支：{lunar["ganzhi_month"]}
+日干支：{lunar["ganzhi_day"]}
+值神：{lunar["value_god"]}
+建除十二星：{lunar["jianchu"]}
+
+请根据以上精确数据生成今日黄历 JSON。"""
+
+    parsed, model = await _deepseek_json(
+        [
+            {"role": "system", "content": DAILY_FORTUNE_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=400,
+        model="deepseek-v4-flash",
+    )
+
+    required = ["title", "summary", "good", "avoid", "hours", "wealth_direction", "noble_direction", "happy_direction"]
+    missing = [key for key in required if not str(parsed.get(key, "")).strip()]
+    if missing:
+        raise HTTPException(status_code=502, detail=f"DeepSeek 返回缺少字段：{', '.join(missing)}")
+
+    result = DailyFortuneOut(
+        model=model,
+        **{key: str(parsed[key]).strip() for key in required}
+    )
+
+    _fortune_cache[date_key] = result
+    return result
+
+
+
+@router.post("/sign-reading", response_model=OracleChatOut)
+async def sign_reading(data: SignReadingIn) -> OracleChatOut:
+    now_text = data.current_time or datetime.now().isoformat(timespec="seconds")
+    question = data.question.strip() or "今日提醒"
+    user_prompt = f"""当前时间：{now_text}
+用户所问：{question}
+签号：第 {data.sign_no} 签
+签等：{data.grade}
+签诗：{data.poem}
+本地简解：{data.meaning}
+
+请把这支签翻译成现代人能直接看懂的建议。重点解释“现在适合怎么做”，不要只解释字面意思。"""
+    return await _deepseek_chat(
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": SIGN_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=1000,
     )
